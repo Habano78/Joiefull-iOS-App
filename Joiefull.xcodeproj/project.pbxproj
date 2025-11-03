@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		2288BA8D2EB8B6F5006B9107 /* JoiefullApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2288BA8C2EB8B6F5006B9107 /* JoiefullApp.swift */; };
+		2288BA912EB8B6F7006B9107 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2288BA902EB8B6F7006B9107 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		2288BA972EB8B6F7006B9107 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -25,16 +30,32 @@
 
 /* Begin PBXFileReference section */
 		2288BA892EB8B6F5006B9107 /* Joiefull.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Joiefull.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2288BA8C2EB8B6F5006B9107 /* JoiefullApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoiefullApp.swift; sourceTree = "<group>"; };
+		2288BA902EB8B6F7006B9107 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2288BA962EB8B6F7006B9107 /* JoiefullTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JoiefullTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2288BAA02EB8B6F7006B9107 /* JoiefullUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JoiefullUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		2288BA8B2EB8B6F5006B9107 /* Joiefull */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Joiefull;
-			sourceTree = "<group>";
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		2288BAC52EB8E646006B9107 /* Exceptions for "ProductList" folder in "Joiefull" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				ProductListView.swift,
+				ProductListViewModel.swift,
+			);
+			target = 2288BA882EB8B6F5006B9107 /* Joiefull */;
 		};
+		2288BACB2EB8E677006B9107 /* Exceptions for "ProductDetail" folder in "Joiefull" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				ProductDetailView.swift,
+				ProductDetailViewModel.swift,
+			);
+			target = 2288BA882EB8B6F5006B9107 /* Joiefull */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
 		2288BA992EB8B6F7006B9107 /* JoiefullTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = JoiefullTests;
@@ -43,6 +64,37 @@
 		2288BAA32EB8B6F7006B9107 /* JoiefullUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = JoiefullUITests;
+			sourceTree = "<group>";
+		};
+		2288BAB62EB8E4F9006B9107 /* Models */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Models;
+			sourceTree = "<group>";
+		};
+		2288BABA2EB8E541006B9107 /* Services */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Services;
+			sourceTree = "<group>";
+		};
+		2288BABB2EB8E54C006B9107 /* Extensions */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		2288BABD2EB8E56D006B9107 /* ProductDetail */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				2288BACB2EB8E677006B9107 /* Exceptions for "ProductDetail" folder in "Joiefull" target */,
+			);
+			path = ProductDetail;
+			sourceTree = "<group>";
+		};
+		2288BABE2EB8E570006B9107 /* ProductList */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				2288BAC52EB8E646006B9107 /* Exceptions for "ProductList" folder in "Joiefull" target */,
+			);
+			path = ProductList;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -75,7 +127,9 @@
 		2288BA802EB8B6F5006B9107 = {
 			isa = PBXGroup;
 			children = (
-				2288BA8B2EB8B6F5006B9107 /* Joiefull */,
+				2288BAB32EB8E401006B9107 /* Application */,
+				2288BAB42EB8E464006B9107 /* Core */,
+				2288BABC2EB8E560006B9107 /* Features */,
 				2288BA992EB8B6F7006B9107 /* JoiefullTests */,
 				2288BAA32EB8B6F7006B9107 /* JoiefullUITests */,
 				2288BA8A2EB8B6F5006B9107 /* Products */,
@@ -90,6 +144,34 @@
 				2288BAA02EB8B6F7006B9107 /* JoiefullUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		2288BAB32EB8E401006B9107 /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				2288BA8C2EB8B6F5006B9107 /* JoiefullApp.swift */,
+				2288BA902EB8B6F7006B9107 /* Assets.xcassets */,
+			);
+			path = Application;
+			sourceTree = "<group>";
+		};
+		2288BAB42EB8E464006B9107 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				2288BAB62EB8E4F9006B9107 /* Models */,
+				2288BABA2EB8E541006B9107 /* Services */,
+				2288BABB2EB8E54C006B9107 /* Extensions */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		2288BABC2EB8E560006B9107 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				2288BABE2EB8E570006B9107 /* ProductList */,
+				2288BABD2EB8E56D006B9107 /* ProductDetail */,
+			);
+			path = Features;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -108,7 +190,9 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				2288BA8B2EB8B6F5006B9107 /* Joiefull */,
+				2288BAB62EB8E4F9006B9107 /* Models */,
+				2288BABA2EB8E541006B9107 /* Services */,
+				2288BABB2EB8E54C006B9107 /* Extensions */,
 			);
 			name = Joiefull;
 			packageProductDependencies = (
@@ -212,6 +296,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2288BA912EB8B6F7006B9107 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -236,6 +321,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2288BA8D2EB8B6F5006B9107 /* JoiefullApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
