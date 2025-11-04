@@ -7,14 +7,14 @@
 
 import Foundation
 
-//MARK: -- PROTOCOLE : ce que le ViewModel va connaître
+//MARK: -- PROTOCOLE
 
 protocol NetworkServiceProtocol {
         func fetchProducts() async throws -> [Product]
 }
 
 
-//MARK: -- IMPLÉMENTATION du protocol : classe qui parle au reseau concrètement
+//MARK: -- IMPLÉMENTATION
 
 class NetworkService: NetworkServiceProtocol {
         
@@ -22,7 +22,6 @@ class NetworkService: NetworkServiceProtocol {
         
         func fetchProducts() async throws -> [Product] {
                 
-                // On enveloppe TOUT dans un do-catch pour "traduire" les erreurs.
                 do {
                         
                         // 1. GESTION ERREUR CLIENT
@@ -45,9 +44,6 @@ class NetworkService: NetworkServiceProtocol {
                         
                         let products = try decoder.decode([Product].self, from: data)
                         return products
-                        
-                        // C'est ici que la magie opère : on "attrape" les erreurs
-                        // et on les "traduit" en nos erreurs NetworkError.
                         
                 } catch let error as DecodingError {
                         // Si c'est une erreur de décodage

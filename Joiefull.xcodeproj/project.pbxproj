@@ -42,6 +42,7 @@
 			membershipExceptions = (
 				ProductListView.swift,
 				ProductListViewModel.swift,
+				ProductListViewState.swift,
 			);
 			target = 2288BA882EB8B6F5006B9107 /* Joiefull */;
 		};
@@ -50,6 +51,13 @@
 			membershipExceptions = (
 				ProductDetailView.swift,
 				ProductDetailViewModel.swift,
+			);
+			target = 2288BA882EB8B6F5006B9107 /* Joiefull */;
+		};
+		22CEC3E62EBA36E500BAB0AA /* Exceptions for "ProductRow" folder in "Joiefull" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				ProductRowView.swift,
 			);
 			target = 2288BA882EB8B6F5006B9107 /* Joiefull */;
 		};
@@ -76,9 +84,9 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
-		2288BABB2EB8E54C006B9107 /* Extensions */ = {
+		2288BABB2EB8E54C006B9107 /* DI */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Extensions;
+			path = DI;
 			sourceTree = "<group>";
 		};
 		2288BABD2EB8E56D006B9107 /* ProductDetail */ = {
@@ -95,6 +103,14 @@
 				2288BAC52EB8E646006B9107 /* Exceptions for "ProductList" folder in "Joiefull" target */,
 			);
 			path = ProductList;
+			sourceTree = "<group>";
+		};
+		22CEC3E52EBA36D800BAB0AA /* ProductRow */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				22CEC3E62EBA36E500BAB0AA /* Exceptions for "ProductRow" folder in "Joiefull" target */,
+			);
+			path = ProductRow;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -160,7 +176,7 @@
 			children = (
 				2288BAB62EB8E4F9006B9107 /* Models */,
 				2288BABA2EB8E541006B9107 /* Services */,
-				2288BABB2EB8E54C006B9107 /* Extensions */,
+				2288BABB2EB8E54C006B9107 /* DI */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -169,6 +185,7 @@
 			isa = PBXGroup;
 			children = (
 				2288BABE2EB8E570006B9107 /* ProductList */,
+				22CEC3E52EBA36D800BAB0AA /* ProductRow */,
 				2288BABD2EB8E56D006B9107 /* ProductDetail */,
 			);
 			path = Features;
@@ -192,7 +209,7 @@
 			fileSystemSynchronizedGroups = (
 				2288BAB62EB8E4F9006B9107 /* Models */,
 				2288BABA2EB8E541006B9107 /* Services */,
-				2288BABB2EB8E54C006B9107 /* Extensions */,
+				2288BABB2EB8E54C006B9107 /* DI */,
 			);
 			name = Joiefull;
 			packageProductDependencies = (
