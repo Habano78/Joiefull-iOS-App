@@ -6,3 +6,21 @@
 //
 
 import Foundation
+import Combine
+
+@MainActor
+class ProductDetailViewModel: ObservableObject {
+    
+    @Published var product: Product
+    
+    private let service: NetworkServiceProtocol
+    
+    init(product: Product, service: NetworkServiceProtocol) {
+        self.product = product
+        self.service = service
+    }
+    
+    // On ajoutera bientôt des fonctions ici, par exemple :
+    // func rateProduct(_ rating: Int) async { ... }
+    // func shareProduct() { ... }
+}

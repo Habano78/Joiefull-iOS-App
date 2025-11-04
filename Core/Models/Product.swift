@@ -7,12 +7,12 @@
 
 import Foundation
 
-struct Picture: Codable {
+struct Picture: Codable, Hashable {
         let url: String
         let description: String
 }
 
-struct Product: Codable, Identifiable {
+struct Product: Codable, Identifiable, Hashable {
         let id: Int
         let name: String
         let category: String
@@ -20,11 +20,4 @@ struct Product: Codable, Identifiable {
         let price: Double
         let originalPrice: Double
         let picture: Picture
-        
-        enum CodingKeys: String, CodingKey {
-                // lister tout ce qui correspond parfaitement
-                case id, name, category, likes, price, picture
-                // mapper ce qui est différent
-                case originalPrice = "original_price"
-        }
 }
