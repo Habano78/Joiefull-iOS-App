@@ -47,27 +47,62 @@ struct ProductListView: View {
                                         .padding()
                                         
                                         // CAS 4 : On a les données !
-                                case .loaded(let products):
-                                        ScrollView {
-                                                LazyVGrid(columns: [
-                                                        GridItem(.flexible()),
-                                                        GridItem(.flexible())
-                                                ], spacing: 16) {
+                                case .loaded(let sections):
+                                        
+                                        // une SEULE ScrollView verticale
+                                        ScrollView(.vertical, showsIndicators: false) {
+                                                
+                                                // VStack pour empiler les sections
+                                                VStack(alignment: .leading, spacing: 24) {
                                                         
-                                                        ForEach(products) { product in
+                                                        ForEach(sections, id: \.id) { section in
                                                                 
-                                                                        NavigationLink(value: product) {
-                                                                                // Ce que l'utilisateur voit
-                                                                            ProductRowView(product: product)
-                                                                        }
-                                                                        .buttonStyle(.plain) //
+                                                                // DÉBUT D'UNE SECTION
+                                                                VStack(alignment: .leading, spacing: 12) {
+                                                                        Text(section.category.capitalized) /// "TOPS" -> "Tops"
+                                                                                .font(.title2)
+                                                                                .fontWeight(.bold)
+                                                                                .padding(.horizontal)
+                                                                        
+                                                                        // CARROUSEL HORIZONTAL
+                                                                        ScrollView(.horizontal, showsIndicators: false) {
+                                                                                
+                                                                                LazyHStack(spacing: 16) {
+                                                                                        
+                                                                                        ForEach(section.products, id: \.id) { product in
+                                                                                                
+                                                                                                NavigationLink(value: product as Product) {
+                                                                                                        
+                                                                                                        ProductRowView(product: product)
+                                                                                                                .frame(width: 170)
+                                                                                                }
+                                                                                                .buttonStyle(.plain)
+                                                                                        }
+                                                                                }
+                                                                                .padding(.horizontal)
+                                                                                .padding(.bottom, 8)
+                                                                        } // --- Fin du Carrousel ---
+                                                                        
+                                                                } // --- Fin d'une Section ---
                                                         }
                                                 }
-                                                .padding()
+                                                .padding(.vertical)
+                                        }
+                                        // 9. On n'oublie pas notre gestionnaire de destination !
+                                        .navigationDestination(for: Product.self) { product in
+                                                // L'usine fabrique le VM de détail
+                                                let viewModel = diContainer.makeProductDetailViewModel(product: product)
+                                                // On crée la vue
+                                                ProductDetailView(viewModel: viewModel)
                                         }
                                 }
-                        } 
+                        }
                         .navigationTitle("Catalogue")
+                }
+                .task {
+                        if case .idle = viewModel.state {
+                                await viewModel.reload ()
+                        }
                 }
         }
 }

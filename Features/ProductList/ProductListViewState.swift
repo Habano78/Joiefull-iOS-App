@@ -11,6 +11,6 @@ import Foundation
 enum ProductListViewState {
         case idle
         case loading
-        case loaded([Product])
+        case loaded([ProductSection])
         case error(String)
 }

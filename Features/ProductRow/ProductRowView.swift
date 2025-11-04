@@ -11,54 +11,107 @@ struct ProductRowView: View {
         let product: Product
         
         var body: some View {
-                // empiler l'image et le texte
                 VStack(alignment: .leading, spacing: 8) {
                         
-                        AsyncImage(url: URL(string: product.picture.url)) { phase in
-                                switch phase {
+                        ZStack(alignment: .bottomTrailing) { /// ZStack pour superposer le badge des likes
                                 
-                                case .empty:
-                                        // Pendant le chargement
-                                        ProgressView()
-                                
-                                case .success(let image):
-                                        // Si l'image est chargée
-                                        image
-                                                .resizable()
-                                                .aspectRatio(contentMode: .fit)
-                                                .cornerRadius(10)
-                                
-                                case .failure: /// En cas d'erreur réseau
-                                        Image(systemName: "photo.fill")
-                                                .foregroundColor(.gray)
-                                @unknown default:
-                                        EmptyView()
+                                AsyncImage(url: URL(string: product.picture.url)) { phase in
+                                        switch phase {
+                                        case .empty:
+                                                
+                                                ProgressView()
+                                                        .frame(maxWidth: .infinity)
+                                                        .frame(height: 150)
+                                                        .background(Color.gray.opacity(0.1))
+                                                
+                                        case .success(let image):
+                                                image
+                                                        .resizable()
+                                                        .aspectRatio(contentMode: .fill) ///  .fill pour remplir le cadre comme sur la maquette/
+                                                        .frame(height: 150)
+                                                        .clipped() ///coupe ce qui dépasse
+                                                
+                                        case .failure:
+                                                Image(systemName: "photo.fill") ///Icone "pas d'image"
+                                                        .foregroundColor(.gray)
+                                                        .frame(maxWidth: .infinity)
+                                                        .frame(height: 150)
+                                                        .background(Color.gray.opacity(0.1))
+                                                
+                                        @unknown default:
+                                                EmptyView()
+                                        }
                                 }
+                                .frame(height: 150)
+                                
+                                // Badge "Likes"
+                                HStack(spacing: 4) {
+                                        Image(systemName: "heart.fill")
+                                        Text("\(product.likes)")
+                                }
+                                .font(.caption.weight(.bold))
+                                .foregroundColor(.white)
+                                .padding(6)
+                                .background(Color.black.opacity(0.6))
+                                .cornerRadius(10)
+                                .padding(8)
+                                
                         }
-                        .frame(height: 150)
-                     
+                        .cornerRadius(10)
+                        
+                        
+                        // LE TEXTE
                         Text(product.name)
                                 .font(.headline)
                                 .lineLimit(2)
+                                .frame(minHeight: 40, alignment: .top)
                         
-                        Text(String(format: "%.2f €", product.price))
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
+                        // PRIX + NOTE
+                        HStack(alignment: .firstTextBaseline, spacing: 8) {
+                                
+                                // LA NOTE (si elle existe car l'API ne la fournit pas
+                                if let note = product.note {
+                                        HStack(spacing: 2) {
+                                                Image(systemName: "star.fill")
+                                                Text(String(format: "%.1f", note))
+                                        }
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                                
+                                //LES PRIX (VENTE + BARRÉ)
+                                
+                                Text(String(format: "%.2f €", product.price))
+                                        .font(.subheadline)
+                                        .fontWeight(.bold) // En gras, comme sur la maquette
+                                
+                                if product.originalPrice > product.price { ///  Si le prix original est différent (en promo)
+                                        Text(String(format: "%.2f €", product.originalPrice))
+                                                .font(.caption)
+                                                .foregroundColor(.secondary)
+                                                .strikethrough() // Le modificateur "barré"
+                                }
+                                
+                                Spacer()
+                        }
                         
-                        Spacer()
+                        Spacer() // Pousse tout vers le haut
                 }
                 .padding(8)
                 .background(Color.gray.opacity(0.1))
                 .cornerRadius(10)
                 
-                //MARK:  --- ACCESSIBILITÉ ---
+                //MARK: --- ACCESSIBILITÉ ---
                 
-                // Combine tous les éléments en un seul "bouton"
-                // pour VoiceOver
                 .accessibilityElement(children: .combine)
-                // L'étiquette lue par VoiceOver
-                .accessibilityLabel("\(product.name), \(String(format: "%.2f", product.price)) euros")
-                // L'indice (l'alt-text de l'API !)
+                .accessibilityLabel("\(product.name), \(product.likes) favoris, \(String(format: "%.2f", product.price)) euros")
                 .accessibilityHint(product.picture.description)
         }
+}
+
+
+#Preview {
+        ProductRowView(product: MockData.product)
+                .padding()
+                .frame(width: 200)
 }

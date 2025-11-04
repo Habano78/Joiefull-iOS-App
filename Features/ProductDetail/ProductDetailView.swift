@@ -53,3 +53,21 @@ struct ProductDetailView: View {
                 .navigationBarTitleDisplayMode(.inline)
         }
 }
+
+#Preview {
+        // 1. Crée les dépendances factices
+        let mockProduct = MockData.product
+        let mockService = MockNetworkService()
+        
+        // 2. Crée le ViewModel
+        let viewModel = ProductDetailViewModel(
+                product: mockProduct,
+                service: mockService
+        )
+        
+        // 3. Affiche la vue dans un NavigationStack
+        //    pour voir le titre de navigation
+        NavigationStack {
+                ProductDetailView(viewModel: viewModel)
+        }
+}
