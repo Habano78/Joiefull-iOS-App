@@ -26,11 +26,11 @@ class ProductListViewModel: ObservableObject {
                 }
         }
         
-        //MARK: ACTION PRINCIPALE
+        //MARK: METHODES
         
         private func fetchProducts() async {
                 
-                if case .loading = state { 
+                if case .loading = state {
                         return
                 }
                 
@@ -39,23 +39,21 @@ class ProductListViewModel: ObservableObject {
                 do {
                         let products = try await service.fetchProducts()
                         
-                        // On vérifie que la tâche n'a pas été annulée
-                        try Task.checkCancellation()
+                        try Task.checkCancellation() /// On vérifie que la tâche n'a pas été annulée
                         
-                        // On met à jour l'état
-                        self.state = .loaded(products)
+                        self.state = .loaded(products) /// On met à jour l'état
                         
                 } catch is CancellationError {
-                        // Si la tâche est annulée (ex: l'utilisateur quitte la vue),on revient à l'état initial.
-                        self.state = .idle
+                        self.state = .idle /// Si la tâche est annulée (ex: l'utilisateur quitte la vue),on revient à l'état initial.
+                        
                 } catch let error as NetworkError {
                         self.state = .error(error.errorDescription ?? "Une erreur est survenue")
+                        
                 } catch {
                         self.state = .error(error.localizedDescription)
                 }
         }
         
-        // C'est la seule fonction que la Vue appellera.
         func reload() async {
                 await fetchProducts()
         }

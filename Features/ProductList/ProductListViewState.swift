@@ -8,7 +8,6 @@
 import Foundation
 
 
-// public pour que le ViewModel et la Vue puissent le voir.
 enum ProductListViewState {
         case idle
         case loading

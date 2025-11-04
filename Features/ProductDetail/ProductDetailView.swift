@@ -8,29 +8,28 @@ import SwiftUI
 
 struct ProductDetailView: View {
         
-        // 1. La source de vérité pour cet écran
+        
         @StateObject private var viewModel: ProductDetailViewModel
         
-        // 2. L'init qui permet l'injection
+        //MARK: --- init ---
+        
         init(viewModel: ProductDetailViewModel) {
                 _viewModel = StateObject(wrappedValue: viewModel)
         }
         
         var body: some View {
-                // Pour l'instant, on affiche juste l'image et la description
                 ScrollView {
                         VStack(alignment: .leading, spacing: 16) {
                                 
-                                // L'image (comme dans le RowView)
                                 AsyncImage(url: URL(string: viewModel.product.picture.url)) { phase in
                                         if let image = phase.image {
                                                 image
                                                         .resizable()
                                                         .aspectRatio(contentMode: .fit)
                                         } else if phase.error != nil {
-                                                Image(systemName: "photo.fill") // Erreur
+                                                Image(systemName: "photo.fill")
                                         } else {
-                                                ProgressView() // Chargement
+                                                ProgressView()
                                         }
                                 }
                                 
@@ -50,8 +49,7 @@ struct ProductDetailView: View {
                         }
                         .padding()
                 }
-                // Le titre de la barre de navigation
-                .navigationTitle(viewModel.product.name)
+                .navigationTitle(viewModel.product.name) /// Le titre de la barre de navigation
                 .navigationBarTitleDisplayMode(.inline)
         }
 }

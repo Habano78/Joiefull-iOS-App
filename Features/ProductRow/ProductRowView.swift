@@ -16,17 +16,19 @@ struct ProductRowView: View {
                         
                         AsyncImage(url: URL(string: product.picture.url)) { phase in
                                 switch phase {
+                                
                                 case .empty:
                                         // Pendant le chargement
                                         ProgressView()
+                                
                                 case .success(let image):
                                         // Si l'image est chargée
                                         image
-                                                .resizable() // La rend redimensionnable
-                                                .aspectRatio(contentMode: .fit) // Garde les proportions
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fit)
                                                 .cornerRadius(10)
-                                case .failure:
-                                        // En cas d'erreur réseau
+                                
+                                case .failure: /// En cas d'erreur réseau
                                         Image(systemName: "photo.fill")
                                                 .foregroundColor(.gray)
                                 @unknown default:
@@ -34,8 +36,7 @@ struct ProductRowView: View {
                                 }
                         }
                         .frame(height: 150)
-                        
-                        // LE TEXTE
+                     
                         Text(product.name)
                                 .font(.headline)
                                 .lineLimit(2)

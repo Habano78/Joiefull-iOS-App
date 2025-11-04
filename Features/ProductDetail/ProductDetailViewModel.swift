@@ -20,7 +20,6 @@ class ProductDetailViewModel: ObservableObject {
         self.service = service
     }
     
-    // On ajoutera bientôt des fonctions ici, par exemple :
     // func rateProduct(_ rating: Int) async { ... }
     // func shareProduct() { ... }
 }

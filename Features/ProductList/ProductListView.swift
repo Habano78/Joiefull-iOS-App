@@ -55,7 +55,7 @@ struct ProductListView: View {
                                                 ], spacing: 16) {
                                                         
                                                         ForEach(products) { product in
-                                                                // Le 'NavigationLink' gère le clic.
+                                                                
                                                                         NavigationLink(value: product) {
                                                                                 // Ce que l'utilisateur voit
                                                                             ProductRowView(product: product)
