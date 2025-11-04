@@ -45,6 +45,7 @@
 				ProductListView.swift,
 				ProductListViewModel.swift,
 				ProductListViewState.swift,
+				ProductSection.swift,
 			);
 			target = 2288BA882EB8B6F5006B9107 /* Joiefull */;
 		};

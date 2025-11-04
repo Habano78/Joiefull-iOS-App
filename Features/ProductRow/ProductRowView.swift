@@ -13,12 +13,12 @@ struct ProductRowView: View {
         var body: some View {
                 VStack(alignment: .leading, spacing: 8) {
                         
-                        ZStack(alignment: .topTrailing) { /// ZStack pour superposer le badge des likes
+                        ZStack(alignment: .bottomTrailing) { /// ZStack pour superposer le badge des likes
                                 
                                 AsyncImage(url: URL(string: product.picture.url)) { phase in
                                         switch phase {
                                         case .empty:
-
+                                                
                                                 ProgressView()
                                                         .frame(maxWidth: .infinity)
                                                         .frame(height: 150)
@@ -44,7 +44,7 @@ struct ProductRowView: View {
                                 }
                                 .frame(height: 150)
                                 
-                                // Badge "Likes" (♡ 24)
+                                // Badge "Likes"
                                 HStack(spacing: 4) {
                                         Image(systemName: "heart.fill")
                                         Text("\(product.likes)")
@@ -56,24 +56,50 @@ struct ProductRowView: View {
                                 .cornerRadius(10)
                                 .padding(8)
                                 
-                        } // Fin du ZStack
+                        }
                         .cornerRadius(10)
                         
-        
-                        // TEXTE
+                        
+                        // LE TEXTE
                         Text(product.name)
                                 .font(.headline)
                                 .lineLimit(2)
+                                .frame(minHeight: 40, alignment: .top)
                         
-                        Text(String(format: "%.2f €", product.price))
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
+                        // PRIX + NOTE
+                        HStack(alignment: .firstTextBaseline, spacing: 8) {
+                                
+                                // LA NOTE (si elle existe car l'API ne la fournit pas
+                                if let note = product.note {
+                                        HStack(spacing: 2) {
+                                                Image(systemName: "star.fill")
+                                                Text(String(format: "%.1f", note))
+                                        }
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                                
+                                //LES PRIX (VENTE + BARRÉ)
+                                
+                                Text(String(format: "%.2f €", product.price))
+                                        .font(.subheadline)
+                                        .fontWeight(.bold) // En gras, comme sur la maquette
+                                
+                                if product.originalPrice > product.price { ///  Si le prix original est différent (en promo)
+                                        Text(String(format: "%.2f €", product.originalPrice))
+                                                .font(.caption)
+                                                .foregroundColor(.secondary)
+                                                .strikethrough() // Le modificateur "barré"
+                                }
+                                
+                                Spacer()
+                        }
                         
-                        Spacer()
+                        Spacer() // Pousse tout vers le haut
                 }
                 .padding(8)
-                .background(Color.gray.opacity(0.1)) // Le fond de la carte
-                .cornerRadius(10) // Les coins de la carte
+                .background(Color.gray.opacity(0.1))
+                .cornerRadius(10)
                 
                 //MARK: --- ACCESSIBILITÉ ---
                 
@@ -87,5 +113,5 @@ struct ProductRowView: View {
 #Preview {
         ProductRowView(product: MockData.product)
                 .padding()
-                .frame(width: 200) // Donne une largeur fixe pour l'aperçu
+                .frame(width: 200)
 }

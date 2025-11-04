@@ -33,11 +33,21 @@ class ProductListViewModel: ObservableObject {
                 self.state = .loading
                 
                 do {
+                        // 1. On récupère la liste plate (ne change pas)
                         let products = try await service.fetchProducts()
+                        try Task.checkCancellation()
                         
-                        try Task.checkCancellation() /// On vérifie que la tâche n'a pas été annulée
                         
-                        self.state = .loaded(products) /// On met à jour l'état
+                        // un Dictionnaire pour grouper tous les produits par catégorie.
+                        let groupedProducts = Dictionary(grouping: products, by: { $0.category })
+                        
+                        // On transforme ce dictionnaire en notre array de [ProductSection]
+                        let sections = groupedProducts.map { (category, products) in
+                                ProductSection(category: category, products: products)
+                        }.sorted(by: { $0.category < $1.category })
+                        
+                        // On envoie les SECTIONS à la vue
+                        self.state = .loaded(sections)
                         
                 } catch is CancellationError {
                         self.state = .idle /// Si la tâche est annulée (ex: l'utilisateur quitte la vue),on revient à l'état initial.
