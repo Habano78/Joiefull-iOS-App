@@ -20,10 +20,6 @@ class ProductListViewModel: ObservableObject {
         
         init(service: NetworkServiceProtocol) {
                 self.service = service
-                
-                Task {
-                        await self.reload()
-                }
         }
         
         //MARK: METHODES

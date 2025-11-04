@@ -50,24 +50,68 @@ struct ProductListView: View {
                                 case .loaded(let products):
                                         ScrollView {
                                                 LazyVGrid(columns: [
-                                                        GridItem(.flexible()),
-                                                        GridItem(.flexible())
+                                                        GridItem(.adaptive(minimum: 160)) ///Grille adaptative pour IPad
                                                 ], spacing: 16) {
                                                         
                                                         ForEach(products) { product in
                                                                 
-                                                                        NavigationLink(value: product) {
-                                                                                // Ce que l'utilisateur voit
-                                                                            ProductRowView(product: product)
-                                                                        }
-                                                                        .buttonStyle(.plain) //
+                                                                NavigationLink(value: product) {
+                                                                        // Ce que l'utilisateur voit
+                                                                        ProductRowView(product: product)
+                                                                }
+                                                                .buttonStyle(.plain) //
                                                         }
                                                 }
                                                 .padding()
                                         }
                                 }
-                        } 
+                        }
                         .navigationTitle("Catalogue")
                 }
+                .task {
+                        if case .idle = viewModel.state {
+                                await viewModel.reload ()
+                        }
+                }
         }
+}
+
+
+#Preview("1. Liste Chargée (Loaded)") {
+        // Crée un service factice
+        let mockService = MockNetworkService()
+        // Crée un VM
+        let viewModel = ProductListViewModel(service: mockService)
+        // FORCE l'état à ".loaded"
+        viewModel.state = .loaded(MockData.products)
+        
+        // Crée un faux conteneur
+        let diContainer = AppDIContainer()
+        
+        return ProductListView(viewModel: viewModel)
+                .environmentObject(diContainer)
+}
+
+#Preview("2. En Chargement (Loading)") {
+        let mockService = MockNetworkService()
+        let viewModel = ProductListViewModel(service: mockService)
+        // FORCE l'état à ".loading"
+        viewModel.state = .loading
+        
+        let diContainer = AppDIContainer()
+        
+        return ProductListView(viewModel: viewModel)
+                .environmentObject(diContainer)
+}
+
+#Preview("3. Erreur") {
+        let mockService = MockNetworkService()
+        let viewModel = ProductListViewModel(service: mockService)
+        // FORCE l'état à ".error"
+        viewModel.state = .error("Ceci est une erreur de preview ❌")
+        
+        let diContainer = AppDIContainer()
+        
+        return ProductListView(viewModel: viewModel)
+                .environmentObject(diContainer)
 }
