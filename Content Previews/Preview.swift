@@ -6,10 +6,17 @@
 //
 
 import Foundation
+import SwiftUI
 
 class MockNetworkService: NetworkServiceProtocol {
+        
         func fetchProducts() async throws -> [Product] {
                 return []
+        }
+        
+        func downloadImage(from urlString: String) async throws -> UIImage {
+                
+                return UIImage(systemName: "photo.fill")!
         }
 }
 
@@ -42,7 +49,7 @@ struct MockData {
                         price: 49.99,
                         originalPrice: 59.99,
                         picture: Picture(
-                        
+                                
                                 url: "https://raw.githubusercontent.com/OpenClassrooms-Student-Center/Cr-ez-une-interface-dynamique-et-accessible-avec-SwiftUI/main/img/bottoms/1.jpg",
                                 description: "Un jean bleu."
                         )

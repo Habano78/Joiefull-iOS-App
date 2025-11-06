@@ -19,7 +19,6 @@ class AppDIContainer: ObservableObject {
                 
         }
         
-        
         //MARK: --- Construction des VIEWMODELS ---
      
         func makeProductListViewModel() -> ProductListViewModel {

@@ -41,7 +41,7 @@ class ProductListViewModel: ObservableObject {
                         // un Dictionnaire pour grouper tous les produits par catégorie.
                         let groupedProducts = Dictionary(grouping: products, by: { $0.category })
                         
-                        // On transforme ce dictionnaire en notre array de [ProductSection]
+                        // On transforme ce dictionnaire en array de [ProductSection]
                         let sections = groupedProducts.map { (category, products) in
                                 ProductSection(category: category, products: products)
                         }.sorted(by: { $0.category < $1.category })
