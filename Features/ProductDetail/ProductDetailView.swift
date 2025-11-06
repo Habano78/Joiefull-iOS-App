@@ -51,7 +51,7 @@ struct ProductDetailView: View {
                         .navigationTitle(viewModel.product.name)
                         .navigationBarTitleDisplayMode(.inline)
                         
-                        // --- BOUTON DE PARTAGE ---
+                        //MARK: ___ Bouton de partage ___
                         .toolbar {
                                 ToolbarItem(placement: .navigationBarTrailing) {
                                         Button {
@@ -65,7 +65,8 @@ struct ProductDetailView: View {
                                 }
                         }
                         
-                        // --- FEUILLE DE PARTAGE ---
+                        
+                        //MARK: ___ Feuille de Partage ___
                         .sheet(isPresented: $viewModel.isShowingShareSheet, onDismiss: {
                                 viewModel.resetShareableImage()
                         }) {
@@ -73,8 +74,13 @@ struct ProductDetailView: View {
                                         
                                         let message = "Regarde cet article sur Joiefull : \(viewModel.product.name)"
                                         
-                                        // L'IMAGE EN PREMIER !
-                                        ShareSheet(items: [image, message])
+                                        //  "wrapper" intelligent
+                                        let shareProvider = ImageShareProvider(
+                                                image: image,
+                                                message: message
+                                        )
+                                        
+                                        ShareSheet(items: [shareProvider])
                                         
                                 } else {
                                         Text("Erreur lors de la préparation de l'image.")
@@ -89,6 +95,6 @@ struct ProductDetailView: View {
                                         .cornerRadius(10)
                         }
                         
-                } // Fin du ZStack
+                }
         }
 }
