@@ -6,11 +6,13 @@
 //
 
 import Foundation
+import SwiftUI
 
 //MARK: -- PROTOCOLE
 
 protocol NetworkServiceProtocol {
         func fetchProducts() async throws -> [Product]
+        func downloadImage(from urlString: String) async throws -> UIImage
 }
 
 
@@ -24,12 +26,10 @@ class NetworkService: NetworkServiceProtocol {
                 
                 do {
                         
-                        // 1. GESTION ERREUR CLIENT
-                        guard let url = URL(string: apiURL) else {
+                        guard let url = URL(string: apiURL) else { //MEME URL abajo
                                 throw NetworkError.invalidURL
                         }
                         
-                        // 2. APPEL RÉSEAU
                         let (data, response) = try await URLSession.shared.data(from: url)
                         
                         // 3. GESTION ERREUR SERVEUR
@@ -66,6 +66,31 @@ class NetworkService: NetworkServiceProtocol {
                         throw NetworkError.unknownError(error)
                 }
         }
+        
+        //MARK: --- Image
+        
+        func downloadImage(from urlString: String) async throws -> UIImage {
+                // 1. On utilise le même 'guard' que pour le fetch
+                guard let url = URL(string: urlString) else { // ????? url arriba : mismo ? même guard ???
+                        throw NetworkError.invalidURL
+                }
+                
+                let (data, response) = try await URLSession.shared.data(from: url)
+                
+                guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+                        let statusCode = (response as? HTTPURLResponse)?.statusCode ?? -1
+                        throw NetworkError.serverError(statusCode: statusCode)
+                }
+                
+                // 4. On transforme les 'data' en une 'UIImage'
+                if let image = UIImage(data: data) {
+                        return image
+                } else {
+                        // Si les données ne sont pas une image, c'est une erreur de décodage
+                        throw NetworkError.decodingError(DecodingError.dataCorrupted(.init(codingPath: [], debugDescription: "Invalid image data")))
+                }
+        }
+        
 }
 
 

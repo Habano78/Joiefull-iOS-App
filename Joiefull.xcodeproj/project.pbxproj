@@ -10,6 +10,7 @@
 		2288BA8D2EB8B6F5006B9107 /* JoiefullApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2288BA8C2EB8B6F5006B9107 /* JoiefullApp.swift */; };
 		2288BA912EB8B6F7006B9107 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2288BA902EB8B6F7006B9107 /* Assets.xcassets */; };
 		22CEC4032EBA970D00BAB0AA /* Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CEC4022EBA970D00BAB0AA /* Preview.swift */; };
+		22CEC4252EBB672700BAB0AA /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CEC4242EBB672700BAB0AA /* ShareSheet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +37,7 @@
 		2288BA962EB8B6F7006B9107 /* JoiefullTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JoiefullTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2288BAA02EB8B6F7006B9107 /* JoiefullUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JoiefullUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		22CEC4022EBA970D00BAB0AA /* Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preview.swift; sourceTree = "<group>"; };
+		22CEC4242EBB672700BAB0AA /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -146,6 +148,7 @@
 		2288BA802EB8B6F5006B9107 = {
 			isa = PBXGroup;
 			children = (
+				22CEC4232EBB66FD00BAB0AA /* Helpers */,
 				2288BAB32EB8E401006B9107 /* Application */,
 				2288BAB42EB8E464006B9107 /* Core */,
 				2288BABC2EB8E560006B9107 /* Features */,
@@ -189,8 +192,8 @@
 			isa = PBXGroup;
 			children = (
 				2288BABE2EB8E570006B9107 /* ProductList */,
-				22CEC3E52EBA36D800BAB0AA /* ProductRow */,
 				2288BABD2EB8E56D006B9107 /* ProductDetail */,
+				22CEC3E52EBA36D800BAB0AA /* ProductRow */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -201,6 +204,14 @@
 				22CEC4022EBA970D00BAB0AA /* Preview.swift */,
 			);
 			path = "Content Previews";
+			sourceTree = "<group>";
+		};
+		22CEC4232EBB66FD00BAB0AA /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				22CEC4242EBB672700BAB0AA /* ShareSheet.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -352,6 +363,7 @@
 			files = (
 				2288BA8D2EB8B6F5006B9107 /* JoiefullApp.swift in Sources */,
 				22CEC4032EBA970D00BAB0AA /* Preview.swift in Sources */,
+				22CEC4252EBB672700BAB0AA /* ShareSheet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
