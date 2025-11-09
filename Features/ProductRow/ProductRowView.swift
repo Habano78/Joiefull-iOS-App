@@ -13,7 +13,7 @@ struct ProductRowView: View {
         var body: some View {
                 VStack(alignment: .leading, spacing: 8) {
                         
-                        ZStack(alignment: .bottomTrailing) { /// ZStack pour superposer le badge des likes
+                        ZStack(alignment: .bottomTrailing) {
                                 
                                 AsyncImage(url: URL(string: product.picture.url)) { phase in
                                         switch phase {
@@ -29,7 +29,7 @@ struct ProductRowView: View {
                                                         .resizable()
                                                         .aspectRatio(contentMode: .fill) ///  .fill pour remplir le cadre comme sur la maquette/
                                                         .frame(height: 150)
-                                                        .clipped() ///coupe ce qui dépasse
+                                                        .clipped()
                                                 
                                         case .failure:
                                                 Image(systemName: "photo.fill") ///Icone "pas d'image"
@@ -46,7 +46,7 @@ struct ProductRowView: View {
                                 
                                 // Badge "Likes"
                                 HStack(spacing: 4) {
-                                        Image(systemName: "heart.fill")
+                                        Image(systemName: "heart")
                                         Text("\(product.likes)")
                                 }
                                 .font(.caption.weight(.bold))
@@ -60,16 +60,16 @@ struct ProductRowView: View {
                         .cornerRadius(10)
                         
                         
-                        // LE TEXTE
+                        // Nom
                         Text(product.name)
                                 .font(.headline)
                                 .lineLimit(2)
                                 .frame(minHeight: 40, alignment: .top)
                         
-                        // PRIX + NOTE
+                        // Prix + Note
                         HStack(alignment: .firstTextBaseline, spacing: 8) {
                                 
-                                // LA NOTE (si elle existe car l'API ne la fournit pas
+                                // LA NOTE (si elle existe car l'API ne la fournit pas)
                                 if let note = product.note {
                                         HStack(spacing: 2) {
                                                 Image(systemName: "star.fill")
@@ -79,17 +79,16 @@ struct ProductRowView: View {
                                         .foregroundColor(.secondary)
                                 }
                                 
-                                //LES PRIX (VENTE + BARRÉ)
-                                
+                                // PRIX : vente + barré
                                 Text(String(format: "%.2f €", product.price))
                                         .font(.subheadline)
-                                        .fontWeight(.bold) // En gras, comme sur la maquette
+                                        .fontWeight(.bold)
                                 
                                 if product.originalPrice > product.price { ///  Si le prix original est différent (en promo)
                                         Text(String(format: "%.2f €", product.originalPrice))
                                                 .font(.caption)
                                                 .foregroundColor(.secondary)
-                                                .strikethrough() // Le modificateur "barré"
+                                                .strikethrough() /// modificateur "barré"
                                 }
                                 
                                 Spacer()
@@ -101,7 +100,7 @@ struct ProductRowView: View {
                 .background(Color.gray.opacity(0.1))
                 .cornerRadius(10)
                 
-                //MARK: --- ACCESSIBILITÉ ---
+                //MARK: ___ ACCESSIBILITÉ ___
                 
                 .accessibilityElement(children: .combine)
                 .accessibilityLabel("\(product.name), \(product.likes) favoris, \(String(format: "%.2f", product.price)) euros")

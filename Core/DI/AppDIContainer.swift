@@ -10,24 +10,20 @@ import Combine
 
 class AppDIContainer: ObservableObject {
         
-        //MARK: SInGLeToNs
+        //MARK: SInGLeToN
         let networkService: NetworkServiceProtocol
         
         init() {
-                
                 self.networkService = NetworkService()
-                
         }
         
-        //MARK: --- Construction des VIEWMODELS ---
+        //MARK: ___ Construction des VIEWMODELS ___
      
         func makeProductListViewModel() -> ProductListViewModel {
-        
                 return ProductListViewModel(service: networkService)
         }
         
         func makeProductDetailViewModel(product: Product) -> ProductDetailViewModel {
-               
                 return ProductDetailViewModel(product: product, service: networkService)
         }
         

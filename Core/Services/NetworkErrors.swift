@@ -1,5 +1,5 @@
 //
-//  ErrorsService.swift
+//  NetworkError.swift
 //  Joiefull
 //
 //  Created by Perez William on 03/11/2025.
