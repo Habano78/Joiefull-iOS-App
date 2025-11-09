@@ -11,6 +11,8 @@
 		2288BA912EB8B6F7006B9107 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2288BA902EB8B6F7006B9107 /* Assets.xcassets */; };
 		22CEC4032EBA970D00BAB0AA /* Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CEC4022EBA970D00BAB0AA /* Preview.swift */; };
 		22CEC4252EBB672700BAB0AA /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CEC4242EBB672700BAB0AA /* ShareSheet.swift */; };
+		22CEC4612EBD441900BAB0AA /* ImageShareProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CEC4602EBD441900BAB0AA /* ImageShareProvider.swift */; };
+		22F08A922EBE2C680074743E /* StarRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F08A912EBE2C680074743E /* StarRatingView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +40,8 @@
 		2288BAA02EB8B6F7006B9107 /* JoiefullUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JoiefullUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		22CEC4022EBA970D00BAB0AA /* Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preview.swift; sourceTree = "<group>"; };
 		22CEC4242EBB672700BAB0AA /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
+		22CEC4602EBD441900BAB0AA /* ImageShareProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageShareProvider.swift; sourceTree = "<group>"; };
+		22F08A912EBE2C680074743E /* StarRatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarRatingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -148,10 +152,10 @@
 		2288BA802EB8B6F5006B9107 = {
 			isa = PBXGroup;
 			children = (
-				22CEC4232EBB66FD00BAB0AA /* Helpers */,
 				2288BAB32EB8E401006B9107 /* Application */,
 				2288BAB42EB8E464006B9107 /* Core */,
 				2288BABC2EB8E560006B9107 /* Features */,
+				22CEC4232EBB66FD00BAB0AA /* Helpers */,
 				22CEC4012EBA96D800BAB0AA /* Content Previews */,
 				2288BA992EB8B6F7006B9107 /* JoiefullTests */,
 				2288BAA32EB8B6F7006B9107 /* JoiefullUITests */,
@@ -210,6 +214,8 @@
 			isa = PBXGroup;
 			children = (
 				22CEC4242EBB672700BAB0AA /* ShareSheet.swift */,
+				22CEC4602EBD441900BAB0AA /* ImageShareProvider.swift */,
+				22F08A912EBE2C680074743E /* StarRatingView.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -295,7 +301,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 2600;
-				LastUpgradeCheck = 2600;
+				LastUpgradeCheck = 2610;
 				TargetAttributes = {
 					2288BA882EB8B6F5006B9107 = {
 						CreatedOnToolsVersion = 26.0.1;
@@ -361,6 +367,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22CEC4612EBD441900BAB0AA /* ImageShareProvider.swift in Sources */,
+				22F08A922EBE2C680074743E /* StarRatingView.swift in Sources */,
 				2288BA8D2EB8B6F5006B9107 /* JoiefullApp.swift in Sources */,
 				22CEC4032EBA970D00BAB0AA /* Preview.swift in Sources */,
 				22CEC4252EBB672700BAB0AA /* ShareSheet.swift in Sources */,
@@ -456,6 +464,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -513,6 +522,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};

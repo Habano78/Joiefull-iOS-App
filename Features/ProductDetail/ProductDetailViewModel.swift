@@ -12,50 +12,76 @@ import Combine
 @MainActor
 class ProductDetailViewModel: ObservableObject {
         
-        // MARK: - Properties
         
         @Published var product: Product
         private let service: NetworkServiceProtocol
         
+        // Sheet
         @Published var isShowingShareSheet = false /// Trigger de Sheet
         @Published private(set) var imageToShare: UIImage? ///Image télécharhgée pour la view
-        
         @Published private(set) var isPreparingShare = false
         
+        // Avis
+        @Published var userRating: Int = 0
+        @Published var userComment: String = ""
+        
+        // Favoris
+        @Published var isFavorite: Bool = false // est-ce que l'utilisateur à cliqué ?
+        
+        
+        //MARK: Init
         init(product: Product, service: NetworkServiceProtocol) {
                 self.product = product
                 self.service = service
         }
         
-        // MARK: - Download + Prepare
+        //MARK: Methodes
         
+        // Favoris : appelée quand on clique sur le coeur
+        func toggleFavorite () {
+                isFavorite.toggle()
+                
+                if isFavorite {
+                        
+                }
+                
+        }
+        
+        
+        // Download + Prepare
         func prepareShareableImage() async {
                 
-                self.isPreparingShare = true
-                defer { self.isPreparingShare = false }
+                // pour éviter le double-clic
+                guard !isPreparingShare else { return }
+                
+                isPreparingShare = true
+                defer { isPreparingShare = false }
                 
                 do {
-                        // demande au service de télécharger l'image
+                        // téléchargement de l'image
                         let image = try await service.downloadImage(
                                 from: product.picture.url
                         )
                         
-                        // stocke l'image ET on active le trigger
-                        self.imageToShare = image
-                        self.isShowingShareSheet = true // Trigger
+                        // si la vue a disparu, on annule la tâche ici
+                        try Task.checkCancellation()
+                        
+                        // on n'arrive ici que si la tâche est toujours active
+                        imageToShare = image
+                        isShowingShareSheet = true
+                        
+                } catch is CancellationError { /// annulation cancellée
                         
                 } catch let error as NetworkError {
-                        // (On pourrait aussi publier cette erreur à la vue)
                         print("Erreur de téléchargement d'image: \(error.errorDescription ?? "")")
-                        self.imageToShare = nil
+                        imageToShare = nil
                 } catch {
                         print("Erreur inconnue: \(error.localizedDescription)")
-                        self.imageToShare = nil
+                        imageToShare = nil
                 }
         }
         
         // MARK: - Reset
-        
         func resetShareableImage() {
                 imageToShare = nil
                 isShowingShareSheet = false

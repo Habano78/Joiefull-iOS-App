@@ -14,16 +14,14 @@ class ProductListViewModel: ObservableObject {
         
         @Published var state: ProductListViewState = .idle
         
-        //MARK: INJECTION DE DÉPENDANCE
-        
         private let service: NetworkServiceProtocol
         
+        // MARK: init
         init(service: NetworkServiceProtocol) {
                 self.service = service
         }
         
         //MARK: METHODES
-        
         private func fetchProducts() async {
                 
                 if case .loading = state {
@@ -33,20 +31,15 @@ class ProductListViewModel: ObservableObject {
                 self.state = .loading
                 
                 do {
-                        // 1. On récupère la liste plate (ne change pas)
-                        let products = try await service.fetchProducts()
+                        let products = try await service.fetchProducts() /// recuperation de la liste
                         try Task.checkCancellation()
                         
-                        
-                        // un Dictionnaire pour grouper tous les produits par catégorie.
                         let groupedProducts = Dictionary(grouping: products, by: { $0.category })
                         
-                        // On transforme ce dictionnaire en array de [ProductSection]
                         let sections = groupedProducts.map { (category, products) in
                                 ProductSection(category: category, products: products)
                         }.sorted(by: { $0.category < $1.category })
                         
-                        // On envoie les SECTIONS à la vue
                         self.state = .loaded(sections)
                         
                 } catch is CancellationError {
