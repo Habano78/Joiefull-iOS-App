@@ -4,93 +4,107 @@
 //
 //  Created by Perez William on 03/11/2025.
 //
+
 import SwiftUI
 
 struct ProductListView: View {
         
         @EnvironmentObject private var diContainer: AppDIContainer
-        
         @StateObject private var viewModel: ProductListViewModel
+        
+        @State private var selectedProduct: Product? /// pour retenir quel produit est actuellement cliqué.
+
+        @State private var columnVisibility = NavigationSplitViewVisibility.all /// pour contrôler la visibilité des colonnes
         
         init(viewModel: ProductListViewModel) {
                 _viewModel = StateObject(wrappedValue: viewModel)
         }
         
         var body: some View {
-                NavigationStack {
+                
+                
+                NavigationSplitView(columnVisibility: $columnVisibility) {  /// pour lier le SPLIT VIEW à la sélection
+                        
+                        // Sidebar
                         Group {
                                 switch viewModel.state {
-                                        
                                 case .idle:
                                         Color.clear
-                                        
                                 case .loading:
                                         ProgressView("Chargement...")
-                                        
                                 case .error(let message):
                                         VStack(spacing: 20) {
-                                                Text("Erreur: \(message)")
-                                                        .foregroundColor(.red)
-                                                        .multilineTextAlignment(.center)
-                                                
-                                                Button("Réessayer") {
-                                                        Task {
-                                                                await viewModel.reload()
-                                                        }
-                                                }
-                                                .buttonStyle(.borderedProminent)
+                                                Text("Erreur: \(message)").foregroundColor(.red).multilineTextAlignment(.center)
+                                                Button("Réessayer") { Task { await viewModel.reload() } }
+                                                        .buttonStyle(.borderedProminent)
                                         }
                                         .padding()
                                         
                                 case .loaded(let sections):
                                         
-                                        ScrollView(.vertical, showsIndicators: false) {
-                                                
-                                                VStack(alignment: .leading, spacing: 24) {
-                                                        
-                                                        ForEach(sections, id: \.id) { section in
-                                                                
-                                                                VStack(alignment: .leading, spacing: 12) {
-                                                                        Text(section.category.capitalized) /// "TOPS" -> "Tops"
-                                                                                .font(.title2)
-                                                                                .fontWeight(.bold)
-                                                                                .padding(.horizontal)
-                                                                        
-                                                                        ScrollView(.horizontal, showsIndicators: false) {
-                                                                                
-                                                                                LazyHStack(spacing: 16) {
-                                                                                        
-                                                                                        ForEach(section.products, id: \.id) { product in
-                                                                                                
-                                                                                                NavigationLink(value: product as Product) {
-                                                                                                        
-                                                                                                        ProductRowView(product: product)
-                                                                                                                .frame(width: 170)
-                                                                                                }
-                                                                                                .buttonStyle(.plain)
+                                        List(selection: $selectedProduct) {
+                                                ForEach(sections) { section in
+                                                        Section(header: Text(section.category.capitalized).font(.title2).fontWeight(.bold)) {
+                                                                // Carrousel horizontal DANS la liste
+                                                                ScrollView(.horizontal, showsIndicators: false) {
+                                                                        LazyHStack(spacing: 16) {
+                                                                                ForEach(section.products) { product in
+                                                                                        // NAVIGATION LINK
+                                                                                        Button {
+                                                                                                selectedProduct = product
+                                                                                        } label: {
+                                                                                                ProductRowView(product: product)
+                                                                                                        .frame(width: 170)
                                                                                         }
+                                                                                        .buttonStyle(.plain)
                                                                                 }
-                                                                                .padding(.horizontal)
-                                                                                .padding(.bottom, 8)
                                                                         }
-                                                                        
+                                                                        .padding(.horizontal, -16)
                                                                 }
+                                                                .listRowInsets(EdgeInsets())
                                                         }
                                                 }
-                                                .padding(.vertical)
                                         }
-                                        .navigationDestination(for: Product.self) { product in
-                                                let viewModel = diContainer.makeProductDetailViewModel(product: product)
-                                                ProductDetailView(viewModel: viewModel)
-                                        }
+                                        .listStyle(.plain) // Style plus propre
                                 }
                         }
                         .navigationTitle("Catalogue")
+                        .navigationSplitViewColumnWidth(ideal: 450) 
+                        
+                } detail: {
+                        // vue détail; réagit à 'selectedProduct'
+                        if let product = selectedProduct {
+                                ProductDetailView(viewModel: diContainer.makeProductDetailViewModel(product: product))
+                                        .id(product.id) ///Si l'ID du produit change, considère que c'est une vue TOTALEMENT différente et redessine-la de zéro
+                        } else {
+                                // Sinon, on affiche le placeholder
+                                VStack(spacing: 20) {
+                                        Image(systemName: "tshirt")
+                                                .font(.system(size: 80))
+                                                .foregroundColor(.gray.opacity(0.3))
+                                        Text("Sélectionnez un article\npour voir les détails")
+                                                .font(.title2)
+                                                .multilineTextAlignment(.center)
+                                                .foregroundColor(.secondary)
+                                }
+                        }
                 }
+                // Tâche de démarrage
                 .task {
                         if case .idle = viewModel.state {
-                                await viewModel.reload ()
+                                await viewModel.reload()
                         }
                 }
         }
+}
+
+//MARK: Preview
+#Preview {
+        let mockService = MockNetworkService()
+        let viewModel = ProductListViewModel(service: mockService)
+        let mockSection = ProductSection(category: "Preview", products: MockData.products)
+        viewModel.state = .loaded([mockSection])
+        let diContainer = AppDIContainer()
+        return ProductListView(viewModel: viewModel)
+                .environmentObject(diContainer)
 }

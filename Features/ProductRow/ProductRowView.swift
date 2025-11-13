@@ -97,7 +97,7 @@ struct ProductRowView: View {
                         Spacer() // Pousse tout vers le haut
                 }
                 .padding(8)
-                .background(Color.gray.opacity(0.1))
+                .background(Color.joiefullCardBackground)
                 .cornerRadius(10)
                 
                 //MARK: ___ ACCESSIBILITÉ ___
