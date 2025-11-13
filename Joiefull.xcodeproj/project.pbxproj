@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		228796762EC5F155006803D6 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228796752EC5F155006803D6 /* Color.swift */; };
 		2288BA8D2EB8B6F5006B9107 /* JoiefullApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2288BA8C2EB8B6F5006B9107 /* JoiefullApp.swift */; };
 		2288BA912EB8B6F7006B9107 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2288BA902EB8B6F7006B9107 /* Assets.xcassets */; };
 		22CEC4032EBA970D00BAB0AA /* Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CEC4022EBA970D00BAB0AA /* Preview.swift */; };
@@ -33,6 +34,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		228796752EC5F155006803D6 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		2288BA892EB8B6F5006B9107 /* Joiefull.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Joiefull.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2288BA8C2EB8B6F5006B9107 /* JoiefullApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoiefullApp.swift; sourceTree = "<group>"; };
 		2288BA902EB8B6F7006B9107 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -156,7 +158,7 @@
 				2288BAB42EB8E464006B9107 /* Core */,
 				2288BABC2EB8E560006B9107 /* Features */,
 				22CEC4232EBB66FD00BAB0AA /* Helpers */,
-				22CEC4012EBA96D800BAB0AA /* Content Previews */,
+				22CEC4012EBA96D800BAB0AA /* Theme+Color */,
 				2288BA992EB8B6F7006B9107 /* JoiefullTests */,
 				2288BAA32EB8B6F7006B9107 /* JoiefullUITests */,
 				2288BA8A2EB8B6F5006B9107 /* Products */,
@@ -202,12 +204,13 @@
 			path = Features;
 			sourceTree = "<group>";
 		};
-		22CEC4012EBA96D800BAB0AA /* Content Previews */ = {
+		22CEC4012EBA96D800BAB0AA /* Theme+Color */ = {
 			isa = PBXGroup;
 			children = (
 				22CEC4022EBA970D00BAB0AA /* Preview.swift */,
+				228796752EC5F155006803D6 /* Color.swift */,
 			);
-			path = "Content Previews";
+			path = "Theme+Color";
 			sourceTree = "<group>";
 		};
 		22CEC4232EBB66FD00BAB0AA /* Helpers */ = {
@@ -369,6 +372,7 @@
 			files = (
 				22CEC4612EBD441900BAB0AA /* ImageShareProvider.swift in Sources */,
 				22F08A922EBE2C680074743E /* StarRatingView.swift in Sources */,
+				228796762EC5F155006803D6 /* Color.swift in Sources */,
 				2288BA8D2EB8B6F5006B9107 /* JoiefullApp.swift in Sources */,
 				22CEC4032EBA970D00BAB0AA /* Preview.swift in Sources */,
 				22CEC4252EBB672700BAB0AA /* ShareSheet.swift in Sources */,

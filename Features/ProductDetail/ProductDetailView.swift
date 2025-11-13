@@ -87,7 +87,7 @@ struct ProductDetailView: View {
                                                         // NOTE FAKE ici car la note n'est pas donnée par l'API
                                                         HStack(spacing: 4) {
                                                                 Image(systemName: "star.fill")
-                                                                        .foregroundColor(.yellow)
+                                                                        .foregroundColor(.joiefullStar)
                                                                 Text("4.6")
                                                                         .font(.subheadline.weight(.semibold))
                                                                         .foregroundColor(.secondary)
@@ -141,7 +141,7 @@ struct ProductDetailView: View {
                                                 TextEditor(text: $viewModel.userComment)
                                                         .frame(height: 100)
                                                         .padding(4)
-                                                        .background(Color.gray.opacity(0.1))
+                                                        .background(Color.joiefullCardBackground)
                                                         .cornerRadius(8)
                                                 
                                                 // Bouton d'envoi (fake))
@@ -155,7 +155,7 @@ struct ProductDetailView: View {
                                                                 .fontWeight(.semibold)
                                                                 .frame(maxWidth: .infinity)
                                                                 .padding()
-                                                                .background(Color.blue)
+                                                                .background(Color.joiefullPrimary)
                                                                 .foregroundColor(.white)
                                                                 .cornerRadius(12)
                                                 }
@@ -171,7 +171,7 @@ struct ProductDetailView: View {
                         
                         //MARK: ___ SPINNER ___
                         if viewModel.isPreparingShare {
-                                Color.black.opacity(0.4).edgesIgnoringSafeArea(.all)
+                                Color.joiefullSpinnerOverlay.edgesIgnoringSafeArea(.all)
                                 ProgressView("Préparation...")
                                         .padding()
                                         .background(Color.white)
