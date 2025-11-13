@@ -80,11 +80,6 @@
 			path = JoiefullTests;
 			sourceTree = "<group>";
 		};
-		2288BAA32EB8B6F7006B9107 /* JoiefullUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = JoiefullUITests;
-			sourceTree = "<group>";
-		};
 		2288BAB62EB8E4F9006B9107 /* Models */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Models;
@@ -160,7 +155,6 @@
 				22CEC4232EBB66FD00BAB0AA /* Helpers */,
 				22CEC4012EBA96D800BAB0AA /* Theme+Color */,
 				2288BA992EB8B6F7006B9107 /* JoiefullTests */,
-				2288BAA32EB8B6F7006B9107 /* JoiefullUITests */,
 				2288BA8A2EB8B6F5006B9107 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -207,8 +201,8 @@
 		22CEC4012EBA96D800BAB0AA /* Theme+Color */ = {
 			isa = PBXGroup;
 			children = (
-				22CEC4022EBA970D00BAB0AA /* Preview.swift */,
 				228796752EC5F155006803D6 /* Color.swift */,
+				22CEC4022EBA970D00BAB0AA /* Preview.swift */,
 			);
 			path = "Theme+Color";
 			sourceTree = "<group>";
@@ -285,9 +279,6 @@
 			);
 			dependencies = (
 				2288BAA22EB8B6F7006B9107 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				2288BAA32EB8B6F7006B9107 /* JoiefullUITests */,
 			);
 			name = JoiefullUITests;
 			packageProductDependencies = (

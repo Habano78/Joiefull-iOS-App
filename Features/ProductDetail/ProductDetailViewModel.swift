@@ -44,7 +44,6 @@ class ProductDetailViewModel: ObservableObject {
                 if isFavorite {
                         
                 }
-                
         }
         
         
