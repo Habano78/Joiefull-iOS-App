@@ -26,7 +26,7 @@ class ProductDetailViewModel: ObservableObject {
         @Published var userComment: String = ""
         
         // Favoris
-        @Published var isFavorite: Bool = false // est-ce que l'utilisateur à cliqué ?
+        @Published var isFavorite: Bool = false
         
         
         //MARK: Init
@@ -36,23 +36,19 @@ class ProductDetailViewModel: ObservableObject {
         }
         
         //MARK: Methodes
-        
-        // Favoris : appelée quand on clique sur le coeur
-        func toggleFavorite () {
+        func toggleFavorite () { /// appelée quand on clique sur le coeur/
                 isFavorite.toggle()
                 
                 if isFavorite {
                         
                 }
-                
         }
         
         
         // Download + Prepare
         func prepareShareableImage() async {
                 
-                // pour éviter le double-clic
-                guard !isPreparingShare else { return }
+                guard !isPreparingShare else { return } /// pour éviter le double-clic/
                 
                 isPreparingShare = true
                 defer { isPreparingShare = false }
@@ -73,10 +69,8 @@ class ProductDetailViewModel: ObservableObject {
                 } catch is CancellationError { /// annulation cancellée
                         
                 } catch let error as NetworkError {
-                        print("Erreur de téléchargement d'image: \(error.errorDescription ?? "")")
                         imageToShare = nil
                 } catch {
-                        print("Erreur inconnue: \(error.localizedDescription)")
                         imageToShare = nil
                 }
         }

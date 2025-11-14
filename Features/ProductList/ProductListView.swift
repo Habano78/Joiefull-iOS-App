@@ -14,7 +14,7 @@ struct ProductListView: View {
         
         @State private var selectedProduct: Product? /// pour retenir quel produit est actuellement cliqué.
 
-        @State private var columnVisibility = NavigationSplitViewVisibility.all /// pour contrôler la visibilité des colonnes
+        @State private var columnVisibility = NavigationSplitViewVisibility.all
         
         init(viewModel: ProductListViewModel) {
                 _viewModel = StateObject(wrappedValue: viewModel)
@@ -25,7 +25,7 @@ struct ProductListView: View {
                 
                 NavigationSplitView(columnVisibility: $columnVisibility) {  /// pour lier le SPLIT VIEW à la sélection
                         
-                        // Sidebar
+                        // ProductList
                         Group {
                                 switch viewModel.state {
                                 case .idle:
@@ -43,13 +43,14 @@ struct ProductListView: View {
                                 case .loaded(let sections):
                                         
                                         List(selection: $selectedProduct) {
+                                                
                                                 ForEach(sections) { section in
                                                         Section(header: Text(section.category.capitalized).font(.title2).fontWeight(.bold)) {
                                                                 // Carrousel horizontal DANS la liste
                                                                 ScrollView(.horizontal, showsIndicators: false) {
                                                                         LazyHStack(spacing: 16) {
+                                                                                
                                                                                 ForEach(section.products) { product in
-                                                                                        // NAVIGATION LINK
                                                                                         Button {
                                                                                                 selectedProduct = product
                                                                                         } label: {
@@ -65,19 +66,18 @@ struct ProductListView: View {
                                                         }
                                                 }
                                         }
-                                        .listStyle(.plain) // Style plus propre
+                                        .listStyle(.plain)
                                 }
                         }
                         .navigationTitle("Catalogue")
                         .navigationSplitViewColumnWidth(ideal: 450) 
                         
+                        // DetailView
                 } detail: {
-                        // vue détail; réagit à 'selectedProduct'
                         if let product = selectedProduct {
                                 ProductDetailView(viewModel: diContainer.makeProductDetailViewModel(product: product))
                                         .id(product.id) ///Si l'ID du produit change, considère que c'est une vue TOTALEMENT différente et redessine-la de zéro
                         } else {
-                                // Sinon, on affiche le placeholder
                                 VStack(spacing: 20) {
                                         Image(systemName: "tshirt")
                                                 .font(.system(size: 80))
@@ -89,22 +89,11 @@ struct ProductListView: View {
                                 }
                         }
                 }
-                // Tâche de démarrage
+                /// Tâche de démarrage
                 .task {
                         if case .idle = viewModel.state {
                                 await viewModel.reload()
                         }
                 }
         }
-}
-
-//MARK: Preview
-#Preview {
-        let mockService = MockNetworkService()
-        let viewModel = ProductListViewModel(service: mockService)
-        let mockSection = ProductSection(category: "Preview", products: MockData.products)
-        viewModel.state = .loaded([mockSection])
-        let diContainer = AppDIContainer()
-        return ProductListView(viewModel: viewModel)
-                .environmentObject(diContainer)
 }

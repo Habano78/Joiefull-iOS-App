@@ -31,7 +31,7 @@ class ProductListViewModel: ObservableObject {
                 self.state = .loading
                 
                 do {
-                        let products = try await service.fetchProducts() /// recuperation de la liste
+                        let products = try await service.fetchProducts() 
                         try Task.checkCancellation()
                         
                         let groupedProducts = Dictionary(grouping: products, by: { $0.category })

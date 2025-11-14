@@ -14,14 +14,12 @@ struct JoiefullApp: App {
         
         var body: some Scene {
                 WindowGroup {
-                        // On fabrique le ViewModel utilisant l'usine
+                        
                         let viewModel = diContainer.makeProductListViewModel()
                         
-                        // On injecte le VM dans la vue.
-                        ProductListView(viewModel: viewModel)
+                        ProductListView(viewModel: viewModel) /// On injecte le VM dans la vue.
                         
-                        //On injecte le conteneur pour les futures vues (ex: l'écran de détail)
-                                .environmentObject(diContainer)
+                                .environmentObject(diContainer) ///On injecte le conteneur pour les futures vues (ex: l'écran de détail)/
                 }
         }
 }

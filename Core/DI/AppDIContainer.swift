@@ -13,11 +13,12 @@ class AppDIContainer: ObservableObject {
         //MARK: SInGLeToN
         let networkService: NetworkServiceProtocol
         
+        //MARK: Init
         init() {
                 self.networkService = NetworkService()
         }
         
-        //MARK: ___ Construction des VIEWMODELS ___
+        //MARK: Construction des VIEWMODELS 
      
         func makeProductListViewModel() -> ProductListViewModel {
                 return ProductListViewModel(service: networkService)

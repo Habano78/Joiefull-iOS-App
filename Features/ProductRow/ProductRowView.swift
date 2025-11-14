@@ -107,10 +107,3 @@ struct ProductRowView: View {
                 .accessibilityHint(product.picture.description)
         }
 }
-
-
-#Preview {
-        ProductRowView(product: MockData.product)
-                .padding()
-                .frame(width: 200)
-}
