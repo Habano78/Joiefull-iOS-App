@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct StarRatingView: View {
-        // un Binding pour que la vue parente puisse lire ET modifier la note.
-        @Binding var rating: Int
+        
+        @Binding var rating: Int ///  Binding pour que la vue parente puisse lire ET modifier la note.
         
         var maxRating = 5
-        var interactive = true // Pour savoir si on peut cliquer
+        var interactive = true /// Pour savoir si on peut cliquer
         
         var body: some View {
                 HStack(spacing: 4) {
@@ -30,8 +30,4 @@ struct StarRatingView: View {
                         }
                 }
         }
-}
-
-#Preview {
-        StarRatingView(rating: .constant(3))
 }

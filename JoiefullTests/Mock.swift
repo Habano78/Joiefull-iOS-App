@@ -32,10 +32,10 @@ class MockNetworkService: NetworkServiceProtocol {
                 case failure(Error)
         }
         
-        // On configure ce que 'fetchProducts' doit faire
+        // Configuration de 'fetchProducts'
         var fetchProductsResult: MockResult = .success
         
-        // On configure ce que 'downloadImage' doit faire
+        // Configuration de'downloadImage'
         var downloadImageResult: MockResult = .success
         
         // Compteurs
@@ -46,12 +46,14 @@ class MockNetworkService: NetworkServiceProtocol {
         func fetchProducts() async throws -> [Product] {
                 fetchProductsCallCount += 1
                 
+                try await Task.sleep(nanoseconds: 500_000_000)/// Simule un  appel réseau (ex: 0.5 sec)
+                try Task.checkCancellation()
+                
                 switch fetchProductsResult {
                 case .success:
                         return [mockTestProduct]
                         
                 case .failure(let error):
-                        // On lance l'erreur qu'on nous a donnée !
                         throw error
                 }
         }
@@ -60,7 +62,7 @@ class MockNetworkService: NetworkServiceProtocol {
         func downloadImage(from urlString: String) async throws -> UIImage {
                 downloadImageCallCount += 1
                 
-                try await Task.sleep(nanoseconds: 1_000_000_000) // On garde le délai
+                try await Task.sleep(nanoseconds: 1_000_000_000) // pour simuler un télechargement
                 try Task.checkCancellation()
                 
                 switch downloadImageResult {

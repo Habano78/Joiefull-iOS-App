@@ -19,18 +19,18 @@ class ImageShareProvider: NSObject, UIActivityItemSource {
         super.init()
     }
     
-    // 1. Ce que la feuille de partage doit afficher (un placeholder)
+    // Ce que la feuille de partage doit afficher (un placeholder)
     func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
         return image
     }
     
-    // 2. L'objet réel à partager
+    // L'objet réel à partager
     func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
         // On retourne l'image pour la plupart des activités
         return image
     }
     
-    // 3. Le "contexte" (le texte) qui va AVEC l'image
+    // Le "contexte" (le texte) qui va AVEC l'image
     func activityViewControllerLinkMetadata(_ activityViewController: UIActivityViewController) -> LPLinkMetadata? {
         let metadata = LPLinkMetadata()
         

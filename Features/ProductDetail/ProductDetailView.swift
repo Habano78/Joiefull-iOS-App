@@ -27,7 +27,7 @@ struct ProductDetailView: View {
                                 
                                 VStack(alignment: .leading, spacing: 20) {
                                         
-                                        //MARK: BLOC IMAGE + BADGES
+                                        // IMAGE + BADGES
                                         ZStack(alignment: .bottomTrailing) {
                                                 
                                                 AsyncImage(url: URL(string: viewModel.product.picture.url)) { phase in
@@ -49,7 +49,7 @@ struct ProductDetailView: View {
                                                 }
                                                 
                                                 
-                                                // ___ Coeur Interactif___
+                                                // LIKES
                                                 Button {
                                                         withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
                                                                 viewModel.toggleFavorite()
@@ -75,16 +75,14 @@ struct ProductDetailView: View {
                                         .padding(.horizontal)
                                         
                                         
-                                        //MARK: ___ Bloc Informations ___
+                                        // INFORMATIONS
                                         VStack(alignment: .leading, spacing: 8) {
                                                 
                                                 HStack  {
-                                                        // nom de Produit
                                                         Text(viewModel.product.name)
                                                                 .font(.title2.weight(.bold))
-                                                        
                                                         Spacer()
-                                                        // NOTE FAKE ici car la note n'est pas donnée par l'API
+                                                        // NOTE FAKE car pas donnée par l'API
                                                         HStack(spacing: 4) {
                                                                 Image(systemName: "star.fill")
                                                                         .foregroundColor(.joiefullStar)
@@ -124,7 +122,7 @@ struct ProductDetailView: View {
                                         Divider().padding(.horizontal)
                                         
                                         
-                                        //MARK: ___ Section Avis ___
+                                        //MARK: Section Avis
                                         VStack(alignment: .leading, spacing: 12) {
                                                 Text("Avis").font(.headline)
                                                 
@@ -194,8 +192,6 @@ struct ProductDetailView: View {
                         }
                 }
                 
-                //MARK: ___ Task & Sheet ___
-                
                 // Tâche de préparation du partage
                 .task(id: triggerTask) {
                         guard triggerTask else { return }
@@ -215,17 +211,5 @@ struct ProductDetailView: View {
                                 ShareSheet(items: [shareProvider])
                         }
                 }
-        }
-}
-
-//MARK: ___ Preview ___
-#Preview {
-        let mockProduct = MockData.product
-        let mockService = MockNetworkService()
-        let viewModel = ProductDetailViewModel(product: mockProduct, service: mockService)
-        
-        return NavigationStack {
-                ProductDetailView(viewModel: viewModel)
-                        .navigationTitle("Home")
         }
 }

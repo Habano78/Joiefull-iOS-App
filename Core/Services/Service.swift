@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-//MARK: -- PROTOCOLE
+//MARK: ___ PROTOCOLE ___
 
 protocol NetworkServiceProtocol {
         func fetchProducts() async throws -> [Product]
@@ -16,7 +16,7 @@ protocol NetworkServiceProtocol {
 }
 
 
-//MARK: -- IMPLÉMENTATION
+//MARK: ___ IMPLÉMENTATION ___
 
 class NetworkService: NetworkServiceProtocol {
         
@@ -64,8 +64,8 @@ class NetworkService: NetworkServiceProtocol {
         //MARK: ___ Telechargement de l'image
         
         func downloadImage(from urlString: String) async throws -> UIImage {
-                // 1. On utilise le même 'guard' que pour le fetch
-                guard let url = URL(string: urlString) else { // ????? url arriba : mismo ? même guard ???
+                
+                guard let url = URL(string: urlString) else {
                         throw NetworkError.invalidURL
                 }
                 
@@ -84,6 +84,3 @@ class NetworkService: NetworkServiceProtocol {
         }
         
 }
-
-
-//  NOTE : toute la complexité de la gestion d'erreurs est centralisée à l'intérieur du NetworkService. Séparation des Préoccupations!

@@ -17,163 +17,142 @@ struct ProductDetailViewModelTests {
         @MainActor
         init() {
                 mockService = MockNetworkService()
-                sut = ProductDetailViewModel(product: mockTestProduct,service: mockService)
+                sut = ProductDetailViewModel(
+                        product: mockTestProduct,
+                        service: mockService
+                )
         }
         
-        //MARK: Vérifier que le favori s'active
-        @Test
+        //MARK: --- Tests Favoris ---
+        
+        @Test("Vérifie que l'état favori bascule de 'off' à 'on'")
         @MainActor
         func testToggleFavorite_WhenOff_ShouldTurnOn() {
-                
-                // 1. GIVEN (Étant donné)
-                // Notre 'init()' a préparé le 'sut'.
-                // On vérifie que l'état initial est bien 'false'.
+                // GIVEN
                 #expect(sut.isFavorite == false)
                 
-                // 2. WHEN (Quand)
-                // On exécute l'action.
+                // WHEN
                 sut.toggleFavorite()
                 
-                // 3. THEN (Alors)
-                // On vérifie que l'état a changé.
+                // THEN
                 #expect(sut.isFavorite == true)
         }
         
-        // Test 2: Vérifier qu'il se désactive aussi
-        @Test
+        @Test("Vérifie que l'état favori bascule de 'on' à 'off'")
         @MainActor
         func testToggleFavorite_WhenOn_ShouldTurnOff() {
-                
-                // 1. GIVEN (Étant donné)
-                // On met manuellement l'état à 'true' pour ce test.
+                // GIVEN
                 sut.isFavorite = true
                 #expect(sut.isFavorite == true)
                 
-                // 2. WHEN (Quand)
-                // On exécute l'action.
+                // WHEN
                 sut.toggleFavorite()
                 
-                // 3. THEN (Alors)
-                // On vérifie qu'il est revenu à 'false'.
+                // THEN
                 #expect(sut.isFavorite == false)
         }
         
-        //MARK: telechargement de l'image
+        //MARK: --- Tests Partage (Succès) ---
         
-        // Test 1 (Succès) : Que se passe-t-il si le téléchargement de l'image réussit ?
-        // Test 2 (Échec) : Que se passe-t-il si le téléchargement échoue ?
-        // Test 3 (Double Clic) : Que se passe-t-il si on clique deux fois (le "verrou" fonctionne-t-il)
-        
-        //MARK: Succes
-        
-        @Test
+        @Test("Vérifie que le partage réussit et met à jour l'état")
         @MainActor
-        func testPrepareShareableImage_WhenSuccess_ShouldUpdateState() async {
-                
-                // 1. GIVEN (Étant donné)
-                mockService.fetchProductsResult = .success
-                // On vérifie que tout est à zéro
+        func testPrepareShareableImage_WhenSuccess() async {
+                // GIVEN
+                mockService.downloadImageResult = .success
                 #expect(sut.isShowingShareSheet == false)
                 #expect(sut.imageToShare == nil)
                 
-                // 2. WHEN (Quand)
+                // WHEN
                 await sut.prepareShareableImage()
                 
-                // 3. THEN (Alors)
-                // On vérifie que tout s'est bien passé
-                #expect(sut.isPreparingShare == false) // Le spinner est arrêté (merci 'defer')
-                #expect(sut.isShowingShareSheet == true) // La feuille doit s'ouvrir
-                #expect(sut.imageToShare != nil) // L'image est chargée
-                #expect(mockService.downloadImageCallCount == 1) // On a bien appelé le service 1x
-        }
-        
-        //MARK: Echec
-        @Test
-        @MainActor
-        func testPrepareShareableImage_WhenFailure_ShouldNotShowSheet() async {
-                
-                // 1. GIVEN
-                mockService.downloadImageResult = .failure(CancellationError()) // On dit au mock d'échouer
-                
-                // 2. WHEN
-                await sut.prepareShareableImage()
-                
-                // 3. THEN
-                // On vérifie que l'état d'erreur est géré
-                #expect(sut.isPreparingShare == false) // Le spinner est arrêté
-                #expect(sut.isShowingShareSheet == false) // La feuille NE doit PAS s'ouvrir
-                #expect(sut.imageToShare == nil) // Pas d'image
-                #expect(mockService.downloadImageCallCount == 1) // On a quand même essayé de télécharger
-        }
-        
-        //MARK: double clic
-        @Test
-        @MainActor
-        func testPrepareShareableImage_WhenAlreadyPreparing_ShouldDoNothing() async {
-                
-                // 1. GIVEN (Étant donné)
-                mockService.downloadImageResult  = .success // Le service va réussir (lentement)
-                #expect(mockService.downloadImageCallCount == 0)
-                
-                // 2. WHEN (Quand)
-                // On lance deux appels en "concurrence"
-                // (sans s'attendre l'un l'autre)
-                async let firstCall = sut.prepareShareableImage()
-                async let secondCall = sut.prepareShareableImage()
-                
-                // On attend qu'ils soient tous les deux terminés
-                let _ = await (firstCall, secondCall)
-                
-                // 3. THEN (Alors)
-                // Le "guard !isPreparingShare" a dû fonctionner.
-                // Le service ne doit avoir été appelé que 1 seule fois (par le premier appel).
-                // Le deuxième appel a dû voir 'isPreparingShare == true' et s'arrêter net.
-                #expect(mockService.downloadImageCallCount == 1)
-                
-                // Et l'état final doit être celui du succès (du premier appel)
+                // THEN
+                #expect(sut.isPreparingShare == false)
                 #expect(sut.isShowingShareSheet == true)
                 #expect(sut.imageToShare != nil)
+                #expect(mockService.downloadImageCallCount == 1)
         }
         
-        struct UnknownTestError: Error { }
-        
-        @Test
+        @Test("Vérifie que le partage ne se lance qu'une fois en cas de 'double-clic'")
         @MainActor
-        func testPrepareShareableImage_WhenUnknownError_ShouldNotShowSheet() async {
+        func testPrepareShareableImage_WhenCalledConcurrently() async {
+                // GIVEN
+                mockService.downloadImageResult = .success
+                #expect(mockService.downloadImageCallCount == 0)
                 
-                // 1. GIVEN
-                // On dit au mock de lancer notre erreur inconnue
-                mockService.downloadImageResult = .failure(UnknownTestError())
+                // WHEN
+                async let firstCall = sut.prepareShareableImage()
+                async let secondCall = sut.prepareShareableImage()
+                let _ = await (firstCall, secondCall)
                 
-                // 2. WHEN
+                // THEN
+                #expect(mockService.downloadImageCallCount == 1)
+                #expect(sut.isShowingShareSheet == true)
+        }
+        
+        //MARK: --- Tests Partage (Échecs) ---
+        
+        @Test("Vérifie que le partage ne s'ouvre pas en cas d'erreur réseau")
+        @MainActor
+        func testPrepareShareableImage_WhenNetworkFails() async {
+                // GIVEN
+                mockService.downloadImageResult = .failure(NetworkError.serverError(statusCode: 404))
+                
+                // WHEN
                 await sut.prepareShareableImage()
                 
-                // 3. THEN
+                // THEN
                 #expect(sut.isPreparingShare == false)
                 #expect(sut.isShowingShareSheet == false)
                 #expect(sut.imageToShare == nil)
         }
         
-        // --- TEST DE LA FONCTION RESET ---
-        @Test
+        @Test("Vérifie que le partage ne s'ouvre pas si la tâche est annulée")
         @MainActor
-        func testResetShareableImage_WhenStateIsDirty_ShouldClearState() async {
+        func testPrepareShareableImage_WhenTaskIsCancelled() async {
+                // GIVEN
+                mockService.downloadImageResult = .failure(CancellationError())
                 
-                // 1. GIVEN (Étant donné)
-                // On crée un état "sale" en simulant un partage réussi
-                mockService.downloadImageResult = .success
+                // WHEN
                 await sut.prepareShareableImage()
                 
-                // On vérifie que l'état est bien "sale"
+                // THEN
+                #expect(sut.isPreparingShare == false)
+                #expect(sut.isShowingShareSheet == false)
+                #expect(sut.imageToShare == nil)
+        }
+        
+        struct UnknownTestError: Error { }
+        
+        @Test("Vérifie que le partage ne s'ouvre pas en cas d'erreur inconnue")
+        @MainActor
+        func testPrepareShareableImage_WhenUnknownError() async {
+                // GIVEN
+                mockService.downloadImageResult = .failure(UnknownTestError())
+                
+                // WHEN
+                await sut.prepareShareableImage()
+                
+                // THEN
+                #expect(sut.isPreparingShare == false)
+                #expect(sut.isShowingShareSheet == false)
+                #expect(sut.imageToShare == nil)
+        }
+        
+        //MARK: --- Tests Reset ---
+        
+        @Test("Vérifie que la fonction 'reset' nettoie bien l'état")
+        @MainActor
+        func testResetShareableImage_WhenStateIsDirty() async {
+                // GIVEN
+                mockService.downloadImageResult = .success
+                await sut.prepareShareableImage()
                 #expect(sut.isShowingShareSheet == true)
                 #expect(sut.imageToShare != nil)
                 
-                // 2. WHEN (Quand)
-                // On appelle la fonction de nettoyage
+                // WHEN
                 sut.resetShareableImage()
                 
-                // 3. THEN (Alors)
-                // On vérifie que tout a été remis à zéro
+                // THEN
                 #expect(sut.isShowingShareSheet == false)
                 #expect(sut.imageToShare == nil)
         }

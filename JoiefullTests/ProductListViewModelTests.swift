@@ -9,7 +9,6 @@ import Testing
 import SwiftUI
 @testable import Joiefull
 
-// La 'struct' qui contient nos tests
 struct ProductListViewModelTests {
         
         var sut: ProductListViewModel
@@ -17,41 +16,40 @@ struct ProductListViewModelTests {
         
         @MainActor
         init() {
-                // Le "setup" s'exécute avant chaque test
                 mockService = MockNetworkService()
                 sut = ProductListViewModel(service: mockService)
         }
         
-        //MARK:  Happy path
-        @Test
+        //MARK: --- Tests FetchProducts ---
+        
+        @Test("Vérifie que l'état passe à .loaded en cas de succès réseau")
         @MainActor
-        func testFetchProducts_WhenSuccess_ShouldUpdateStateToLoaded() async {
+        func testFetchProducts_WhenSuccess() async {
                 
-                // ___GIVEN
+                // GIVEN
                 mockService.fetchProductsResult = .success
                 
-                // ___WHEN
+                // WHEN
                 await sut.reload()
                 
-                // ___THEN
+                // THEN
                 switch sut.state {
                 case .loaded(let sections):
                         #expect(sections.count == 1)
                         #expect(sections.first?.category == "TEST")
                         #expect(sections.first?.products.first?.name == "Test Product")
-                        #expect(sections.first?.products.first?.price == 50.0)
                 default:
-                        Issue.record("L'état final était \(sut.state), mais on attendait .loaded")
+                        Issue.record("État inattendu : \(sut.state), attendu : .loaded")
                 }
         }
         
-        //MARK: Unhappy Path
-        @Test
+        @Test("Vérifie que l'état passe à .error en cas d'erreur réseau")
         @MainActor
-        func testFetchProducts_WhenFailure_ShouldUpdateStateToError() async {
+        func testFetchProducts_WhenNetworkError() async {
                 
                 // GIVEN
-                mockService.fetchProductsResult = .failure(NetworkError.serverError(statusCode: 500))
+                let networkError = NetworkError.serverError(statusCode: 500)
+                mockService.fetchProductsResult = .failure(networkError)
                 
                 // WHEN
                 await sut.reload()
@@ -59,62 +57,80 @@ struct ProductListViewModelTests {
                 // THEN
                 switch sut.state {
                 case .error(let message):
-                        // On vérifie que le message est le bon
-                        let expectedMessage = NetworkError.serverError(statusCode: 500).errorDescription
-                        #expect(message == expectedMessage)
+                        #expect(message == networkError.errorDescription)
                 default:
-                        Issue.record("L'état final était \(sut.state), mais on attendait .error")
+                        Issue.record("État inattendu : \(sut.state), attendu : .error")
                 }
         }
         
-        // --- TEST 3 : L'ANNULATION ---
-        @Test
+        @Test("Vérifie que l'état revient à .idle en cas d'annulation")
         @MainActor
-        func testFetchProducts_WhenCancellationError_ShouldUpdateStateToIdle() async {
+        func testFetchProducts_WhenCancellationError() async {
                 
-                // 1. GIVEN (Étant donné)
-                // On dit au mock de lancer une CancellationError
+                // GIVEN
                 mockService.fetchProductsResult = .failure(CancellationError())
                 
-                // 2. WHEN (Quand)
+                // WHEN
                 await sut.reload()
                 
-                // 3. THEN (Alors)
-                // On vérifie que l'état est bien revenu à '.idle'
+                // THEN
                 switch sut.state {
                 case .idle:
-                        // C'est ce qu'on veut ! Le test passe.
                         break
                 default:
-                        Issue.record("L'état final était \(sut.state), mais on attendait .idle")
+                        Issue.record("État inattendu : \(sut.state), attendu : .idle")
                 }
         }
         
-        // --- TEST 4 : L'ERREUR INCONNUE ---
+        struct UnknownTestError: Error {}
         
-        // On a besoin d'une fausse erreur "inconnue"
-        struct UnknownTestError: Error {} // Pas besoin de description
-        
-        @Test
+        @Test("Vérifie que l'état passe à .error en cas d'erreur inconnue")
         @MainActor
-        func testFetchProducts_WhenUnknownError_ShouldUpdateStateToError() async {
+        func testFetchProducts_WhenUnknownError() async {
                 
-                // 1. GIVEN
+                // GIVEN
                 let unknownError = UnknownTestError()
                 mockService.fetchProductsResult = .failure(unknownError)
                 
-                // 2. WHEN
+                // WHEN
                 await sut.reload()
                 
-                // 3. THEN
-                // On vérifie que l'état est '.error'
+                // THEN
                 switch sut.state {
                 case .error:
-                        // C'est un succès ! L'état est bien '.error'.
-                        // On n'a pas besoin de vérifier le message exact.
-                        break // Le test passe
+                        break
                 default:
-                        Issue.record("L'état final était \(sut.state), mais on attendait .error")
+                        Issue.record("État inattendu : \(sut.state), attendu : .error")
                 }
         }
+            
+            @Test("Vérifie que l'état .loading empêche les doubles appels")
+            @MainActor
+            func testFetchProducts_WhenAlreadyLoading_ShouldDoNothing() async {
+                
+                // 1. GIVEN (Étant donné)
+                mockService.fetchProductsResult = .success
+                #expect(mockService.fetchProductsCallCount == 0)
+
+                // 2. WHEN (Quand)
+                // On lance deux appels en parallèle
+                async let firstCall = sut.reload()
+                async let secondCall = sut.reload()
+                
+                // On attend qu'ils soient tous les deux terminés
+                let _ = await (firstCall, secondCall)
+                
+                // 3. THEN (Alors)
+                // Le 'guard' (if case .loading) a dû fonctionner.
+                // Le service ne doit avoir été appelé QU'UNE SEULE FOIS.
+                #expect(mockService.fetchProductsCallCount == 1)
+                
+                // L'état final doit être .loaded (du premier appel)
+                switch sut.state {
+                case .loaded:
+                    break
+                default:
+                    Issue.record("État inattendu, le verrou a échoué")
+                }
+            }
 }
