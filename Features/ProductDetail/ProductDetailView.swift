@@ -76,7 +76,7 @@ struct ProductDetailView: View {
                                                                         .foregroundColor(viewModel.isFavorite ? .red : .black)
                                                                 
                                                                 // Nombre de likes
-                                                                Text("\(viewModel.product.likes)")
+                                                                Text("\(viewModel.likesCount)")
                                                         }
                                                         .font(.subheadline.weight(.bold))
                                                         .foregroundColor(.black)

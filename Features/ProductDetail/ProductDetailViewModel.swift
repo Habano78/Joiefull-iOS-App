@@ -12,6 +12,7 @@ import Combine
 @MainActor
 class ProductDetailViewModel: ObservableObject {
         
+        //Dépendances
         @Published var product: Product
         private let service: NetworkServiceProtocol
         
@@ -30,18 +31,31 @@ class ProductDetailViewModel: ObservableObject {
         // Pour éviter de lancer plusieurs préchargements
         private var isPreloadingShare = false
         
+        //likes count
+        @Published var likesCount: Int = 0
+        @Published var isLiked: Bool = false
+        
         // MARK: - Init
         init(product: Product, service: NetworkServiceProtocol) {
                 self.product = product
                 self.service = service
+                self.likesCount = product.likes
+                
                 Task {
-                        await self.preloadShareableImage() // On lance le préchargement dès la création du ViewModel
+                        await self.preloadShareableImage() ///telech dirct
                 }
         }
         
+        
         // MARK: - Favoris
-        func toggleFavorite () {
+        func toggleFavorite() {
                 isFavorite.toggle()
+                
+                if isFavorite {
+                        likesCount += 1
+                } else {
+                        likesCount -= 1
+                }
         }
         
         
