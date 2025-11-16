@@ -10,87 +10,93 @@ import SwiftUI
 
 struct ProductDetailView: View {
         
-        @StateObject private var viewModel: ProductDetailViewModel
-        @State private var triggerTask = false
+        //MARK: --- Properties ---
         
-        //MARK: Init
+        // Le ViewModel est injecté lors de l'initialisation
+        @StateObject private var viewModel: ProductDetailViewModel
+        
+        
+        //MARK: --- Init ---
         
         init(viewModel: ProductDetailViewModel) {
                 _viewModel = StateObject(wrappedValue: viewModel)
         }
         
+        //MARK: --- Body ---
+        
         var body: some View {
-                
                 ZStack {
                         
                         ScrollView {
-                                
                                 VStack(alignment: .leading, spacing: 20) {
                                         
-                                        // IMAGE + BADGES
+                                        //MARK: 1. BLOC IMAGE + BADGES
                                         ZStack(alignment: .bottomTrailing) {
                                                 
-                                                AsyncImage(url: URL(string: viewModel.product.picture.url)) { phase in
-                                                        if let image = phase.image {
-                                                                image.resizable()
-                                                                        .aspectRatio(contentMode: .fill)
-                                                                        .frame(height: 400)
-                                                                        .clipped()
-                                                        } else if phase.error != nil {
-                                                                Image(systemName: "photo.fill")
-                                                                        .frame(height: 400)
-                                                                        .foregroundColor(.gray.opacity(0.3))
-                                                        } else {
-                                                                ProgressView()
-                                                                        .frame(height: 400)
-                                                                        .frame(maxWidth: .infinity)
-                                                                        .background(Color.gray.opacity(0.1))
+                                                if let uiImage = viewModel.imageToShare {
+                                                        Image(uiImage: uiImage)
+                                                                .resizable()
+                                                                .aspectRatio(contentMode: .fill)
+                                                                .frame(height: 400)
+                                                                .clipped()
+                                                } else {
+                                                        AsyncImage(url: URL(string: viewModel.product.picture.url)) { phase in ///Fallback
+                                                                switch phase {
+                                                                case .empty:
+                                                                        Color.gray.opacity(0.1)
+                                                                                .frame(height: 400)
+                                                                        
+                                                                case .success(let image):
+                                                                        image
+                                                                                .resizable()
+                                                                                .aspectRatio(contentMode: .fill)
+                                                                                .frame(height: 400)
+                                                                                .clipped()
+                                                                        
+                                                                case .failure(_):
+                                                                        Color.gray.opacity(0.1)
+                                                                                .frame(height: 400)
+                                                                        
+                                                                @unknown default:
+                                                                        Color.gray.opacity(0.1)
+                                                                                .frame(height: 400)
+                                                                }
                                                         }
                                                 }
                                                 
-                                                
-                                                // LIKES
+                                                //MARK: Bouton Favoris (Interactif)
                                                 Button {
                                                         withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
                                                                 viewModel.toggleFavorite()
                                                         }
                                                 } label: {
                                                         HStack(spacing: 4) {
-                                                                
-                                                                Image(systemName: viewModel.isFavorite ? "heart.fill" : "heart") ///// L'icône change selon l'état !
+                                                                // Cœur plein/vide selon l'état
+                                                                Image(systemName: viewModel.isFavorite ? "heart.fill" : "heart")
                                                                         .foregroundColor(viewModel.isFavorite ? .red : .black)
                                                                 
-                                                                Text("\(viewModel.product.likes + (viewModel.isFavorite ? 1 : 0))")
+                                                                // Nombre de likes
+                                                                Text("\(viewModel.product.likes)")
                                                         }
                                                         .font(.subheadline.weight(.bold))
                                                         .foregroundColor(.black)
                                                         .padding(.vertical, 8)
                                                         .padding(.horizontal, 12)
-                                                        .background(Color.white)
+                                                        .background(Color.white) // Fond blanc pur pour le badge
                                                         .cornerRadius(12)
                                                 }
-                                                .padding(12)
-                                        }
+                                                .padding(12) // Marge par rapport au bord de l'image
+                                                
+                                        } // Fin ZStack Image
                                         .cornerRadius(24)
                                         .padding(.horizontal)
                                         
                                         
-                                        // INFORMATIONS
+                                        //MARK: 2. BLOC INFORMATIONS
                                         VStack(alignment: .leading, spacing: 8) {
                                                 
-                                                HStack  {
-                                                        Text(viewModel.product.name)
-                                                                .font(.title2.weight(.bold))
-                                                        Spacer()
-                                                        // NOTE FAKE car pas donnée par l'API
-                                                        HStack(spacing: 4) {
-                                                                Image(systemName: "star.fill")
-                                                                        .foregroundColor(.joiefullStar)
-                                                                Text("4.6")
-                                                                        .font(.subheadline.weight(.semibold))
-                                                                        .foregroundColor(.secondary)
-                                                        }
-                                                }
+                                                Text(viewModel.product.name)
+                                                        .font(.title2.weight(.bold))
                                                 
                                                 HStack {
                                                         // Prix de vente
@@ -99,18 +105,28 @@ struct ProductDetailView: View {
                                                                 .foregroundColor(.primary)
                                                         
                                                         Spacer()
+                                                        
+                                                        // Note (statique pour la démo, car absente de l'API)
+                                                        HStack(spacing: 4) {
+                                                                Image(systemName: "star.fill")
+                                                                        .foregroundColor(.joiefullStar) // Constante de couleur
+                                                                Text("4.6")
+                                                                        .font(.subheadline.weight(.semibold))
+                                                                        .foregroundColor(.secondary)
+                                                        }
+                                                        
                                                         // Prix barré (si promo)
                                                         if viewModel.product.originalPrice > viewModel.product.price {
                                                                 Text(String(format: "%.2f €", viewModel.product.originalPrice))
                                                                         .font(.subheadline)
                                                                         .strikethrough()
                                                                         .foregroundColor(.secondary)
+                                                                        .padding(.leading, 4)
                                                         }
-                                                        
-                                                        
                                                 }
+                                                .frame(maxWidth: .infinity)
                                                 
-                                                // Description
+                                                // Description (alt-text)
                                                 Text(viewModel.product.picture.description)
                                                         .font(.body)
                                                         .foregroundColor(.secondary)
@@ -122,11 +138,11 @@ struct ProductDetailView: View {
                                         Divider().padding(.horizontal)
                                         
                                         
-                                        //MARK: Section Avis
+                                        //MARK: 3. SECTION AVIS
                                         VStack(alignment: .leading, spacing: 12) {
                                                 Text("Avis").font(.headline)
                                                 
-                                                // Note interactive
+                                                // Étoiles interactives
                                                 HStack {
                                                         StarRatingView(rating: $viewModel.userRating)
                                                         Spacer()
@@ -135,14 +151,14 @@ struct ProductDetailView: View {
                                                                 .foregroundColor(.secondary)
                                                 }
                                                 
-                                                // Champ de commentaire
+                                                // Champ texte
                                                 TextEditor(text: $viewModel.userComment)
                                                         .frame(height: 100)
                                                         .padding(4)
-                                                        .background(Color.joiefullCardBackground)
+                                                        .background(Color.joiefullCardBackground) // Constante de couleur
                                                         .cornerRadius(8)
                                                 
-                                                // Bouton d'envoi (fake))
+                                                // Bouton d'envoi
                                                 Button {
                                                         withAnimation {
                                                                 viewModel.userRating = 0
@@ -153,7 +169,7 @@ struct ProductDetailView: View {
                                                                 .fontWeight(.semibold)
                                                                 .frame(maxWidth: .infinity)
                                                                 .padding()
-                                                                .background(Color.joiefullPrimary)
+                                                                .background(Color.joiefullPrimary) // Constante de couleur
                                                                 .foregroundColor(.white)
                                                                 .cornerRadius(12)
                                                 }
@@ -163,40 +179,40 @@ struct ProductDetailView: View {
                                         .padding(.horizontal)
                                         .padding(.bottom, 40)
                                         
-                                }
+                                } // Fin VStack Principal
                                 .padding(.top)
-                        }
+                        } // Fin ScrollView
                         
-                        //MARK: ___ SPINNER ___
+                        
+                        //MARK: 4. SPINNER (Overlay)
                         if viewModel.isPreparingShare {
-                                Color.joiefullSpinnerOverlay.edgesIgnoringSafeArea(.all)
+                                Color.joiefullSpinnerOverlay // Constante de couleur
+                                        .edgesIgnoringSafeArea(.all)
+                                
                                 ProgressView("Préparation...")
                                         .padding()
-                                        .background(Color.white)
+                                        .background(Color(UIColor.systemBackground))
                                         .cornerRadius(10)
                         }
                         
-                }
+                } // Fin ZStack Racine
                 
-                //MARK: ___ Configuration Navigation ___
+                //MARK: --- Gestionnaires ---
+                
                 .navigationTitle(viewModel.product.name)
                 .navigationBarTitleDisplayMode(.inline)
+                
+                // Bouton Partager dans la barre
                 .toolbar {
-                        // Bouton Partager
                         ToolbarItem(placement: .navigationBarTrailing) {
                                 Button {
-                                        self.triggerTask = true
+                                        Task {
+                                                await viewModel.handleShareButtonTapped()
+                                        }
                                 } label: {
                                         Image(systemName: "square.and.arrow.up")
                                 }
                         }
-                }
-                
-                // Tâche de préparation du partage
-                .task(id: triggerTask) {
-                        guard triggerTask else { return }
-                        await viewModel.prepareShareableImage()
-                        self.triggerTask = false
                 }
                 
                 // Feuille de partage
@@ -205,10 +221,9 @@ struct ProductDetailView: View {
                 }) {
                         if let image = viewModel.imageToShare {
                                 let message = "Regarde cet article sur Joiefull : \(viewModel.product.name)"
-                                
-                                // utilisation du WRAPPER
-                                let shareProvider = ImageShareProvider(image: image, message: message)
-                                ShareSheet(items: [shareProvider])
+                                let provider = ImageShareProvider(image: image, message: message)
+                               
+                                ShareSheet(items: [provider, message])
                         }
                 }
         }
