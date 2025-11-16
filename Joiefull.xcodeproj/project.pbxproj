@@ -12,7 +12,6 @@
 		2288BA912EB8B6F7006B9107 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2288BA902EB8B6F7006B9107 /* Assets.xcassets */; };
 		22CEC4252EBB672700BAB0AA /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CEC4242EBB672700BAB0AA /* ShareSheet.swift */; };
 		22CEC4612EBD441900BAB0AA /* ImageShareProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CEC4602EBD441900BAB0AA /* ImageShareProvider.swift */; };
-		22F08A922EBE2C680074743E /* StarRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F08A912EBE2C680074743E /* StarRatingView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,7 +40,6 @@
 		2288BAA02EB8B6F7006B9107 /* JoiefullUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JoiefullUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		22CEC4242EBB672700BAB0AA /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
 		22CEC4602EBD441900BAB0AA /* ImageShareProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageShareProvider.swift; sourceTree = "<group>"; };
-		22F08A912EBE2C680074743E /* StarRatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarRatingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -51,7 +49,6 @@
 				ProductListView.swift,
 				ProductListViewModel.swift,
 				ProductListViewState.swift,
-				ProductSection.swift,
 			);
 			target = 2288BA882EB8B6F5006B9107 /* Joiefull */;
 		};
@@ -60,6 +57,7 @@
 			membershipExceptions = (
 				ProductDetailView.swift,
 				ProductDetailViewModel.swift,
+				StarRatingView.swift,
 			);
 			target = 2288BA882EB8B6F5006B9107 /* Joiefull */;
 		};
@@ -209,7 +207,6 @@
 			children = (
 				22CEC4242EBB672700BAB0AA /* ShareSheet.swift */,
 				22CEC4602EBD441900BAB0AA /* ImageShareProvider.swift */,
-				22F08A912EBE2C680074743E /* StarRatingView.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -359,7 +356,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				22CEC4612EBD441900BAB0AA /* ImageShareProvider.swift in Sources */,
-				22F08A922EBE2C680074743E /* StarRatingView.swift in Sources */,
 				228796762EC5F155006803D6 /* Color.swift in Sources */,
 				2288BA8D2EB8B6F5006B9107 /* JoiefullApp.swift in Sources */,
 				22CEC4252EBB672700BAB0AA /* ShareSheet.swift in Sources */,

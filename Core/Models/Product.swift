@@ -22,3 +22,5 @@ struct Product: Codable, Identifiable, Hashable {
         let originalPrice: Double
         let picture: Picture
 }
+
+// Product mape le JSON de l'API

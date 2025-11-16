@@ -12,8 +12,8 @@ struct ProductListView: View {
         @EnvironmentObject private var diContainer: AppDIContainer
         @StateObject private var viewModel: ProductListViewModel
         
-        @State private var selectedProduct: Product? /// pour retenir quel produit est actuellement cliqué.
-
+        // États pour la navigation iPad
+        @State private var selectedProduct: Product?
         @State private var columnVisibility = NavigationSplitViewVisibility.all
         
         init(viewModel: ProductListViewModel) {
@@ -21,62 +21,42 @@ struct ProductListView: View {
         }
         
         var body: some View {
-                
-                
-                NavigationSplitView(columnVisibility: $columnVisibility) {  /// pour lier le SPLIT VIEW à la sélection
-                        
-                        // ProductList
+                // Gestion de l'iPad avec NavigationSplitView
+                NavigationSplitView(columnVisibility: $columnVisibility) {
+                        // --- COLONNE DE GAUCHE (Sidebar) ---
                         Group {
                                 switch viewModel.state {
                                 case .idle:
                                         Color.clear
+                                        
                                 case .loading:
                                         ProgressView("Chargement...")
+                                        
                                 case .error(let message):
                                         VStack(spacing: 20) {
-                                                Text("Erreur: \(message)").foregroundColor(.red).multilineTextAlignment(.center)
-                                                Button("Réessayer") { Task { await viewModel.reload() } }
-                                                        .buttonStyle(.borderedProminent)
+                                                Text("Erreur: \(message)")
+                                                        .foregroundColor(.red)
+                                                        .multilineTextAlignment(.center)
+                                                Button("Réessayer") {
+                                                        Task { await viewModel.reload() }
+                                                }
+                                                .buttonStyle(.borderedProminent)
                                         }
                                         .padding()
                                         
                                 case .loaded(let sections):
-                                        
-                                        List(selection: $selectedProduct) {
-                                                
-                                                ForEach(sections) { section in
-                                                        Section(header: Text(section.category.capitalized).font(.title2).fontWeight(.bold)) {
-                                                                // Carrousel horizontal DANS la liste
-                                                                ScrollView(.horizontal, showsIndicators: false) {
-                                                                        LazyHStack(spacing: 16) {
-                                                                                
-                                                                                ForEach(section.products) { product in
-                                                                                        Button {
-                                                                                                selectedProduct = product
-                                                                                        } label: {
-                                                                                                ProductRowView(product: product)
-                                                                                                        .frame(width: 170)
-                                                                                        }
-                                                                                        .buttonStyle(.plain)
-                                                                                }
-                                                                        }
-                                                                        .padding(.horizontal, -16)
-                                                                }
-                                                                .listRowInsets(EdgeInsets())
-                                                        }
-                                                }
-                                        }
-                                        .listStyle(.plain)
+                                        loadedProductList(sections: sections)
                                 }
                         }
                         .navigationTitle("Catalogue")
-                        .navigationSplitViewColumnWidth(ideal: 450) 
+                        .navigationSplitViewColumnWidth(ideal: 350) // Largeur idéale pour iPad
                         
-                        // DetailView
                 } detail: {
+                        // --- COLONNE DE DROITE (Détail) ---
                         if let product = selectedProduct {
                                 ProductDetailView(viewModel: diContainer.makeProductDetailViewModel(product: product))
-                                        .id(product.id) ///Si l'ID du produit change, considère que c'est une vue TOTALEMENT différente et redessine-la de zéro
+                                        .environmentObject(diContainer)
+                                        .id(product.id)
                         } else {
                                 VStack(spacing: 20) {
                                         Image(systemName: "tshirt")
@@ -89,11 +69,45 @@ struct ProductListView: View {
                                 }
                         }
                 }
-                /// Tâche de démarrage
+                // Tâche de démarrage
                 .task {
                         if case .idle = viewModel.state {
                                 await viewModel.reload()
                         }
                 }
+        }
+        
+        // MARK: - Subviews (pour aider le compilateur)
+
+        @ViewBuilder
+        private func loadedProductList(sections: [ProductSection]) -> some View {
+                List(selection: $selectedProduct) {
+                        ForEach(sections) { section in
+                                Section(header:
+                                                Text(section.category.capitalized)
+                                        .font(.title2)
+                                        .fontWeight(.bold)
+                                        .foregroundColor(.primary)
+                                ) {
+                                        // Le carrousel horizontal
+                                        ScrollView(.horizontal, showsIndicators: false) {
+                                                LazyHStack(spacing: 16) {
+                                                        ForEach(section.products) { product in
+                                                                Button {
+                                                                        selectedProduct = product
+                                                                } label: {
+                                                                        ProductRowView(product: product)
+                                                                                .frame(width: 170)
+                                                                }
+                                                                .buttonStyle(.plain)
+                                                        }
+                                                }
+                                                .padding(.horizontal, 16)/// Annule le padding par défaut de la List pour coller aux bords
+                                        }
+                                        .listRowInsets(EdgeInsets()) /// Enlève les marges de la cellule de liste/
+                                }
+                        }
+                }
+                .listStyle(.plain)
         }
 }
