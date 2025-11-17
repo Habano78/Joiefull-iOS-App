@@ -12,17 +12,17 @@ struct ProductDetailView: View {
         
         //MARK: --- Properties ---
         
-        // Le ViewModel est injecté lors de l'initialisation
         @StateObject private var viewModel: ProductDetailViewModel
         
         
-        //MARK: --- Init ---
+        //MARK:  Init
         
         init(viewModel: ProductDetailViewModel) {
                 _viewModel = StateObject(wrappedValue: viewModel)
         }
         
-        //MARK: --- Body ---
+        
+        //MARK:  Body
         
         var body: some View {
                 ZStack {
@@ -30,7 +30,7 @@ struct ProductDetailView: View {
                         ScrollView {
                                 VStack(alignment: .leading, spacing: 20) {
                                         
-                                        //MARK: 1. BLOC IMAGE + BADGES
+                                        //MARK: IMAGE + BADGES
                                         ZStack(alignment: .bottomTrailing) {
                                                 
                                                 if let uiImage = viewModel.imageToShare {
@@ -64,35 +64,38 @@ struct ProductDetailView: View {
                                                         }
                                                 }
                                                 
-                                                //MARK: Bouton Favoris (Interactif)
+                                                //MARK: Bouton Favoris
                                                 Button {
                                                         withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
                                                                 viewModel.toggleFavorite()
                                                         }
                                                 } label: {
                                                         HStack(spacing: 4) {
-                                                                // Cœur plein/vide selon l'état
-                                                                Image(systemName: viewModel.isFavorite ? "heart.fill" : "heart")
+                                                                Image(systemName: viewModel.isFavorite ? "heart.fill" : "heart")/// Cœur plein/vide selon l'état
                                                                         .foregroundColor(viewModel.isFavorite ? .red : .black)
                                                                 
+<<<<<<< HEAD
                                                                 // Nombre de likes
                                                                 Text("\(viewModel.likesCount)")
+=======
+                                                                Text("\(viewModel.product.likes)")
+>>>>>>> dev
                                                         }
                                                         .font(.subheadline.weight(.bold))
                                                         .foregroundColor(.black)
                                                         .padding(.vertical, 8)
                                                         .padding(.horizontal, 12)
-                                                        .background(Color.white) // Fond blanc pur pour le badge
+                                                        .background(Color.white)
                                                         .cornerRadius(12)
                                                 }
-                                                .padding(12) // Marge par rapport au bord de l'image
+                                                .padding(12)
                                                 
-                                        } // Fin ZStack Image
+                                        }
                                         .cornerRadius(24)
                                         .padding(.horizontal)
                                         
                                         
-                                        //MARK: 2. BLOC INFORMATIONS
+                                        //MARK: Nom + Prix + Note + Description
                                         VStack(alignment: .leading, spacing: 8) {
                                                 
                                                 Text(viewModel.product.name)
@@ -109,7 +112,7 @@ struct ProductDetailView: View {
                                                         // Note (statique pour la démo, car absente de l'API)
                                                         HStack(spacing: 4) {
                                                                 Image(systemName: "star.fill")
-                                                                        .foregroundColor(.joiefullStar) // Constante de couleur
+                                                                        .foregroundColor(.joiefullStar)
                                                                 Text("4.6")
                                                                         .font(.subheadline.weight(.semibold))
                                                                         .foregroundColor(.secondary)
@@ -138,7 +141,7 @@ struct ProductDetailView: View {
                                         Divider().padding(.horizontal)
                                         
                                         
-                                        //MARK: 3. SECTION AVIS
+                                        //MARK: AVIS
                                         VStack(alignment: .leading, spacing: 12) {
                                                 Text("Avis").font(.headline)
                                                 
@@ -169,7 +172,7 @@ struct ProductDetailView: View {
                                                                 .fontWeight(.semibold)
                                                                 .frame(maxWidth: .infinity)
                                                                 .padding()
-                                                                .background(Color.joiefullPrimary) // Constante de couleur
+                                                                .background(Color.joiefullPrimary)
                                                                 .foregroundColor(.white)
                                                                 .cornerRadius(12)
                                                 }
@@ -179,12 +182,12 @@ struct ProductDetailView: View {
                                         .padding(.horizontal)
                                         .padding(.bottom, 40)
                                         
-                                } // Fin VStack Principal
+                                }
                                 .padding(.top)
                         } // Fin ScrollView
                         
                         
-                        //MARK: 4. SPINNER (Overlay)
+                        //MARK: SPINNER (Overlay)
                         if viewModel.isPreparingShare {
                                 Color.joiefullSpinnerOverlay // Constante de couleur
                                         .edgesIgnoringSafeArea(.all)
@@ -195,9 +198,9 @@ struct ProductDetailView: View {
                                         .cornerRadius(10)
                         }
                         
-                } // Fin ZStack Racine
+                } 
                 
-                //MARK: --- Gestionnaires ---
+                //MARK: Gestionnaires
                 
                 .navigationTitle(viewModel.product.name)
                 .navigationBarTitleDisplayMode(.inline)
@@ -222,7 +225,7 @@ struct ProductDetailView: View {
                         if let image = viewModel.imageToShare {
                                 let message = "Regarde cet article sur Joiefull : \(viewModel.product.name)"
                                 let provider = ImageShareProvider(image: image, message: message)
-                               
+                                
                                 ShareSheet(items: [provider, message])
                         }
                 }

@@ -16,12 +16,12 @@ class ProductListViewModel: ObservableObject {
         
         private let service: NetworkServiceProtocol
         
-        // MARK: init
+        // MARK: Init
         init(service: NetworkServiceProtocol) {
                 self.service = service
         }
         
-        //MARK: METHODES
+        //MARK: Methodes
         private func fetchProducts() async {
                 
                 if case .loading = state {
