@@ -19,7 +19,7 @@ struct ShareSheet: UIViewControllerRepresentable {
         }
         
         func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {
-                // Rien faire
+                // Rien
         }
 }
 
