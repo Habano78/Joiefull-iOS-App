@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ProductListView: View {
         
+        //MARK: Proprietés
+        
         @EnvironmentObject private var diContainer: AppDIContainer
         @StateObject private var viewModel: ProductListViewModel
         
@@ -16,14 +18,17 @@ struct ProductListView: View {
         @State private var selectedProduct: Product?
         @State private var columnVisibility = NavigationSplitViewVisibility.all
         
+        
+        //MARK: Init
         init(viewModel: ProductListViewModel) {
                 _viewModel = StateObject(wrappedValue: viewModel)
         }
         
+        //MARK: Body
         var body: some View {
                 // Gestion de l'iPad avec NavigationSplitView
                 NavigationSplitView(columnVisibility: $columnVisibility) {
-                        // --- COLONNE DE GAUCHE (Sidebar) ---
+                        //  COLONNE DE GAUCHE
                         Group {
                                 switch viewModel.state {
                                 case .idle:
@@ -49,10 +54,10 @@ struct ProductListView: View {
                                 }
                         }
                         .navigationTitle("Catalogue")
-                        .navigationSplitViewColumnWidth(ideal: 350) // Largeur idéale pour iPad
+                        .navigationSplitViewColumnWidth(ideal: 350)
                         
                 } detail: {
-                        // --- COLONNE DE DROITE (Détail) ---
+                        //  COLONNE DE DROITE (Détail)
                         if let product = selectedProduct {
                                 ProductDetailView(viewModel: diContainer.makeProductDetailViewModel(product: product))
                                         .environmentObject(diContainer)
@@ -77,7 +82,7 @@ struct ProductListView: View {
                 }
         }
         
-        // MARK: - Subviews (pour aider le compilateur)
+        // MARK: - Subviews
 
         @ViewBuilder
         private func loadedProductList(sections: [ProductSection]) -> some View {
@@ -104,7 +109,7 @@ struct ProductListView: View {
                                                 }
                                                 .padding(.horizontal, 16)/// Annule le padding par défaut de la List pour coller aux bords
                                         }
-                                        .listRowInsets(EdgeInsets()) /// Enlève les marges de la cellule de liste/
+                                        .listRowInsets(EdgeInsets()) 
                                 }
                         }
                 }
