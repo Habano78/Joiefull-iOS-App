@@ -16,7 +16,7 @@ class ProductDetailViewModel: ObservableObject {
         
         //Pour le vue
         @Published var product: Product
-        private let service: NetworkServiceProtocol
+        let service: NetworkServiceProtocol
         
         // Partage
         @Published var isShowingShareSheet = false
@@ -28,8 +28,9 @@ class ProductDetailViewModel: ObservableObject {
         @Published var userComment: String = ""
         
         // Favoris / likes
-        @Published var isFavorite: Bool = false
-        @Published var likesCounting: Int
+        @Published var favoriteState: FavoriteState
+        ///  @Published var isFavorite: Bool = false
+        ///  @Published var likesCounting: Int
         
         // Préchargement
         private var isPreloadingShare = false
@@ -42,8 +43,11 @@ class ProductDetailViewModel: ObservableObject {
              autoPreload: Bool = true) {
                 self.product = product
                 self.service = service
-                self.likesCounting = product.likes
                 
+                self.favoriteState = FavoriteState(
+                        isFavorite: false,
+                        likesCount: product.likes
+                )
                 if autoPreload {
                         Task { [weak self] in
                                 await self?.preloadShareableImage()
@@ -53,15 +57,9 @@ class ProductDetailViewModel: ObservableObject {
         
         //Favoris
         func toggleFavorite() {
-                isFavorite.toggle()
-                
-                if isFavorite {
-                        likesCounting += 1
-                } else {
-                        likesCounting -= 1
-                }
+                favoriteState.toggle()
         }
-        
+                
         // Préchargement de l'image. Pour télécharger l'image en avance
         func preloadShareableImage() async {
                 guard imageToShare == nil,
@@ -88,7 +86,7 @@ class ProductDetailViewModel: ObservableObject {
                 
                 isPreparingShare = true
                 defer { isPreparingShare = false }
-        
+                
                 if imageToShare != nil {
                         isShowingShareSheet = true /// Si l'image est déjà préchargée, on ouvre juste la feuille
                         return
@@ -118,7 +116,7 @@ class ProductDetailViewModel: ObservableObject {
                 if imageToShare != nil {
                         isShowingShareSheet = true
                 } else {
-                       
+                        
                         await prepareShareableImage()
                 }
         }
@@ -130,6 +128,6 @@ class ProductDetailViewModel: ObservableObject {
 }
 
 
-        //Note:  Parameter autoPreload:
+//Note:  Parameter autoPreload:
 ///   true (défaut) → l'image est préchargée automatiquement en prod.
 ///   false → les tests contrôlent manuellement le préchargement.

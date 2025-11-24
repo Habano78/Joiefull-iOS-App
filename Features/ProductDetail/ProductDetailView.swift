@@ -4,7 +4,6 @@
 //
 //  Created by Perez William on 03/11/2025.
 //
-//
 
 import SwiftUI
 
@@ -28,104 +27,53 @@ struct ProductDetailView: View {
                         ScrollView {
                                 VStack(alignment: .leading, spacing: 20) {
                                         
-                                        //  IMAGE + BADGES
+                                        // MARK: IMAGE + FAVORIS
                                         ZStack(alignment: .bottomTrailing) {
                                                 
-                                                /// Image prioritaire  (cache local)
-                                                if let uiImage = viewModel.imageToShare {
-                                                        Image(uiImage: uiImage)
-                                                                .resizable()
-                                                                .aspectRatio(contentMode: .fill)
-                                                                .frame(height: 400)
-                                                                .clipped()
-                                                }
-                                                else {
-                                                        AsyncImage(url: URL(string: viewModel.product.picture.url)) { phase in
-                                                                switch phase {
-                                                                case .empty:
-                                                                        Color.gray.opacity(0.1)
-                                                                                .frame(height: 400)
-                                                                case .success(let image):
-                                                                        image.resizable()
-                                                                                .aspectRatio(contentMode: .fill)
-                                                                                .frame(height: 400)
-                                                                                .clipped()
-                                                                case .failure(_):
-                                                                        Color.gray.opacity(0.1)
-                                                                                .frame(height: 400)
-                                                                @unknown default:
-                                                                        Color.gray.opacity(0.1)
-                                                                                .frame(height: 400)
-                                                                }
-                                                        }
-                                                }
+                                                RemoteImageView(
+                                                        url: viewModel.product.picture.url,
+                                                        service: viewModel.service
+                                                )
+                                                .frame(height: 400)
+                                                .clipped()
+                                                .accessibilityElement(children: .ignore)
+                                                .accessibilityLabel(Text(viewModel.product.picture.description))
+                                                .accessibilityAddTraits(.isImage)
                                                 
-                                                // Bouton Favoris
-                                                Button {
-                                                        withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
-                                                                viewModel.toggleFavorite()
-                                                        }
-                                                } label: {
-                                                        HStack(spacing: 4) {
-                                                                Image(systemName: viewModel.isFavorite ? "heart.fill" : "heart")
-                                                                        .foregroundColor(viewModel.isFavorite ? .red : .black)
-                                                                
-                                                                Text("\(viewModel.likesCounting)")
-                                                        }
-                                                        .font(.subheadline.weight(.bold))
-                                                        .foregroundColor(.black)
-                                                        .padding(.vertical, 8)
-                                                        .padding(.horizontal, 12)
-                                                        .background(Color.white)
-                                                        .cornerRadius(12)
-                                                }
+
+                                                FavoriteButtonView(
+                                                        isFavorite: viewModel.favoriteState.isFavorite,
+                                                        likesCount: viewModel.favoriteState.likesCount,
+                                                        onToggle: { viewModel.favoriteState.toggle() }
+                                                )
+                                                .equatable()
                                                 .padding(12)
                                         }
                                         .cornerRadius(24)
                                         .padding(.horizontal)
                                         
                                         
-                                        // INFORMATIONS PRODUIT
-                                        VStack(alignment: .leading, spacing: 8) {
-                                                
-                                                Text(viewModel.product.name)
-                                                        .font(.title2.weight(.bold))
-                                                
-                                                HStack {
-                                                        Text(String(format: "%.2f €", viewModel.product.price))
-                                                                .font(.title3.weight(.semibold))
-                                                        
-                                                        Spacer()
-                                                        
-                                                        HStack {
-                                                                Image(systemName: "star.fill")
-                                                                        .foregroundColor(.joiefullStar)
-                                                                Text("4.6")
-                                                                        .foregroundColor(.secondary)
-                                                        }
-                                                        
-                                                        if viewModel.product.originalPrice > viewModel.product.price {
-                                                                Text(String(format: "%.2f €", viewModel.product.originalPrice))
-                                                                        .strikethrough()
-                                                                        .foregroundColor(.secondary)
-                                                        }
-                                                }
-                                                
-                                                Text(viewModel.product.picture.description)
-                                                        .foregroundColor(.secondary)
-                                                        .padding(.top, 8)
-                                                
-                                        }
-                                        .padding(.horizontal)
+                                        // MARK: INFORMATIONS PRODUIT (SubView)
+                                        
+                                        ProductInfoView(
+                                                product: viewModel.product,
+                                                accessibilityPriceDescription: a11yPriceDescription
+                                        )
+                                        .equatable()
+                                        
+                                        
                                         
                                         Divider().padding(.horizontal)
                                         
                                         
-                                        // AVIS UTILISATEUR
-                                        
+                                        // MARK: - 3. SECTION AVIS
                                         VStack(alignment: .leading, spacing: 12) {
-                                                Text("Avis").font(.headline)
                                                 
+                                                Text("Avis")
+                                                        .font(.headline)
+                                                        .accessibilityAddTraits(.isHeader)
+                                                
+                                                // RATING
                                                 HStack {
                                                         StarRatingView(rating: $viewModel.userRating)
                                                         Spacer()
@@ -133,12 +81,16 @@ struct ProductDetailView: View {
                                                                 .foregroundColor(.secondary)
                                                 }
                                                 
+                                                // COMMENT
                                                 TextEditor(text: $viewModel.userComment)
                                                         .frame(height: 100)
                                                         .padding(4)
                                                         .background(Color.joiefullCardBackground)
                                                         .cornerRadius(8)
+                                                        .accessibilityLabel("Commentaire")
+                                                        .accessibilityHint("Entrez votre avis sur cet article.")
                                                 
+                                                // SEND BUTTON
                                                 Button {
                                                         withAnimation {
                                                                 viewModel.userRating = 0
@@ -155,7 +107,8 @@ struct ProductDetailView: View {
                                                 }
                                                 .disabled(viewModel.userRating == 0)
                                                 .opacity(viewModel.userRating == 0 ? 0.6 : 1)
-                                                
+                                                .accessibilityLabel("Envoyer mon avis")
+                                                .accessibilityHint("Envoie votre avis pour cet article")
                                         }
                                         .padding(.horizontal)
                                         .padding(.bottom, 40)
@@ -163,9 +116,10 @@ struct ProductDetailView: View {
                                 }
                                 .padding(.top)
                         }
+                        .accessibilityHidden(viewModel.isPreparingShare)
                         
                         
-                        // SPINNER
+                        // MARK: - LOADING OVERLAY
                         if viewModel.isPreparingShare {
                                 Color.joiefullSpinnerOverlay
                                         .edgesIgnoringSafeArea(.all)
@@ -174,32 +128,36 @@ struct ProductDetailView: View {
                                         .padding()
                                         .background(Color(UIColor.systemBackground))
                                         .cornerRadius(10)
+                                        .accessibilityElement(children: .combine)
+                                
                         }
+                        
+                        
                 }
-                
-                
-                // MARK: Toolbar + Navigation
+                // MARK: - Navigation
                 .navigationTitle(viewModel.product.name)
                 .navigationBarTitleDisplayMode(.inline)
                 
+                // MARK: - Toolbar (Share)
                 .toolbar {
                         ToolbarItem(placement: .navigationBarTrailing) {
                                 Button {
-                                        Task {
-                                                await viewModel.handleShareButtonTapped()
-                                        }
+                                        Task { await viewModel.handleShareButtonTapped() }
                                 } label: {
                                         Image(systemName: "square.and.arrow.up")
                                 }
+                                .accessibilityLabel("Partager cet article")
+                                .accessibilityHint("Ouvre la feuille de partage")
                         }
                 }
                 
-                // Préchargement automatique
+                // MARK: - Preload image on appear
                 .task {
-                        await viewModel.preloadShareableImage()
+                        if viewModel.imageToShare == nil { await viewModel.preloadShareableImage() }
                 }
                 
-                // Feuille de partage
+                
+                // MARK: - Share Sheet
                 .sheet(isPresented: $viewModel.isShowingShareSheet, onDismiss: {
                         viewModel.resetShareableImage()
                 }) {
@@ -209,6 +167,63 @@ struct ProductDetailView: View {
                                 ShareSheet(items: [provider, message])
                         }
                 }
+        }
+}
+
+// MARK: - Helpers Accessibility
+
+private extension ProductDetailView {
+        var a11yPriceDescription: String {
+                let current = String(format: "%.2f euros", viewModel.product.price)
+                
+                if viewModel.product.originalPrice > viewModel.product.price {
+                        let original = String(format: "%.2f euros", viewModel.product.originalPrice)
+                        return "Prix actuel : \(current). Ancien prix : \(original). Note 4,6 sur 5."
+                } else {
+                        return "Prix : \(current). Note 4,6 sur 5."
+                }
+        }
+}
+
+
+
+//MARK: Bouton Favoris
+struct FavoriteButtonView: View, Equatable {
+        
+        let isFavorite: Bool
+        let likesCount: Int
+        let onToggle: () -> Void
+        
+        static func == (lhs: FavoriteButtonView, rhs: FavoriteButtonView) -> Bool {
+                lhs.isFavorite == rhs.isFavorite &&
+                lhs.likesCount == rhs.likesCount
+        }
+        
+        var body: some View {
+                Button {
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+                                onToggle()
+                        }
+                } label: {
+                        HStack(spacing: 6) {
+                                Image(systemName: isFavorite ? "heart.fill" : "heart")
+                                        .foregroundColor(isFavorite ? .red : .black)
+                                
+                                Text("\(likesCount)")
+                        }
+                        .font(.subheadline.bold())
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 12)
+                        .background(Color.white)
+                        .cornerRadius(12)
+                }
+                .accessibilityLabel(
+                        Text(isFavorite
+                             ? "Retirer des favoris"
+                             : "Ajouter aux favoris")
+                )
+                .accessibilityValue(Text("\(likesCount) mentions j’aime"))
+                .accessibilityHint(Text("Active ou désactive cet article en favori."))
         }
 }
 

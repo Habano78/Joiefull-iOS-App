@@ -73,7 +73,7 @@ struct ProductListViewModelTests {
                 // WHEN
                 await sut.reload()
                 
-                // THEN
+                // THEN                 
                 switch sut.state {
                 case .idle:
                         break

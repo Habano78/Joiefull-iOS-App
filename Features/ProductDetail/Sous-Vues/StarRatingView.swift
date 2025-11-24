@@ -9,10 +9,9 @@ import SwiftUI
 
 struct StarRatingView: View {
         
-        @Binding var rating: Int ///  Binding pour que la vue parente puisse lire ET modifier la note.
-        
+        @Binding var rating: Int
         var maxRating = 5
-        var interactive = true /// Pour savoir si on peut cliquer
+        var interactive = true
         
         var body: some View {
                 HStack(spacing: 4) {
@@ -29,5 +28,14 @@ struct StarRatingView: View {
                                         }
                         }
                 }
+                // Accessibilité Note
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(Text("Note de l’utilisateur"))
+                .accessibilityValue(Text("\(rating) sur 5"))
+                .accessibilityHint(
+                        interactive
+                        ? Text("Touchez pour modifier la note.")
+                        : Text("Note en lecture seule.")
+                )
         }
 }

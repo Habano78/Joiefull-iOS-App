@@ -10,6 +10,12 @@
 		228796762EC5F155006803D6 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228796752EC5F155006803D6 /* Color.swift */; };
 		2288BA8D2EB8B6F5006B9107 /* JoiefullApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2288BA8C2EB8B6F5006B9107 /* JoiefullApp.swift */; };
 		2288BA912EB8B6F7006B9107 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2288BA902EB8B6F7006B9107 /* Assets.xcassets */; };
+		2292DF822ECC9C400005A8D3 /* ProductListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2292DF7F2ECC9C400005A8D3 /* ProductListView.swift */; };
+		2292DF832ECC9C400005A8D3 /* ProductListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2292DF802ECC9C400005A8D3 /* ProductListViewModel.swift */; };
+		2292DF842ECC9C400005A8D3 /* ProductListViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2292DF812ECC9C400005A8D3 /* ProductListViewState.swift */; };
+		2292DF882ECC9C400005A8D3 /* ProductDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2292DF852ECC9C400005A8D3 /* ProductDetailView.swift */; };
+		2292DF892ECC9C400005A8D3 /* ProductDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2292DF862ECC9C400005A8D3 /* ProductDetailViewModel.swift */; };
+		2292DF8C2ECC9C400005A8D3 /* ProductRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2292DF8B2ECC9C400005A8D3 /* ProductRowView.swift */; };
 		22CEC4252EBB672700BAB0AA /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CEC4242EBB672700BAB0AA /* ShareSheet.swift */; };
 		22CEC4612EBD441900BAB0AA /* ImageShareProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CEC4602EBD441900BAB0AA /* ImageShareProvider.swift */; };
 /* End PBXBuildFile section */
@@ -38,33 +44,31 @@
 		2288BA902EB8B6F7006B9107 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2288BA962EB8B6F7006B9107 /* JoiefullTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JoiefullTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2288BAA02EB8B6F7006B9107 /* JoiefullUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JoiefullUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2292DF7F2ECC9C400005A8D3 /* ProductListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductListView.swift; sourceTree = "<group>"; };
+		2292DF802ECC9C400005A8D3 /* ProductListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductListViewModel.swift; sourceTree = "<group>"; };
+		2292DF812ECC9C400005A8D3 /* ProductListViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductListViewState.swift; sourceTree = "<group>"; };
+		2292DF852ECC9C400005A8D3 /* ProductDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailView.swift; sourceTree = "<group>"; };
+		2292DF862ECC9C400005A8D3 /* ProductDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailViewModel.swift; sourceTree = "<group>"; };
+		2292DF8B2ECC9C400005A8D3 /* ProductRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductRowView.swift; sourceTree = "<group>"; };
 		22CEC4242EBB672700BAB0AA /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
 		22CEC4602EBD441900BAB0AA /* ImageShareProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageShareProvider.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		2288BAC52EB8E646006B9107 /* Exceptions for "ProductList" folder in "Joiefull" target */ = {
+		2288BAC52EB8E646006B9107 /* Exceptions for "Sous-Vues" folder in "Joiefull" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				ProductListView.swift,
-				ProductListViewModel.swift,
-				ProductListViewState.swift,
+				ProductSectionView.swift,
 			);
 			target = 2288BA882EB8B6F5006B9107 /* Joiefull */;
 		};
-		2288BACB2EB8E677006B9107 /* Exceptions for "ProductDetail" folder in "Joiefull" target */ = {
+		2288BACB2EB8E677006B9107 /* Exceptions for "Sous-Vues" folder in "Joiefull" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				ProductDetailView.swift,
-				ProductDetailViewModel.swift,
+				FavoriteState.swift,
+				ProductInfoView.swift,
+				RemoteImageView.swift,
 				StarRatingView.swift,
-			);
-			target = 2288BA882EB8B6F5006B9107 /* Joiefull */;
-		};
-		22CEC3E62EBA36E500BAB0AA /* Exceptions for "ProductRow" folder in "Joiefull" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				ProductRowView.swift,
 			);
 			target = 2288BA882EB8B6F5006B9107 /* Joiefull */;
 		};
@@ -81,9 +85,9 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		2288BABA2EB8E541006B9107 /* Services */ = {
+		2288BABA2EB8E541006B9107 /* Image */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Services;
+			path = Image;
 			sourceTree = "<group>";
 		};
 		2288BABB2EB8E54C006B9107 /* DI */ = {
@@ -91,28 +95,25 @@
 			path = DI;
 			sourceTree = "<group>";
 		};
-		2288BABD2EB8E56D006B9107 /* ProductDetail */ = {
+		2288BABD2EB8E56D006B9107 /* Sous-Vues */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				2288BACB2EB8E677006B9107 /* Exceptions for "ProductDetail" folder in "Joiefull" target */,
+				2288BACB2EB8E677006B9107 /* Exceptions for "Sous-Vues" folder in "Joiefull" target */,
 			);
-			path = ProductDetail;
+			path = "Sous-Vues";
 			sourceTree = "<group>";
 		};
-		2288BABE2EB8E570006B9107 /* ProductList */ = {
+		2288BABE2EB8E570006B9107 /* Sous-Vues */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				2288BAC52EB8E646006B9107 /* Exceptions for "ProductList" folder in "Joiefull" target */,
+				2288BAC52EB8E646006B9107 /* Exceptions for "Sous-Vues" folder in "Joiefull" target */,
 			);
-			path = ProductList;
+			path = "Sous-Vues";
 			sourceTree = "<group>";
 		};
-		22CEC3E52EBA36D800BAB0AA /* ProductRow */ = {
+		2292DF9D2ECD3A670005A8D3 /* Network */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				22CEC3E62EBA36E500BAB0AA /* Exceptions for "ProductRow" folder in "Joiefull" target */,
-			);
-			path = ProductRow;
+			path = Network;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -168,6 +169,7 @@
 		2288BAB32EB8E401006B9107 /* Application */ = {
 			isa = PBXGroup;
 			children = (
+				2292DF9C2ECD3A360005A8D3 /* Services */,
 				2288BA8C2EB8B6F5006B9107 /* JoiefullApp.swift */,
 				2288BA902EB8B6F7006B9107 /* Assets.xcassets */,
 			);
@@ -178,7 +180,6 @@
 			isa = PBXGroup;
 			children = (
 				2288BAB62EB8E4F9006B9107 /* Models */,
-				2288BABA2EB8E541006B9107 /* Services */,
 				2288BABB2EB8E54C006B9107 /* DI */,
 			);
 			path = Core;
@@ -187,11 +188,49 @@
 		2288BABC2EB8E560006B9107 /* Features */ = {
 			isa = PBXGroup;
 			children = (
-				2288BABE2EB8E570006B9107 /* ProductList */,
-				2288BABD2EB8E56D006B9107 /* ProductDetail */,
-				22CEC3E52EBA36D800BAB0AA /* ProductRow */,
+				2292DFA22ECF16460005A8D3 /* ProductList */,
+				2292DFA02ECF13C30005A8D3 /* ProductDetail */,
+				2292DFA12ECF144D0005A8D3 /* ProductRow */,
 			);
 			path = Features;
+			sourceTree = "<group>";
+		};
+		2292DF9C2ECD3A360005A8D3 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				2292DF9D2ECD3A670005A8D3 /* Network */,
+				2288BABA2EB8E541006B9107 /* Image */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		2292DFA02ECF13C30005A8D3 /* ProductDetail */ = {
+			isa = PBXGroup;
+			children = (
+				2292DF852ECC9C400005A8D3 /* ProductDetailView.swift */,
+				2292DF862ECC9C400005A8D3 /* ProductDetailViewModel.swift */,
+				2288BABD2EB8E56D006B9107 /* Sous-Vues */,
+			);
+			path = ProductDetail;
+			sourceTree = "<group>";
+		};
+		2292DFA12ECF144D0005A8D3 /* ProductRow */ = {
+			isa = PBXGroup;
+			children = (
+				2292DF8B2ECC9C400005A8D3 /* ProductRowView.swift */,
+			);
+			path = ProductRow;
+			sourceTree = "<group>";
+		};
+		2292DFA22ECF16460005A8D3 /* ProductList */ = {
+			isa = PBXGroup;
+			children = (
+				2292DF7F2ECC9C400005A8D3 /* ProductListView.swift */,
+				2292DF802ECC9C400005A8D3 /* ProductListViewModel.swift */,
+				2292DF812ECC9C400005A8D3 /* ProductListViewState.swift */,
+				2288BABE2EB8E570006B9107 /* Sous-Vues */,
+			);
+			path = ProductList;
 			sourceTree = "<group>";
 		};
 		22CEC4012EBA96D800BAB0AA /* Theme+Color */ = {
@@ -228,8 +267,9 @@
 			);
 			fileSystemSynchronizedGroups = (
 				2288BAB62EB8E4F9006B9107 /* Models */,
-				2288BABA2EB8E541006B9107 /* Services */,
+				2288BABA2EB8E541006B9107 /* Image */,
 				2288BABB2EB8E54C006B9107 /* DI */,
+				2292DF9D2ECD3A670005A8D3 /* Network */,
 			);
 			name = Joiefull;
 			packageProductDependencies = (
@@ -355,10 +395,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2292DF8C2ECC9C400005A8D3 /* ProductRowView.swift in Sources */,
 				22CEC4612EBD441900BAB0AA /* ImageShareProvider.swift in Sources */,
 				228796762EC5F155006803D6 /* Color.swift in Sources */,
+				2292DF822ECC9C400005A8D3 /* ProductListView.swift in Sources */,
+				2292DF832ECC9C400005A8D3 /* ProductListViewModel.swift in Sources */,
+				2292DF842ECC9C400005A8D3 /* ProductListViewState.swift in Sources */,
 				2288BA8D2EB8B6F5006B9107 /* JoiefullApp.swift in Sources */,
 				22CEC4252EBB672700BAB0AA /* ShareSheet.swift in Sources */,
+				2292DF882ECC9C400005A8D3 /* ProductDetailView.swift in Sources */,
+				2292DF892ECC9C400005A8D3 /* ProductDetailViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

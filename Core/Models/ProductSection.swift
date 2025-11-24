@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ProductSection: Identifiable {
+struct ProductSection: Identifiable, Equatable {
     
     let id = UUID()
     let category: String

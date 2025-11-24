@@ -38,18 +38,42 @@ class NetworkService: NetworkServiceProtocol {
         
         func downloadImage(from urlString: String) async throws -> UIImage {
                 do {
-                        guard let url = URL(string: urlString) else { throw NetworkError.invalidURL }
+                        guard let url = URL(string: urlString) else {
+                                throw NetworkError.invalidURL
+                        }
+                        
+                        // Image dans le cache ?
+                        if let cached = await ImageCache.shared.image(for: url) {
+                                return cached
+                        }
+                        
+                        // 2) Sinon, on télécharge
                         let (data, response) = try await URLSession.shared.data(from: url)
                         
-                        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+                        guard let httpResponse = response as? HTTPURLResponse,
+                              httpResponse.statusCode == 200 else {
                                 throw NetworkError.serverError(statusCode: (response as? HTTPURLResponse)?.statusCode ?? -1)
                         }
                         
-                        if let image = UIImage(data: data) { return image }
-                        else { throw NetworkError.decodingError(.dataCorrupted(.init(codingPath: [], debugDescription: "Image invalide"))) }
+                        guard let image = UIImage(data: data) else {
+                                throw NetworkError.decodingError(.dataCorrupted(.init(
+                                        codingPath: [],
+                                        debugDescription: "Image invalide"
+                                )))
+                        }
                         
-                } catch let error as URLError { throw NetworkError.networkError(error)
-                } catch let error as NetworkError { throw error
-                } catch { throw NetworkError.unknownError(error) }
+                        // 3) On met dans le cache
+                        await ImageCache.shared.insert(image, for: url)
+                        
+                        return image
+                        
+                } catch let error as URLError {
+                        throw NetworkError.networkError(error)
+                } catch let error as NetworkError {
+                        throw error
+                } catch {
+                        throw NetworkError.unknownError(error)
+                }
         }
+        
 }
