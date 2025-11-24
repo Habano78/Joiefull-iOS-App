@@ -57,9 +57,11 @@ class ProductDetailViewModel: ObservableObject {
         
         //Favoris
         func toggleFavorite() {
-                favoriteState.toggle()
+                favoriteState.toggle() 
         }
-                
+        
+        
+        
         // Préchargement de l'image. Pour télécharger l'image en avance
         func preloadShareableImage() async {
                 guard imageToShare == nil,

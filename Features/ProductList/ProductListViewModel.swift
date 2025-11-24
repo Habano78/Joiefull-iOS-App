@@ -12,6 +12,9 @@ import Combine
 @MainActor
 class ProductListViewModel: ObservableObject {
         
+        //MARK: Properties
+        
+        ///Pour la vue
         @Published var state: ProductListViewState = .idle
         
         private let service: NetworkServiceProtocol
