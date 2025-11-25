@@ -22,19 +22,24 @@ struct RemoteImageView: View {
                         if let uiImage {
                                 Image(uiImage: uiImage)
                                         .resizable()
+                                        .scaledToFill()
                                         .transition(.opacity.animation(.easeInOut(duration: 0.25)))
+                        }
+                        else if isLoading {
+                                ZStack {
+                                        Color.gray.opacity(0.2)
+                                        ProgressView()
+                                }
+                        }
+                        else if hasError {
+                                Color.gray.opacity(0.2) // Erreur
                                 
-                        } else if isLoading {
-                                ProgressView()   // placeholder loader
-                                
-                        } else if hasError {
-                                Color.gray.opacity(0.2) // erreur : placeholder
-                                
-                        } else {
-                                // État "initial" très bref avant que .task démarre
-                                Color.gray.opacity(0.1)
+                        }
+                        else {
+                                Color.gray.opacity(0.1) // État "initial"
                         }
                 }
+                .clipped()
                 .task {
                         await loadImage()
                 }

@@ -22,7 +22,7 @@ struct ProductSectionView: View, Equatable {
                 
                 Section(header: sectionHeader) {
                         ScrollView(.horizontal, showsIndicators: false) {
-                                LazyHStack(spacing: 16) {
+                                LazyHStack(alignment: .top, spacing: 16) {
                                         ForEach(section.products) { product in
                                                 
                                                 Button {
@@ -33,7 +33,7 @@ struct ProductSectionView: View, Equatable {
                                                                 service: service
                                                         )
                                                         .equatable()
-                                                        .frame(width: 170)
+                                                        .frame(width: 170, height: 260, alignment: .top)
                                                        
                                                 }
                                                 .buttonStyle(.plain)
