@@ -72,8 +72,7 @@ struct ProductListView: View {
                                 }
                         }
                         .navigationTitle("Catalogue")
-                        .navigationSplitViewColumnWidth(ideal: 350)
-                        
+                        .navigationSplitViewColumnWidth(min: 320, ideal: 450, max: 500)
                         
                 } detail: {
                         

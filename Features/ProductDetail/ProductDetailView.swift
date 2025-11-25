@@ -28,29 +28,33 @@ struct ProductDetailView: View {
                                 VStack(alignment: .leading, spacing: 20) {
                                         
                                         // MARK: IMAGE + FAVORIS
+                                        // MARK: IMAGE + FAVORIS
                                         ZStack(alignment: .bottomTrailing) {
-                                                
-                                                RemoteImageView(
-                                                        url: viewModel.product.picture.url,
-                                                        service: viewModel.service
-                                                )
-                                                .frame(height: 400)
-                                                .clipped()
-                                                .accessibilityElement(children: .ignore)
-                                                .accessibilityLabel(Text(viewModel.product.picture.description))
-                                                .accessibilityAddTraits(.isImage)
-                                                
-                                                
-                                                FavoriteButtonView(
-                                                        isFavorite: viewModel.favoriteState.isFavorite,
-                                                        likesCount: viewModel.favoriteState.likesCount,
-                                                        onToggle: { viewModel.favoriteState.toggle() }
-                                                )
-                                                .equatable()
-                                                .padding(12)
+
+                                            RemoteImageView(
+                                                url: viewModel.product.picture.url,
+                                                service: viewModel.service,
+                                                contentMode: .fit              // on veut voir la photo ENTIEREMENT
+                                            )
+                                           // .aspectRatio(4.0 / 3.0, contentMode: .fill)
+                                            .frame(maxWidth: .infinity)        // prend toute la largeur dispo
+                                            .clipped()
+                                            .accessibilityElement(children: .ignore)
+                                            .accessibilityLabel(Text(viewModel.product.picture.description))
+                                            .accessibilityAddTraits(.isImage)
+
+                                            FavoriteButtonView(
+                                                isFavorite: viewModel.favoriteState.isFavorite,
+                                                likesCount: viewModel.favoriteState.likesCount,
+                                                onToggle: { viewModel.favoriteState.toggle() }
+                                            )
+                                            .equatable()
+                                            .padding(12)
                                         }
-                                        .cornerRadius(24)
+                                        .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
                                         .padding(.horizontal)
+
+                                        
                                         
                                         
                                         // MARK: INFORMATIONS PRODUIT (SubView)
