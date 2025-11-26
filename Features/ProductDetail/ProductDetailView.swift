@@ -34,8 +34,8 @@ struct ProductDetailView: View {
                                                         service: viewModel.service,
                                                         contentMode: .fit              // on veut voir la photo ENTIEREMENT
                                                 )
-                                                .frame(maxWidth: .infinity)
-                                                //.clipped()
+                                                .frame(height: 390)
+                                                .clipped()
                                                 .accessibilityElement(children: .ignore)
                                                 .accessibilityLabel(Text(viewModel.product.picture.description))
                                                 .accessibilityAddTraits(.isImage)

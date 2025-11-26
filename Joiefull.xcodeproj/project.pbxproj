@@ -171,9 +171,8 @@
 		2288BAB32EB8E401006B9107 /* Application */ = {
 			isa = PBXGroup;
 			children = (
-				2292DF9C2ECD3A360005A8D3 /* Services */,
-				2288BA8C2EB8B6F5006B9107 /* JoiefullApp.swift */,
 				2288BA902EB8B6F7006B9107 /* Assets.xcassets */,
+				2288BA8C2EB8B6F5006B9107 /* JoiefullApp.swift */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -181,6 +180,7 @@
 		2288BAB42EB8E464006B9107 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				2292DF9C2ECD3A360005A8D3 /* Services */,
 				2288BAB62EB8E4F9006B9107 /* Models */,
 				2288BABB2EB8E54C006B9107 /* DI */,
 			);
