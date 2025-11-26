@@ -28,7 +28,7 @@ class ProductDetailViewModel: ObservableObject {
         @Published var userComment: String = ""
         
         // Favoris / likes
-        @Published var favoriteState: FavoriteState
+        @Published var favoriteState: ProductDetailFavoriteStatus
         ///  @Published var isFavorite: Bool = false
         ///  @Published var likesCounting: Int
         
@@ -44,7 +44,7 @@ class ProductDetailViewModel: ObservableObject {
                 self.product = product
                 self.service = service
                 
-                self.favoriteState = FavoriteState(
+                self.favoriteState = ProductDetailFavoriteStatus(
                         isFavorite: false,
                         likesCount: product.likes
                 )
@@ -55,14 +55,13 @@ class ProductDetailViewModel: ObservableObject {
                 }
         }
         
-        //Favoris
+        //MARK: Favoris
         func toggleFavorite() {
-                favoriteState.toggle() 
+                favoriteState.toggle()
         }
         
         
-        
-        // Préchargement de l'image. Pour télécharger l'image en avance
+        //MARK: téléchargement image en avance
         func preloadShareableImage() async {
                 guard imageToShare == nil,
                       !isPreparingShare,
@@ -80,7 +79,7 @@ class ProductDetailViewModel: ObservableObject {
                 }
         }
         
-        // Télécharger + ouvrir la feuille de partage
+        //MARK: Télécharger + Ouvrir la feuille de partage
         func prepareShareableImage() async {
                 
                 guard !isPreparingShare,
@@ -113,23 +112,18 @@ class ProductDetailViewModel: ObservableObject {
                 }
         }
         
-        // Bouton de partage
+        //MARK: Gestion Bouton Partage
         func handleShareButtonTapped() async {
                 if imageToShare != nil {
                         isShowingShareSheet = true
                 } else {
-                        
                         await prepareShareableImage()
                 }
         }
         
-        // MARK: - Reset
+        
+        // MARK:  Reset
         func resetShareableImage() {
                 isShowingShareSheet = false /// Ferme la feuille de partage **sans** effacer l'image du cache.
         }
 }
-
-
-//Note:  Parameter autoPreload:
-///   true (défaut) → l'image est préchargée automatiquement en prod.
-///   false → les tests contrôlent manuellement le préchargement.

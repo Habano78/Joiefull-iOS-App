@@ -10,51 +10,46 @@ import SwiftUI
 struct ProductDetailView: View {
         
         // MARK: - Properties
-        
         @StateObject private var viewModel: ProductDetailViewModel
         
-        // MARK: - Init
         
+        // MARK: - Init
         init(viewModel: ProductDetailViewModel) {
                 _viewModel = StateObject(wrappedValue: viewModel)
         }
         
-        // MARK: - Body
         
+        // MARK: - Body
         var body: some View {
                 ZStack {
                         
                         ScrollView {
                                 VStack(alignment: .leading, spacing: 20) {
                                         
-                                        // MARK: IMAGE + FAVORIS
-                                        // MARK: IMAGE + FAVORIS
+                                        // MARK: Image + Favoris
                                         ZStack(alignment: .bottomTrailing) {
-
-                                            RemoteImageView(
-                                                url: viewModel.product.picture.url,
-                                                service: viewModel.service,
-                                                contentMode: .fit              // on veut voir la photo ENTIEREMENT
-                                            )
-                                           // .aspectRatio(4.0 / 3.0, contentMode: .fill)
-                                            .frame(maxWidth: .infinity)        // prend toute la largeur dispo
-                                            .clipped()
-                                            .accessibilityElement(children: .ignore)
-                                            .accessibilityLabel(Text(viewModel.product.picture.description))
-                                            .accessibilityAddTraits(.isImage)
-
-                                            FavoriteButtonView(
-                                                isFavorite: viewModel.favoriteState.isFavorite,
-                                                likesCount: viewModel.favoriteState.likesCount,
-                                                onToggle: { viewModel.favoriteState.toggle() }
-                                            )
-                                            .equatable()
-                                            .padding(12)
+                                                
+                                                RemoteImageView(
+                                                        url: viewModel.product.picture.url,
+                                                        service: viewModel.service,
+                                                        contentMode: .fit              // on veut voir la photo ENTIEREMENT
+                                                )
+                                                .frame(maxWidth: .infinity)
+                                                //.clipped()
+                                                .accessibilityElement(children: .ignore)
+                                                .accessibilityLabel(Text(viewModel.product.picture.description))
+                                                .accessibilityAddTraits(.isImage)
+                                                
+                                                FavoriteButtonView(
+                                                        isFavorite: viewModel.favoriteState.isFavorite,
+                                                        likesCount: viewModel.favoriteState.likesCount,
+                                                        onToggle: { viewModel.favoriteState.toggle() }
+                                                )
+                                                .equatable()
+                                                .padding(12)
                                         }
                                         .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
                                         .padding(.horizontal)
-
-                                        
                                         
                                         
                                         // MARK: INFORMATIONS PRODUIT (SubView)
@@ -70,14 +65,14 @@ struct ProductDetailView: View {
                                         Divider().padding(.horizontal)
                                         
                                         
-                                        // MARK: - 3. SECTION AVIS
+                                        // Section Avis
                                         VStack(alignment: .leading, spacing: 12) {
                                                 
                                                 Text("Avis")
                                                         .font(.headline)
                                                         .accessibilityAddTraits(.isHeader)
                                                 
-                                                // RATING
+                                                // Note
                                                 HStack {
                                                         StarRatingView(rating: $viewModel.userRating)
                                                         Spacer()
@@ -85,7 +80,7 @@ struct ProductDetailView: View {
                                                                 .foregroundColor(.secondary)
                                                 }
                                                 
-                                                // COMMENT
+                                                // Avis
                                                 TextEditor(text: $viewModel.userComment)
                                                         .frame(height: 100)
                                                         .padding(4)
@@ -100,7 +95,7 @@ struct ProductDetailView: View {
                                                         .accessibilityHint("Entrez votre avis sur cet article.")
                                                 
                                                 
-                                                // SEND BUTTON
+                                                // Bouton Avis
                                                 Button {
                                                         withAnimation {
                                                                 viewModel.userRating = 0
@@ -129,7 +124,7 @@ struct ProductDetailView: View {
                         .accessibilityHidden(viewModel.isPreparingShare)
                         
                         
-                        // MARK: - LOADING OVERLAY
+                        // MARK: LOADING OVERLAY
                         if viewModel.isPreparingShare {
                                 Color.joiefullSpinnerOverlay
                                         .edgesIgnoringSafeArea(.all)
@@ -144,11 +139,11 @@ struct ProductDetailView: View {
                         
                         
                 }
-                // MARK: - Navigation
+                // MARK:  Navigation
                 .navigationTitle(viewModel.product.name)
                 .navigationBarTitleDisplayMode(.inline)
                 
-                // MARK: - Toolbar (Share)
+                // MARK: Toolbar (Partage)
                 .toolbar {
                         ToolbarItem(placement: .navigationBarTrailing) {
                                 Button {
@@ -161,7 +156,7 @@ struct ProductDetailView: View {
                         }
                 }
                 
-                // MARK: - Preload image on appear
+                // MARK: Preload image on appear
                 .task {
                         if viewModel.imageToShare == nil { await viewModel.preloadShareableImage() }
                 }

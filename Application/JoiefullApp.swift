@@ -16,7 +16,7 @@ struct JoiefullApp: App {
                 WindowGroup {
                         let viewModel = diContainer.makeProductListViewModel()
                         ProductListView(viewModel: viewModel) /// On injecte le VM dans la vue.
-                                .environmentObject(diContainer) ///On injecte le conteneur pour les futures vues (ex: l'écran de détail)/
+                                .environmentObject(diContainer) ///conteneur pour les futures vues (ex: l'écran de détail)
                                 .preferredColorScheme(.light)
                 }
         }

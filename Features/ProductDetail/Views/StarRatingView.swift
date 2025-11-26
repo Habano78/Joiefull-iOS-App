@@ -28,7 +28,6 @@ struct StarRatingView: View {
                                         }
                         }
                 }
-                // Accessibilité Note
                 .accessibilityElement(children: .ignore)
                 .accessibilityLabel(Text("Note de l’utilisateur"))
                 .accessibilityValue(Text("\(rating) sur 5"))

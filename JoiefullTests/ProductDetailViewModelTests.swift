@@ -29,8 +29,7 @@ struct ProductDetailViewModelTests {
         }
         
         
-        // MARK: - Tests Favoris
-        
+        //
         @Test("Vérifie que le favori passe de off à on et incrémente les likes")
         @MainActor
         func testToggleFavorite_WhenOff_ShouldTurnOnAndIncrementLikes() {
@@ -46,11 +45,12 @@ struct ProductDetailViewModelTests {
                 #expect(sut.favoriteState.likesCount == mockTestProduct.likes + 1)
         }
         
-        @Test("Vérifie que le favori passe de on à off et décrémente les likes")
+        //
+        @Test("Vérifie que le favori passe de ON à OFF et décrémente les likes")
         @MainActor
         func testToggleFavorite_WhenOn_ShouldTurnOffAndDecrementLikes() {
                 // GIVEN
-                sut.favoriteState = FavoriteState(
+                sut.favoriteState = ProductDetailFavoriteStatus(
                         isFavorite: true,
                         likesCount: mockTestProduct.likes + 1
                 )
@@ -65,8 +65,7 @@ struct ProductDetailViewModelTests {
         }
         
         
-        // MARK: - Tests Préchargement
-        
+        //
         @Test("Vérifie que le préchargement télécharge l'image sans ouvrir la feuille de partage")
         @MainActor
         func testPreloadShareableImage_WhenSuccess() async {
@@ -85,8 +84,7 @@ struct ProductDetailViewModelTests {
         }
         
         
-        // MARK: - Tests Partage (Succès)
-        
+        //
         @Test("Vérifie que le partage réussit et met à jour l'état")
         @MainActor
         func testPrepareShareableImage_WhenSuccess() async {
@@ -105,6 +103,8 @@ struct ProductDetailViewModelTests {
                 #expect(mockService.downloadImageCallCount == 1)
         }
         
+        
+        //
         @Test("Vérifie que le partage ne se lance qu'une fois en cas d’appels concurrents")
         @MainActor
         func testPrepareShareableImage_WhenCalledConcurrently_ShouldDownloadOnce() async {
@@ -124,8 +124,7 @@ struct ProductDetailViewModelTests {
         }
         
         
-        // MARK: - Tests Partage (handleShareButtonTapped)
-        
+        //
         @Test("Vérifie que handleShareButtonTapped n'effectue pas un nouveau téléchargement si l'image est déjà préchargée")
         @MainActor
         func testHandleShareButtonTapped_WhenImageAlreadyPreloaded_ShouldNotRedownload() async {
@@ -145,8 +144,7 @@ struct ProductDetailViewModelTests {
         }
         
         
-        // MARK: - Tests Partage (Échecs)
-        
+        //
         @Test("Vérifie que le partage ne s'ouvre pas en cas d'erreur réseau")
         @MainActor
         func testPrepareShareableImage_WhenNetworkFails() async {
@@ -162,6 +160,7 @@ struct ProductDetailViewModelTests {
                 #expect(sut.imageToShare == nil)
         }
         
+        //
         @Test("Vérifie que le partage ne s'ouvre pas si la tâche est annulée")
         @MainActor
         func testPrepareShareableImage_WhenTaskIsCancelled() async {
@@ -179,6 +178,7 @@ struct ProductDetailViewModelTests {
         
         struct UnknownTestError: Error { }
         
+        //
         @Test("Vérifie que le partage ne s'ouvre pas en cas d'erreur inconnue")
         @MainActor
         func testPrepareShareableImage_WhenUnknownError() async {
@@ -195,8 +195,7 @@ struct ProductDetailViewModelTests {
         }
         
         
-        // MARK: - Tests Reset
-        
+        //
         @Test("Vérifie que resetShareableImage ferme la sheet mais garde l'image en cache")
         @MainActor
         func testResetShareableImage_WhenStateIsDirty_ShouldKeepImage() async {
@@ -216,10 +215,10 @@ struct ProductDetailViewModelTests {
 }
 
 //Ce que ces tests couvrent
-///✅ Favoris (toggle + likes qui montent/descendent)
-///✅ Préchargement de l’image de partage (sans ouvrir la sheet)
-///✅ Succès du partage (image téléchargée + sheet affichée)
-///✅ Protection contre les appels concurrents (prepareShareableImage appelé deux fois)
-///✅ handleShareButtonTapped qui ne redéclenche pas un téléchargement si l’image est prête
-///✅ Erreurs : réseau, annulation, erreur inconnue
-///✅ resetShareableImage qui ferme la sheet mais garde l'image pour un partage fluide ensuite
+///* *Favoris (toggle + likes qui montent/descendent)
+///* * Préchargement de l’image de partage (sans ouvrir la sheet)
+///* *Succès du partage (image téléchargée + sheet affichée)
+/// * * Protection contre les appels concurrents (prepareShareableImage appelé deux fois)
+///* * handleShareButtonTapped qui ne redéclenche pas un téléchargement si l’image est prête
+/// * * Erreurs : réseau, annulation, erreur inconnue
+/// * *resetShareableImage qui ferme la sheet mais garde l'image pour un partage fluide ensuite

@@ -20,8 +20,7 @@ struct ProductListViewModelTests {
                 sut = ProductListViewModel(service: mockService)
         }
         
-        //MARK: --- Tests FetchProducts ---
-        
+        //
         @Test("Vérifie que l'état passe à .loaded en cas de succès réseau")
         @MainActor
         func testFetchProducts_WhenSuccess() async {
@@ -43,6 +42,7 @@ struct ProductListViewModelTests {
                 }
         }
         
+        //
         @Test("Vérifie que l'état passe à .error en cas d'erreur réseau")
         @MainActor
         func testFetchProducts_WhenNetworkError() async {
@@ -63,6 +63,7 @@ struct ProductListViewModelTests {
                 }
         }
         
+        //
         @Test("Vérifie que l'état revient à .idle en cas d'annulation")
         @MainActor
         func testFetchProducts_WhenCancellationError() async {
@@ -73,7 +74,7 @@ struct ProductListViewModelTests {
                 // WHEN
                 await sut.reload()
                 
-                // THEN                 
+                // THEN
                 switch sut.state {
                 case .idle:
                         break
@@ -84,6 +85,7 @@ struct ProductListViewModelTests {
         
         struct UnknownTestError: Error {}
         
+        //
         @Test("Vérifie que l'état passe à .error en cas d'erreur inconnue")
         @MainActor
         func testFetchProducts_WhenUnknownError() async {
@@ -103,34 +105,33 @@ struct ProductListViewModelTests {
                         Issue.record("État inattendu : \(sut.state), attendu : .error")
                 }
         }
-            
-            @Test("Vérifie que l'état .loading empêche les doubles appels")
-            @MainActor
-            func testFetchProducts_WhenAlreadyLoading_ShouldDoNothing() async {
+        
+        //
+        @Test("Vérifie que l'état .loading empêche les doubles appels")
+        @MainActor
+        func testFetchProducts_WhenAlreadyLoading_ShouldDoNothing() async {
                 
-                // 1. GIVEN (Étant donné)
+                // 1. GIVEN
                 mockService.fetchProductsResult = .success
                 #expect(mockService.fetchProductsCallCount == 0)
-
-                // 2. WHEN (Quand)
+                
+                // 2. WHEN
                 // On lance deux appels en parallèle
                 async let firstCall = sut.reload()
                 async let secondCall = sut.reload()
                 
-                // On attend qu'ils soient tous les deux terminés
                 let _ = await (firstCall, secondCall)
                 
-                // 3. THEN (Alors)
-                // Le 'guard' (if case .loading) a dû fonctionner.
-                // Le service ne doit avoir été appelé QU'UNE SEULE FOIS.
+                // 3. THEN
+               
+                // Le service ne doit avoir été appelé QU'UNE SEULE FOIS... si le 'guard' (if case .loading) a fonctionné
                 #expect(mockService.fetchProductsCallCount == 1)
                 
-                // L'état final doit être .loaded (du premier appel)
                 switch sut.state {
                 case .loaded:
-                    break
+                        break
                 default:
-                    Issue.record("État inattendu, le verrou a échoué")
+                        Issue.record("État inattendu, le verrou a échoué")
                 }
-            }
+        }
 }

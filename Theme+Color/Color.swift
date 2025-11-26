@@ -17,7 +17,7 @@ extension Color {
     static let joiefullSpinnerOverlay = Color("SpinnerOverlay")
     
     /// La couleur principale de la marque (ex: bleu)
-    static let joiefullPrimary = Color.blue 
+        static let joiefullPrimary = Color(.blue)
     
     /// L'étoile de notation
     static let joiefullStar = Color.yellow
