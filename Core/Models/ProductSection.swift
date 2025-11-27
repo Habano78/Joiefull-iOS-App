@@ -2,7 +2,7 @@
 //  ProductSection.swift
 //  Joiefull
 //
-//  Created by Perez William on 04/11/2025.
+//  Created by Perez William on 26/11/2025.
 //
 
 import Foundation

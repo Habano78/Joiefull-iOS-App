@@ -14,10 +14,17 @@ class ProductListViewModel: ObservableObject {
         
         //MARK: Properties
         
-        ///Pour la vue
         @Published var state: ProductListViewState = .idle
-        
         private let service: NetworkServiceProtocol
+        
+        //MARK: VM State
+        enum ProductListViewState {
+                case idle
+                case loading
+                case loaded([ProductSection])
+                case error(String)
+        }
+        
         
         // MARK: Init
         init(service: NetworkServiceProtocol) {
@@ -34,7 +41,7 @@ class ProductListViewModel: ObservableObject {
                 self.state = .loading
                 
                 do {
-                        let products = try await service.fetchProducts() 
+                        let products = try await service.fetchProducts()
                         try Task.checkCancellation()
                         
                         let groupedProducts = Dictionary(grouping: products, by: { $0.category })
@@ -49,7 +56,8 @@ class ProductListViewModel: ObservableObject {
                         self.state = .idle /// Si la tâche est annulée (ex: l'utilisateur quitte la vue),on revient à l'état initial.
                         
                 } catch let error as NetworkError {
-                        self.state = .error(error.errorDescription ?? "Une erreur est survenue")
+                        let fallbackError = NSLocalizedString("ERROR_DEFAULT_FALLBACK", comment: "Une erreur est survenue")
+                        self.state = .error(error.errorDescription ?? fallbackError)
                         
                 } catch {
                         self.state = .error(error.localizedDescription)
@@ -59,4 +67,5 @@ class ProductListViewModel: ObservableObject {
         func reload() async {
                 await fetchProducts()
         }
+        
 }

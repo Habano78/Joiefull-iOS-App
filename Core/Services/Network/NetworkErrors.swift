@@ -16,20 +16,28 @@ enum NetworkError: Error, LocalizedError { ///LocalizedError permet d'avoir des 
         case decodingError(DecodingError)
         case unknownError(Error) /// erreur général au cas où
         
-        // Pour afficher les messages dans la console
+        /// Pour afficher les messages dans la console
         var errorDescription: String? {
                 switch self {
+                        
                 case .invalidURL:
-                        return "❌ L'URL de l'API est invalide."
+                        return "\(NSLocalizedString("ERROR_INVALID_URL", comment: "Erreur URL non valide"))"
+                        
                 case .serverError(let code):
-                        return "❌ Erreur du serveur. Code: \(code)."
+                        let format = NSLocalizedString("ERROR_SERVER_FORMAT", comment: "Erreur serveur avec code")
+                        return String(format: "%@", format, code)
+                        
                 case .networkError(let urlError):
-                        return "❌ Erreur réseau. L'utilisateur n'est peut-être pas connecté. \(urlError.localizedDescription)"
+                        let format = NSLocalizedString("ERROR_NETWORK_FORMAT", comment: "Erreur réseau avec description")
+                        return String(format: "%@", format, urlError.localizedDescription)
+                        
                 case .decodingError(let decError):
-                        // C'est super utile pour déboguer le JSON !
-                        return "❌ Erreur de décodage. Le modèle ne correspond pas au JSON. \(decError.localizedDescription)"
+                        let format = NSLocalizedString("ERROR_DECODING_FORMAT", comment: "Erreur de décodage avec description")
+                        return String(format: "%@", format, decError.localizedDescription)
+                        
                 case .unknownError(let err):
-                        return "❌ Erreur inconnue. \(err.localizedDescription)"
+                        let format = NSLocalizedString("ERROR_UNKNOWN_FORMAT", comment: "Erreur inconnue avec description")
+                        return String(format: "%@", format, err.localizedDescription)
                 }
         }
 }

@@ -26,13 +26,13 @@ struct ProductDetailView: View {
                         ScrollView {
                                 VStack(alignment: .leading, spacing: 20) {
                                         
-                                        // MARK: Image + Favoris
+                                        // Image + Favoris
                                         ZStack(alignment: .bottomTrailing) {
                                                 
                                                 RemoteImageView(
                                                         url: viewModel.product.picture.url,
                                                         service: viewModel.service,
-                                                        contentMode: .fit              // on veut voir la photo ENTIEREMENT
+                                                        contentMode: .fit              // voir la photo ENTIEREMENT
                                                 )
                                                 .frame(height: 390)
                                                 .clipped()
@@ -41,9 +41,9 @@ struct ProductDetailView: View {
                                                 .accessibilityAddTraits(.isImage)
                                                 
                                                 FavoriteButtonView(
-                                                        isFavorite: viewModel.favoriteState.isFavorite,
-                                                        likesCount: viewModel.favoriteState.likesCount,
-                                                        onToggle: { viewModel.favoriteState.toggle() }
+                                                        isFavorite: viewModel.favoriteStatus.isFavorite,
+                                                        likesCount: viewModel.favoriteStatus.likesCount,
+                                                        onToggle: { viewModel.favoriteStatus.toggle() }
                                                 )
                                                 .equatable()
                                                 .padding(12)
@@ -52,15 +52,12 @@ struct ProductDetailView: View {
                                         .padding(.horizontal)
                                         
                                         
-                                        // MARK: INFORMATIONS PRODUIT (SubView)
-                                        
+                                        // Infos du Produit
                                         ProductInfoView(
                                                 product: viewModel.product,
                                                 accessibilityPriceDescription: a11yPriceDescription
                                         )
                                         .equatable()
-                                        
-                                        
                                         
                                         Divider().padding(.horizontal)
                                         
@@ -68,7 +65,7 @@ struct ProductDetailView: View {
                                         // Section Avis
                                         VStack(alignment: .leading, spacing: 12) {
                                                 
-                                                Text("Avis")
+                                                Text(NSLocalizedString("SECTION_REVIEWS_TITLE", comment: "")) // ⬅️ LOCALISÉ : "Avis"
                                                         .font(.headline)
                                                         .accessibilityAddTraits(.isHeader)
                                                 
@@ -91,9 +88,8 @@ struct ProductDetailView: View {
                                                                         .stroke(Color.secondary.opacity(0.4), lineWidth: 1)
                                                         )
                                                         .foregroundColor(.primary)
-                                                        .accessibilityLabel("Commentaire")
-                                                        .accessibilityHint("Entrez votre avis sur cet article.")
-                                                
+                                                        .accessibilityLabel(NSLocalizedString("COMMENT_FIELD_LABEL", comment: ""))
+                                                        .accessibilityHint(NSLocalizedString("COMMENT_FIELD_HINT", comment: "")) //
                                                 
                                                 // Bouton Avis
                                                 Button {
@@ -102,7 +98,7 @@ struct ProductDetailView: View {
                                                                 viewModel.userComment = ""
                                                         }
                                                 } label: {
-                                                        Text("Envoyer mon avis")
+                                                        Text(NSLocalizedString("SUBMIT_REVIEW_BUTTON", comment: ""))
                                                                 .fontWeight(.semibold)
                                                                 .frame(maxWidth: .infinity)
                                                                 .padding()
@@ -112,8 +108,8 @@ struct ProductDetailView: View {
                                                 }
                                                 .disabled(viewModel.userRating == 0)
                                                 .opacity(viewModel.userRating == 0 ? 0.6 : 1)
-                                                .accessibilityLabel("Envoyer mon avis")
-                                                .accessibilityHint("Envoie votre avis pour cet article")
+                                                .accessibilityLabel(NSLocalizedString("SUBMIT_REVIEW_BUTTON", comment: ""))
+                                                .accessibilityHint(NSLocalizedString("SUBMIT_REVIEW_HINT", comment: ""))
                                         }
                                         .padding(.horizontal)
                                         .padding(.bottom, 40)
@@ -129,14 +125,13 @@ struct ProductDetailView: View {
                                 Color.joiefullSpinnerOverlay
                                         .edgesIgnoringSafeArea(.all)
                                 
-                                ProgressView("Préparation…")
+                                ProgressView(NSLocalizedString("SHARE_LOADING_MESSAGE", comment: ""))
                                         .padding()
                                         .background(Color(UIColor.systemBackground))
                                         .cornerRadius(10)
                                         .accessibilityElement(children: .combine)
                                 
                         }
-                        
                         
                 }
                 // MARK:  Navigation
@@ -151,43 +146,41 @@ struct ProductDetailView: View {
                                 } label: {
                                         Image(systemName: "square.and.arrow.up")
                                 }
-                                .accessibilityLabel("Partager cet article")
-                                .accessibilityHint("Ouvre la feuille de partage")
+                                .accessibilityLabel(NSLocalizedString("SHARE_BUTTON_LABEL", comment: ""))
+                                .accessibilityHint(NSLocalizedString("SHARE_BUTTON_HINT", comment: ""))
                         }
                 }
                 
-                // MARK: Preload image on appear
-                .task {
-                        if viewModel.imageToShare == nil { await viewModel.preloadShareableImage() }
-                }
                 
-                
-                // MARK: - Share Sheet
+                // MARK: Share Sheet
                 .sheet(isPresented: $viewModel.isShowingShareSheet, onDismiss: {
                         viewModel.resetShareableImage()
                 }) {
                         if let image = viewModel.imageToShare {
-                                let message = "Regarde cet article sur Joiefull : \(viewModel.product.name)"
+                                let format = NSLocalizedString("SHARE_MESSAGE_FORMAT", comment: "")
+                                let message = String(format: format, viewModel.product.name)
                                 let provider = ImageShareProvider(image: image, message: message)
                                 ShareSheet(items: [provider, message])
                         }
                 }
-        }
-}
-
-// MARK: - Helpers Accessibility
-
-private extension ProductDetailView {
-        var a11yPriceDescription: String {
-                let current = String(format: "%.2f euros", viewModel.product.price)
-                
-                if viewModel.product.originalPrice > viewModel.product.price {
-                        let original = String(format: "%.2f euros", viewModel.product.originalPrice)
-                        return "Prix actuel : \(current). Ancien prix : \(original). Note 4,6 sur 5."
-                } else {
-                        return "Prix : \(current). Note 4,6 sur 5."
+                .alert(
+                        NSLocalizedString("SHARE_ERROR_TITLE", comment: "Titre de l'alerte d'erreur de partage"),
+                        isPresented: .constant(viewModel.shareError != nil),
+                        presenting: viewModel.shareError
+                ) { error in
+                        Button("OK") {
+                                viewModel.shareError = nil
+                        }
+                } message: { error in
+                        Text(NSLocalizedString("SHARE_ERROR_MESSAGE", comment: "Message de l'alerte d'erreur de partage"))
                 }
         }
+        
+        //MARK: Prix Accésibilité
+        var a11yPriceDescription: String {
+                AccessibilityPriceHelper.generateA11yPriceDescription(
+                        currentPrice: viewModel.product.price,
+                        originalPrice: viewModel.product.originalPrice
+                )
+        }
 }
-
-

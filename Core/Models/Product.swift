@@ -7,11 +7,7 @@
 
 import Foundation
 
-struct Picture: Codable, Hashable {
-        let url: String
-        let description: String
-}
-
+//MARK: mape le JSON de l'API
 struct Product: Codable, Identifiable, Hashable {
         let id: Int
         let name: String
@@ -20,7 +16,5 @@ struct Product: Codable, Identifiable, Hashable {
         let note: Double?
         let price: Double
         let originalPrice: Double
-        let picture: Picture
+        let picture: ProductPicture
 }
-
-// Product mape le JSON de l'API

@@ -17,7 +17,7 @@ let mockTestProduct = Product(
         note: 4.5,
         price: 50.0,
         originalPrice: 100.0,
-        picture: Picture(url: "http://test.com", description: "Test Pic")
+        picture: ProductPicture(url: "http://test.com", description: "Test Pic")
 )
 
 //MARK: faux service

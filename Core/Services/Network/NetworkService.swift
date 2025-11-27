@@ -36,44 +36,60 @@ class NetworkService: NetworkServiceProtocol {
                 } catch { throw NetworkError.unknownError(error) }
         }
         
+        
         func downloadImage(from urlString: String) async throws -> UIImage {
+                
+                ///  vérifie le cache RAM + disque d'abord
+                if let cached = ImageCache.shared.image(forKey: urlString) {
+                        return cached
+                }
+                
+                /// Construire l'URL
+                guard let url = URL(string: urlString) else {
+                        throw NetworkError.invalidURL
+                }
+                
                 do {
-                        guard let url = URL(string: urlString) else {
-                                throw NetworkError.invalidURL
-                        }
-                        
-                        // Image dans le cache ?
-                        if let cached = await ImageCache.shared.image(for: url) {
-                                return cached
-                        }
-                        
-                        // 2) Sinon, on télécharge
+                        /// Appel réseau
                         let (data, response) = try await URLSession.shared.data(from: url)
                         
-                        guard let httpResponse = response as? HTTPURLResponse,
-                              httpResponse.statusCode == 200 else {
-                                throw NetworkError.serverError(statusCode: (response as? HTTPURLResponse)?.statusCode ?? -1)
+                        /// Vérification HTTP
+                        if let http = response as? HTTPURLResponse,
+                           !(200..<300).contains(http.statusCode) {
+                                throw NetworkError.serverError(statusCode: http.statusCode)
                         }
                         
+                        /// Décodage de l'image
                         guard let image = UIImage(data: data) else {
-                                throw NetworkError.decodingError(.dataCorrupted(.init(
-                                        codingPath: [],
-                                        debugDescription: "Image invalide"
-                                )))
+                                /// UIImage(data:) ne renvoie pas d’erreur, on en fabrique une
+                                let localError = NSError(
+                                        domain: "ImageDecoding",
+                                        code: -1,
+                                        userInfo: [NSLocalizedDescriptionKey: NSLocalizedString("ERROR_IMAGE_DECODING", comment: "Impossible de décoder l'image")]
+                                )
+                                throw NetworkError.unknownError(localError)
                         }
                         
-                        // 3) On met dans le cache
-                        await ImageCache.shared.insert(image, for: url)
+                        ///Sauvegarde dans le cache (RAM + disque)
+                        ImageCache.shared.save(image, forKey: urlString)
                         
                         return image
                         
-                } catch let error as URLError {
-                        throw NetworkError.networkError(error)
-                } catch let error as NetworkError {
-                        throw error
+                } catch let urlError as URLError {
+                        
+                        throw NetworkError.networkError(urlError)
+                        
+                } catch let decodingError as DecodingError {
+                        
+                        throw NetworkError.decodingError(decodingError)
+                        
                 } catch {
+                        
                         throw NetworkError.unknownError(error)
                 }
         }
+        
+        
+        
         
 }

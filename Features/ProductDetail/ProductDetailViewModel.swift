@@ -10,58 +10,43 @@ import SwiftUI
 import Combine
 
 @MainActor
-class ProductDetailViewModel: ObservableObject {
+final class ProductDetailViewModel: ObservableObject {
         
-        // MARK: - Propriétés
-        
-        //Pour le vue
-        @Published var product: Product
+        // MARK: Service
         let service: NetworkServiceProtocol
         
-        // Partage
+        //MARK: Published
+        @Published var product: Product
+        @Published var favoriteStatus: ProductDetailFavoriteStatus
+       
         @Published var isShowingShareSheet = false
         @Published private(set) var imageToShare: UIImage?
         @Published private(set) var isPreparingShare = false
         
-        // Avis
         @Published var userRating: Int = 0
         @Published var userComment: String = ""
         
-        // Favoris / likes
-        @Published var favoriteState: ProductDetailFavoriteStatus
-        ///  @Published var isFavorite: Bool = false
-        ///  @Published var likesCounting: Int
+        @Published var shareError: Error?
         
-        // Préchargement
         private var isPreloadingShare = false
         
         
         // MARK: - Init
-        
-        init(product: Product,
-             service: NetworkServiceProtocol,
-             autoPreload: Bool = true) {
+        init(product: Product, service: NetworkServiceProtocol) {
                 self.product = product
                 self.service = service
-                
-                self.favoriteState = ProductDetailFavoriteStatus(
+                self.favoriteStatus = ProductDetailFavoriteStatus(
                         isFavorite: false,
                         likesCount: product.likes
                 )
-                if autoPreload {
-                        Task { [weak self] in
-                                await self?.preloadShareableImage()
-                        }
-                }
-        }
-        
-        //MARK: Favoris
-        func toggleFavorite() {
-                favoriteState.toggle()
+                
+                
+                // PRELOAD de l'ilmage au moment de la création du ViewModel
+                Task { await preloadShareableImage() }
         }
         
         
-        //MARK: téléchargement image en avance
+        // MARK: - Préchargement
         func preloadShareableImage() async {
                 guard imageToShare == nil,
                       !isPreparingShare,
@@ -73,57 +58,40 @@ class ProductDetailViewModel: ObservableObject {
                 do {
                         let image = try await service.downloadImage(from: product.picture.url)
                         try Task.checkCancellation()
-                        imageToShare = image
+                        self.imageToShare = image
                 } catch {
-                        imageToShare = nil
+                        self.imageToShare = nil
                 }
         }
         
-        //MARK: Télécharger + Ouvrir la feuille de partage
-        func prepareShareableImage() async {
-                
-                guard !isPreparingShare,
-                      !isPreloadingShare else { return } /// Empêche les double-clics rapides
-                
-                isPreparingShare = true
-                defer { isPreparingShare = false }
-                
-                if imageToShare != nil {
-                        isShowingShareSheet = true /// Si l'image est déjà préchargée, on ouvre juste la feuille
-                        return
-                }
-                
-                do {
-                        let image = try await service.downloadImage(
-                                from: product.picture.url
-                        )
-                        
-                        try Task.checkCancellation()
-                        
-                        imageToShare = image
-                        isShowingShareSheet = true
-                        
-                } catch is CancellationError { /// si la tâche a été annulée, on laisse tout à nil
-                        imageToShare = nil
-                } catch is NetworkError {
-                        imageToShare = nil
-                } catch {
-                        imageToShare = nil
-                }
-        }
-        
-        //MARK: Gestion Bouton Partage
+        // MARK: - Ouverture feuille de partage
         func handleShareButtonTapped() async {
-                if imageToShare != nil {
+                if let _ = imageToShare {
                         isShowingShareSheet = true
                 } else {
                         await prepareShareableImage()
                 }
         }
         
+        private func prepareShareableImage() async {
+                guard !isPreparingShare else { return }
+                
+                isPreparingShare = true
+                defer { isPreparingShare = false }
+                
+                do {
+                        let image = try await service.downloadImage(from: product.picture.url)
+                        try Task.checkCancellation()
+                        self.imageToShare = image
+                        self.isShowingShareSheet = true
+                        self.shareError = nil // ⬅️ Succès
+                } catch {
+                        self.imageToShare = nil
+                        self.shareError = error // ⬅️ Échec
+                }
+        }
         
-        // MARK:  Reset
         func resetShareableImage() {
-                isShowingShareSheet = false /// Ferme la feuille de partage **sans** effacer l'image du cache.
+                isShowingShareSheet = false
         }
 }

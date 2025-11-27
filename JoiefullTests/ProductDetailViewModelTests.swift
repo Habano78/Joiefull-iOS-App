@@ -34,15 +34,15 @@ struct ProductDetailViewModelTests {
         @MainActor
         func testToggleFavorite_WhenOff_ShouldTurnOnAndIncrementLikes() {
                 // GIVEN
-                #expect(sut.favoriteState.isFavorite == false)
-                #expect(sut.favoriteState.likesCount == mockTestProduct.likes)
+                #expect(sut.favoriteStatus.isFavorite == false)
+                #expect(sut.favoriteStatus.likesCount == mockTestProduct.likes)
                 
                 // WHEN
                 sut.toggleFavorite()
                 
                 // THEN
-                #expect(sut.favoriteState.isFavorite == true)
-                #expect(sut.favoriteState.likesCount == mockTestProduct.likes + 1)
+                #expect(sut.favoriteStatus.isFavorite == true)
+                #expect(sut.favoriteStatus.likesCount == mockTestProduct.likes + 1)
         }
         
         //
@@ -50,18 +50,18 @@ struct ProductDetailViewModelTests {
         @MainActor
         func testToggleFavorite_WhenOn_ShouldTurnOffAndDecrementLikes() {
                 // GIVEN
-                sut.favoriteState = ProductDetailFavoriteStatus(
+                sut.favoriteStatus = ProductDetailFavoriteStatus(
                         isFavorite: true,
                         likesCount: mockTestProduct.likes + 1
                 )
-                #expect(sut.favoriteState.isFavorite == true)
+                #expect(sut.favoriteStatus.isFavorite == true)
                 
                 // WHEN
                 sut.toggleFavorite()
                 
                 // THEN
-                #expect(sut.favoriteState.isFavorite == false)
-                #expect(sut.favoriteState.likesCount == mockTestProduct.likes)
+                #expect(sut.favoriteStatus.isFavorite == false)
+                #expect(sut.favoriteStatus.likesCount == mockTestProduct.likes)
         }
         
         

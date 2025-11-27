@@ -1,0 +1,58 @@
+/* 
+  Localizable.strings
+  Joiefull
+
+  Created by Perez William on 27/11/2025.
+  
+*/
+
+/*
+  Localizable.strings
+  Joiefull
+
+  Created by Perez William on 27/11/2025.
+
+
+/* MARK: Vues Principales */
+ "SECTION_REVIEWS_TITLE" = "Avis";
+
+ /* MARK: Formulaire d'Avis */
+ "COMMENT_FIELD_LABEL" = "Commentaire";
+ "COMMENT_FIELD_HINT" = "Entrez votre avis sur cet article.";
+ "SUBMIT_REVIEW_BUTTON" = "Envoyer mon avis";
+ "SUBMIT_REVIEW_HINT" = "Envoie votre avis pour cet article";
+
+ /* MARK: Partage */
+ "SHARE_BUTTON_LABEL" = "Partager cet article";
+ "SHARE_BUTTON_HINT" = "Ouvre la feuille de partage";
+ "SHARE_LOADING_MESSAGE" = "Préparation…";
+ "SHARE_MESSAGE_FORMAT" = "Regarde cet article sur Joiefull : %@";
+
+
+ /* MARK: Accessibilité Prix */
+ "A11Y_PRICE_CURRENT" = "Prix actuel : %@";
+ "A11Y_PRICE_ORIGINAL" = "Ancien prix : %@";
+ "A11Y_RATING_SUFFIX" = ". Note 4,6 sur 5.";
+ "A11Y_PRICE_FULL_FORMAT" = "Prix actuel : %@. Ancien prix : %@. Note 4,6 sur 5.";
+ "A11Y_PRICE_NORMAL_FORMAT" = "Prix : %@. Note 4,6 sur 5.";
+
+
+/* MARK: ProductListView */
+"LOADING_MESSAGE" = "Chargement…";
+"ERROR_MESSAGE_FORMAT" = "Erreur: %@";
+"RETRY_BUTTON_LABEL" = "Réessayer";
+"PRODUCT_LIST_TITLE" = "Catalogue";
+"DETAIL_VIEW_PLACEHOLDER" = "Sélectionnez un article\npour voir les détails";
+
+
+/* MARK: Errors & Debug */
+"ERROR_INVALID_URL" = "L'URL de l'API est invalide.";
+"ERROR_SERVER_FORMAT" = "Erreur du serveur. Code: %d.";
+"ERROR_NETWORK_FORMAT" = "Erreur réseau. L'utilisateur n'est peut-être pas connecté. %@";
+"ERROR_DECODING_FORMAT" = "Erreur de décodage. Le modèle ne correspond pas au JSON. %@";
+"ERROR_UNKNOWN_FORMAT" = "Erreur inconnue. %@";
+"ERROR_IMAGE_DECODING" = "Impossible de décoder l'image";
+"ERROR_DEFAULT_FALLBACK" = "Une erreur est survenue";
+
+/* MARK: Console Logs (seulement si tu veux traduire les logs) */
+"LOG_DISK_WRITE_FAILURE" = "❌ Impossible d’écrire l’image sur disque: %@";

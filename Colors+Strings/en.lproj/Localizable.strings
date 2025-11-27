@@ -1,0 +1,52 @@
+/* 
+  Localizable.strings
+  Joiefull
+
+  Created by Perez William on 27/11/2025.
+
+ /*
+   Traductions Anglaises.
+ */
+
+ /* MARK: Section Reviews (Vues Principales) */
+ "SECTION_REVIEWS_TITLE" = "Reviews";
+
+ /* MARK: Formulaire d'Avis */
+ "COMMENT_FIELD_LABEL" = "Comment";
+ "COMMENT_FIELD_HINT" = "Enter your review for this item.";
+ "SUBMIT_REVIEW_BUTTON" = "Submit My Review";
+ "SUBMIT_REVIEW_HINT" = "Submits your review for this item";
+
+ /* MARK: Partage */
+ "SHARE_BUTTON_LABEL" = "Share This Item";
+ "SHARE_BUTTON_HINT" = "Opens the sharing sheet";
+ "SHARE_LOADING_MESSAGE" = "Preparing…";
+ "SHARE_MESSAGE_FORMAT" = "Check out this item on Joiefull: %@";
+
+
+ /* MARK: Accessibilité Prix */
+ "A11Y_PRICE_CURRENT" = "Current Price: %@";
+ "A11Y_PRICE_ORIGINAL" = "Original Price: %@";
+ "A11Y_RATING_SUFFIX" = ". Rating 4.6 out of 5.";
+ "A11Y_PRICE_FULL_FORMAT" = "Current price: %@. Original price: %@. Rating 4.6 out of 5.";
+ "A11Y_PRICE_NORMAL_FORMAT" = "Price: %@. Rating 4.6 out of 5.";
+
+
+ /* MARK: Vues Globales (ProductListView) */
+ "LOADING_MESSAGE" = "Loading…";
+ "ERROR_MESSAGE_FORMAT" = "Error: %@";
+ "RETRY_BUTTON_LABEL" = "Retry";
+ "PRODUCT_LIST_TITLE" = "Catalogue";
+ "DETAIL_VIEW_PLACEHOLDER" = "Select an item\nto view details";
+
+/* MARK: Errors & Debug */
+"ERROR_INVALID_URL" = "The API URL is invalid.";
+"ERROR_SERVER_FORMAT" = "Server error. Code: %d.";
+"ERROR_NETWORK_FORMAT" = "Network error. The user might not be connected. %@";
+"ERROR_DECODING_FORMAT" = "Decoding error. The model does not match the JSON structure. %@";
+"ERROR_UNKNOWN_FORMAT" = "Unknown error. %@";
+"ERROR_IMAGE_DECODING" = "Could not decode image";
+"ERROR_DEFAULT_FALLBACK" = "An error occurred";
+
+/* MARK: Console Logs (seulement si tu veux traduire les logs) */
+"LOG_DISK_WRITE_FAILURE" = "❌ Failed to write image to disk: %@";

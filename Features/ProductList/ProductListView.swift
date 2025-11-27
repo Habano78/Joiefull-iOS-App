@@ -41,15 +41,15 @@ struct ProductListView: View {
                                         Color.clear
                                         
                                 case .loading:
-                                        ProgressView("Chargement…")
+                                        ProgressView(NSLocalizedString("SHARE_LOADING_MESSAGE", comment: ""))
                                         
                                 case .error(let message):
                                         VStack(spacing: 20) {
-                                                Text("Erreur: \(message)")
+                                                Text("ERROR_MESSAGE_FORMAT \(message)")
                                                         .foregroundColor(.red)
                                                         .multilineTextAlignment(.center)
                                                 
-                                                Button("Réessayer") {
+                                                Button("RETRY_BUTTON_LABEL"){
                                                         Task { await viewModel.reload() }
                                                 }
                                                 .buttonStyle(.borderedProminent)
@@ -71,7 +71,7 @@ struct ProductListView: View {
                                         .listStyle(.plain)
                                 }
                         }
-                        .navigationTitle("Catalogue")
+                        .navigationTitle("PRODUCT_LIST_TITLE")
                         .navigationSplitViewColumnWidth(min: 320, ideal: 450, max: 500)
                         
                 } detail: {
@@ -88,7 +88,7 @@ struct ProductListView: View {
                                                 .font(.system(size: 80))
                                                 .foregroundColor(.gray.opacity(0.3))
                                         
-                                        Text("Sélectionnez un article\npour voir les détails")
+                                        Text("DETAIL_VIEW_PLACEHOLDER") /// "Sélectionnez un article\npour voir les détails"
                                                 .font(.title2)
                                                 .multilineTextAlignment(.center)
                                                 .foregroundColor(.secondary)
