@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - Pour gérer la devise
+// MARK: Pour gérer la devise
 
 extension NumberFormatter {
         /// Fournit un NumberFormatter configuré pour afficher la devise en EUR selon la localité de l'utilisateur.
@@ -21,7 +21,7 @@ extension NumberFormatter {
         }
 }
 
-// MARK: - Pour l'Accessibilité Prix
+// MARK: Pour l'Accessibilité Prix
 
 struct AccessibilityPriceHelper {
         
@@ -32,19 +32,19 @@ struct AccessibilityPriceHelper {
                 
                 let formatter = NumberFormatter.localizedCurrencyFormatter
                 
-                // Formater les prix avec le NumberFormatter
+                /// Formater les prix avec le NumberFormatter
                 let currentPriceString = formatter.string(from: NSNumber(value: currentPrice)) ?? "\(currentPrice)"
                 let originalPriceString = formatter.string(from: NSNumber(value: originalPrice)) ?? "\(originalPrice)"
                 
-                // Récupérer les formats de phrases localisées (via NSLocalizedString)
+                /// Récupérer les formats de phrases localisées (via NSLocalizedString)
                 let fullFormat = NSLocalizedString("A11Y_PRICE_FULL_FORMAT", comment: "")
                 let normalFormat = NSLocalizedString("A11Y_PRICE_NORMAL_FORMAT", comment: "")
                 
                 if originalPrice > currentPrice {
-                        // Utiliser le format complet (avec réduction)
+                        /// Utiliser le format complet (avec réduction)
                         return String(format: fullFormat, currentPriceString, originalPriceString)
                 } else {
-                        // Utiliser le format normal (sans réduction)
+                        /// Utiliser le format normal (sans réduction)
                         return String(format: normalFormat, currentPriceString)
                 }
         }

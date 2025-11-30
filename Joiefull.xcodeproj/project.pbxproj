@@ -156,7 +156,7 @@
 				2288BAB42EB8E464006B9107 /* Core */,
 				2288BABC2EB8E560006B9107 /* Features */,
 				22CEC4232EBB66FD00BAB0AA /* Helpers */,
-				22CEC4012EBA96D800BAB0AA /* Colors+Strings */,
+				22CEC4012EBA96D800BAB0AA /* Colors+LocalizableStrings */,
 				2288BA992EB8B6F7006B9107 /* JoiefullTests */,
 				2288BA8A2EB8B6F5006B9107 /* Products */,
 			);
@@ -184,9 +184,9 @@
 		2288BAB42EB8E464006B9107 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				2292DF9C2ECD3A360005A8D3 /* Services */,
 				2288BAB62EB8E4F9006B9107 /* Models */,
 				2288BABB2EB8E54C006B9107 /* DI */,
+				2292DF9C2ECD3A360005A8D3 /* Services */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -213,8 +213,8 @@
 		2292DFA02ECF13C30005A8D3 /* ProductDetail */ = {
 			isa = PBXGroup;
 			children = (
-				2292DF862ECC9C400005A8D3 /* ProductDetailViewModel.swift */,
 				2292DF852ECC9C400005A8D3 /* ProductDetailView.swift */,
+				2292DF862ECC9C400005A8D3 /* ProductDetailViewModel.swift */,
 				2292DF932ECD134B0005A8D3 /* ProductDetailFavoriteStatus.swift */,
 				2288BABD2EB8E56D006B9107 /* DetailPerfViews */,
 			);
@@ -255,14 +255,14 @@
 			path = fr.lproj;
 			sourceTree = "<group>";
 		};
-		22CEC4012EBA96D800BAB0AA /* Colors+Strings */ = {
+		22CEC4012EBA96D800BAB0AA /* Colors+LocalizableStrings */ = {
 			isa = PBXGroup;
 			children = (
 				228796752EC5F155006803D6 /* Color.swift */,
 				2292E0862ED81A850005A8D3 /* en.lproj */,
 				2292E0892ED81A850005A8D3 /* fr.lproj */,
 			);
-			path = "Colors+Strings";
+			path = "Colors+LocalizableStrings";
 			sourceTree = "<group>";
 		};
 		22CEC4232EBB66FD00BAB0AA /* Helpers */ = {

@@ -11,3 +11,5 @@ struct ProductPicture: Codable, Hashable {
         let url: String
         let description: String
 }
+
+

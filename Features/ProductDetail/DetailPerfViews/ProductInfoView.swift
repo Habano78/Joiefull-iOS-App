@@ -21,12 +21,12 @@ struct ProductInfoView: View, Equatable {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             
-            // TITRE PRODUIT
+            // Titre du Produit
             Text(product.name)
                 .font(.title2.bold())
                 .accessibilityAddTraits(.isHeader)
             
-            // PRIX + NOTE
+            // Prix + Note
             HStack {
                 Text(String(format: "%.2f €", product.price))
                     .font(.title3.weight(.semibold))
@@ -50,7 +50,7 @@ struct ProductInfoView: View, Equatable {
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(Text(accessibilityPriceDescription))
             
-            // DESCRIPTION
+            // Description
             Text(product.picture.description)
                 .font(.body)
                 .foregroundColor(.secondary)
@@ -59,7 +59,7 @@ struct ProductInfoView: View, Equatable {
     }
 }
 
-// BUT:
+// BUT de cette vue:
 /// la vue prend un Product en valeur (pas via ViewModel) → parfait pour Equatable
 /// on lui passe aussi la phrase d’accessibilité déjà calculée
 /// Equatable compare product + accessibilityPriceDescription

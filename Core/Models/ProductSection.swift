@@ -18,3 +18,5 @@ struct ProductSection: Identifiable, Equatable {
                 self.products = products
         }
 }
+
+//NOTE category comme id pour éviter la generation répétée de UUID et la reconstruction de la vue

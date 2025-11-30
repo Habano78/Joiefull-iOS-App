@@ -20,10 +20,7 @@ let mockTestProduct = Product(
         picture: ProductPicture(url: "http://test.com", description: "Test Pic")
 )
 
-//MARK: faux service
-
-// ... (le mockTestProduct ne change pas)
-
+//MARK: Faux Service
 class MockNetworkService: NetworkServiceProtocol {
         
         //MARK:
@@ -32,7 +29,7 @@ class MockNetworkService: NetworkServiceProtocol {
                 case failure(Error)
         }
         
-        // Configuration de 'fetchProducts'
+        // Configuration de fetchProducts
         var fetchProductsResult: MockResult = .success
         
         // Configuration de'downloadImage'

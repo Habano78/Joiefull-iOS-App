@@ -5,12 +5,19 @@
 //  Created by Perez William on 03/11/2025.
 //
 
+//
+//  AppDIContainer.swift
+//  Joiefull
+//
+//  Created by Perez William on 03/11/2025.
+//
+
 import Foundation
 import Combine
 
 class AppDIContainer: ObservableObject {
         
-        //MARK: SInGLeToN
+        //MARK: Service injecté
         let networkService: NetworkServiceProtocol
         
         //MARK: Init
@@ -18,8 +25,7 @@ class AppDIContainer: ObservableObject {
                 self.networkService = NetworkService()
         }
         
-        //MARK: Construction des VIEWMODELS 
-     
+        //MARK: Fabriques de ViewModels
         func makeProductListViewModel() -> ProductListViewModel {
                 return ProductListViewModel(service: networkService)
         }
@@ -27,6 +33,4 @@ class AppDIContainer: ObservableObject {
         func makeProductDetailViewModel(product: Product) -> ProductDetailViewModel {
                 return ProductDetailViewModel(product: product, service: networkService)
         }
-        
 }
-

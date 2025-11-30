@@ -18,76 +18,78 @@ final class ProductDetailViewModel: ObservableObject {
         //MARK: Published
         @Published var product: Product
         @Published var favoriteStatus: ProductDetailFavoriteStatus
-       
-        @Published var isShowingShareSheet = false
-        @Published private(set) var imageToShare: UIImage?
-        @Published private(set) var isPreparingShare = false
+      
+        @Published private(set) var imageReadyToShare: UIImage?
+        @Published var isShowingShareSheet = false /// pour savoir quand afficher ou masquer la sheet
+        @Published private(set) var isLoadingImage = false /// telechargement en cours
+        
+        private var isAlreadyPreloading = false /// empecher les telechargement repetés
         
         @Published var userRating: Int = 0
         @Published var userComment: String = ""
         
         @Published var shareError: Error?
         
-        private var isPreloadingShare = false
-        
+        func toggleFavorite() {
+                favoriteStatus.toggle()
+        }
         
         // MARK: - Init
-        init(product: Product, service: NetworkServiceProtocol) {
+        init(product: Product, service: NetworkServiceProtocol, autoPreload: Bool = true) {
                 self.product = product
                 self.service = service
                 self.favoriteStatus = ProductDetailFavoriteStatus(
                         isFavorite: false,
                         likesCount: product.likes
                 )
-                
-                
-                // PRELOAD de l'ilmage au moment de la création du ViewModel
-                Task { await preloadShareableImage() }
+                if autoPreload {
+                        Task { await preloadShareableImage() }
+                }
         }
         
         
         // MARK: - Préchargement
         func preloadShareableImage() async {
-                guard imageToShare == nil,
-                      !isPreparingShare,
-                      !isPreloadingShare else { return }
+                guard imageReadyToShare == nil,
+                      !isLoadingImage,
+                      !isAlreadyPreloading else { return }
                 
-                isPreloadingShare = true
-                defer { isPreloadingShare = false }
+                isAlreadyPreloading = true
+                defer { isAlreadyPreloading = false }
                 
                 do {
                         let image = try await service.downloadImage(from: product.picture.url)
                         try Task.checkCancellation()
-                        self.imageToShare = image
+                        self.imageReadyToShare = image
                 } catch {
-                        self.imageToShare = nil
+                        self.imageReadyToShare = nil
                 }
         }
         
         // MARK: - Ouverture feuille de partage
         func handleShareButtonTapped() async {
-                if let _ = imageToShare {
+                if let _ = imageReadyToShare {
                         isShowingShareSheet = true
                 } else {
                         await prepareShareableImage()
                 }
         }
         
-        private func prepareShareableImage() async {
-                guard !isPreparingShare else { return }
+        func prepareShareableImage() async {
+                guard !isLoadingImage else { return }
                 
-                isPreparingShare = true
-                defer { isPreparingShare = false }
+                isLoadingImage = true
+                defer { isLoadingImage = false }
                 
                 do {
                         let image = try await service.downloadImage(from: product.picture.url)
                         try Task.checkCancellation()
-                        self.imageToShare = image
+                        self.imageReadyToShare = image
                         self.isShowingShareSheet = true
-                        self.shareError = nil // ⬅️ Succès
+                        self.shareError = nil /// Succès
                 } catch {
-                        self.imageToShare = nil
-                        self.shareError = error // ⬅️ Échec
+                        self.imageReadyToShare = nil
+                        self.shareError = error /// Échec
                 }
         }
         

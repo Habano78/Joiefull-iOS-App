@@ -20,7 +20,7 @@ struct ProductDetailViewModelTests {
         @MainActor
         init() {
                 mockService = MockNetworkService()
-                // 🔹 autoPreload = false pour garder le contrôle dans les tests
+                // autoPreload = false pour garder le contrôle dans les tests
                 sut = ProductDetailViewModel(
                         product: mockTestProduct,
                         service: mockService,
@@ -71,14 +71,14 @@ struct ProductDetailViewModelTests {
         func testPreloadShareableImage_WhenSuccess() async {
                 // GIVEN
                 mockService.downloadImageResult = .success
-                #expect(sut.imageToShare == nil)
+                #expect(sut.imageReadyToShare == nil)
                 #expect(sut.isShowingShareSheet == false)
                 
                 // WHEN
                 await sut.preloadShareableImage()
                 
                 // THEN
-                #expect(sut.imageToShare != nil)
+                #expect(sut.imageReadyToShare != nil)
                 #expect(sut.isShowingShareSheet == false)
                 #expect(mockService.downloadImageCallCount == 1)
         }
@@ -91,15 +91,15 @@ struct ProductDetailViewModelTests {
                 // GIVEN
                 mockService.downloadImageResult = .success
                 #expect(sut.isShowingShareSheet == false)
-                #expect(sut.imageToShare == nil)
+                #expect(sut.imageReadyToShare == nil)
                 
                 // WHEN
                 await sut.prepareShareableImage()
                 
                 // THEN
-                #expect(sut.isPreparingShare == false)
+                #expect(sut.isLoadingImage == false)
                 #expect(sut.isShowingShareSheet == true)
-                #expect(sut.imageToShare != nil)
+                #expect(sut.imageReadyToShare != nil)
                 #expect(mockService.downloadImageCallCount == 1)
         }
         
@@ -120,7 +120,7 @@ struct ProductDetailViewModelTests {
                 // THEN
                 #expect(mockService.downloadImageCallCount == 1)
                 #expect(sut.isShowingShareSheet == true)
-                #expect(sut.imageToShare != nil)
+                #expect(sut.imageReadyToShare != nil)
         }
         
         
@@ -132,7 +132,7 @@ struct ProductDetailViewModelTests {
                 mockService.downloadImageResult = .success
                 await sut.preloadShareableImage()
                 #expect(mockService.downloadImageCallCount == 1)
-                #expect(sut.imageToShare != nil)
+                #expect(sut.imageReadyToShare != nil)
                 #expect(sut.isShowingShareSheet == false)
                 
                 // WHEN
@@ -155,9 +155,9 @@ struct ProductDetailViewModelTests {
                 await sut.prepareShareableImage()
                 
                 // THEN
-                #expect(sut.isPreparingShare == false)
+                #expect(sut.isLoadingImage == false)
                 #expect(sut.isShowingShareSheet == false)
-                #expect(sut.imageToShare == nil)
+                #expect(sut.imageReadyToShare == nil)
         }
         
         //
@@ -171,9 +171,9 @@ struct ProductDetailViewModelTests {
                 await sut.prepareShareableImage()
                 
                 // THEN
-                #expect(sut.isPreparingShare == false)
+                #expect(sut.isLoadingImage == false)
                 #expect(sut.isShowingShareSheet == false)
-                #expect(sut.imageToShare == nil)
+                #expect(sut.imageReadyToShare == nil)
         }
         
         struct UnknownTestError: Error { }
@@ -189,9 +189,9 @@ struct ProductDetailViewModelTests {
                 await sut.prepareShareableImage()
                 
                 // THEN
-                #expect(sut.isPreparingShare == false)
+                #expect(sut.isLoadingImage == false)
                 #expect(sut.isShowingShareSheet == false)
-                #expect(sut.imageToShare == nil)
+                #expect(sut.imageReadyToShare == nil)
         }
         
         
@@ -203,14 +203,14 @@ struct ProductDetailViewModelTests {
                 mockService.downloadImageResult = .success
                 await sut.prepareShareableImage()
                 #expect(sut.isShowingShareSheet == true)
-                #expect(sut.imageToShare != nil)
+                #expect(sut.imageReadyToShare != nil)
                 
                 // WHEN
                 sut.resetShareableImage()
                 
                 // THEN
                 #expect(sut.isShowingShareSheet == false)
-                #expect(sut.imageToShare != nil) // ✅ on garde l'image en cache
+                #expect(sut.imageReadyToShare != nil) // ✅ on garde l'image en cache
         }
 }
 

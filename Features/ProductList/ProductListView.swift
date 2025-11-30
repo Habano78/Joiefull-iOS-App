@@ -20,11 +20,9 @@ struct ProductListView: View {
         
         
         // MARK: - Init
-        
         init(viewModel: ProductListViewModel) {
                 _viewModel = StateObject(wrappedValue: viewModel)
         }
-        
         
         // MARK: - Body
         

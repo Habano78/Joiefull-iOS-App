@@ -13,7 +13,7 @@ struct ProductSectionView: View, Equatable {
         let service: NetworkServiceProtocol
         let onProductSelected: (Product) -> Void
         
-        // Optimisation : si la section n’a pas changé, elle ne se reconstruit pas
+        /// Optimisation : si la section n’a pas changé, elle ne se reconstruit pas
         static func == (lhs: ProductSectionView, rhs: ProductSectionView) -> Bool {
                 lhs.section == rhs.section
         }
@@ -37,7 +37,7 @@ struct ProductSectionView: View, Equatable {
                                                        
                                                 }
                                                 .buttonStyle(.plain)
-                                                .id(product.id) // Stabilise chaque cellule
+                                                .id(product.id) /// Stabilisateur 
                                         }
                                 }
                                 .padding(.horizontal, 16)

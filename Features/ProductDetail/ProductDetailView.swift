@@ -32,7 +32,7 @@ struct ProductDetailView: View {
                                                 RemoteImageView(
                                                         url: viewModel.product.picture.url,
                                                         service: viewModel.service,
-                                                        contentMode: .fit              // voir la photo ENTIEREMENT
+                                                        contentMode: .fill              
                                                 )
                                                 .frame(height: 390)
                                                 .clipped()
@@ -117,11 +117,11 @@ struct ProductDetailView: View {
                                 }
                                 .padding(.top)
                         }
-                        .accessibilityHidden(viewModel.isPreparingShare)
+                        .accessibilityHidden(viewModel.isLoadingImage)
                         
                         
                         // MARK: LOADING OVERLAY
-                        if viewModel.isPreparingShare {
+                        if viewModel.isLoadingImage {
                                 Color.joiefullSpinnerOverlay
                                         .edgesIgnoringSafeArea(.all)
                                 
@@ -156,7 +156,7 @@ struct ProductDetailView: View {
                 .sheet(isPresented: $viewModel.isShowingShareSheet, onDismiss: {
                         viewModel.resetShareableImage()
                 }) {
-                        if let image = viewModel.imageToShare {
+                        if let image = viewModel.imageReadyToShare {
                                 let format = NSLocalizedString("SHARE_MESSAGE_FORMAT", comment: "")
                                 let message = String(format: format, viewModel.product.name)
                                 let provider = ImageShareProvider(image: image, message: message)

@@ -5,11 +5,6 @@
 //  Created by Perez William on 04/11/2025.
 //
 
-//
-//  ProductRowView.swift
-//  Joiefull
-//
-
 import SwiftUI
 
 struct ProductRowView: View, Equatable {
@@ -46,7 +41,7 @@ struct ProductRowView: View, Equatable {
                                 .clipped()
                                 .cornerRadius(10)
                                 
-                                // Badge "likes"
+                                // Likes
                                 HStack(spacing: 4) {
                                         Image(systemName: "heart.fill")
                                         Text("\(product.likes)")
@@ -65,7 +60,7 @@ struct ProductRowView: View, Equatable {
                                 .lineLimit(2)
                                 .frame(minHeight: 40, alignment: .top)
                         
-                        // 💶 PRIX + ⭐️ NOTE
+                        // PRIX + NOTE
                         HStack(spacing: 8) {
                                 
                                 if let note = product.note {

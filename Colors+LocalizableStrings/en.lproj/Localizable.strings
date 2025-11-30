@@ -49,4 +49,4 @@
 "ERROR_DEFAULT_FALLBACK" = "An error occurred";
 
 /* MARK: Console Logs (seulement si tu veux traduire les logs) */
-"LOG_DISK_WRITE_FAILURE" = "❌ Failed to write image to disk: %@";
+"LOG_DISK_WRITE_FAILURE" = "Failed to write image to disk: %@";
