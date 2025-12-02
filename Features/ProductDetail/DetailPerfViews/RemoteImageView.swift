@@ -11,12 +11,12 @@ import UIKit
 struct RemoteImageView: View {
         
         // MARK: Public API
-        
+       @EnvironmentObject var diContainer: AppDIContainer
         let url: String
-        let service: NetworkServiceProtocol
-        let contentMode: ContentMode   // .fill / .fit
+       /// Del. let service: NetworkServiceProtocol
+        let contentMode: ContentMode
         
-        // MARK: Internal States
+        // MARK: Internal
         
         @State private var uiImage: UIImage?
         @State private var isLoading = false
@@ -26,11 +26,9 @@ struct RemoteImageView: View {
         
         init(
                 url: String,
-                service: NetworkServiceProtocol,
                 contentMode: ContentMode = .fill
         ) {
                 self.url = url
-                self.service = service
                 self.contentMode = contentMode
         }
         
@@ -74,7 +72,7 @@ private extension RemoteImageView {
                 hasError = false
                 
                 do {
-                        let image = try await service.downloadImage(from: url)
+                        let image = try await diContainer.networkService.downloadImage(from: url)
                         uiImage = image
                 } catch {
                         hasError = true

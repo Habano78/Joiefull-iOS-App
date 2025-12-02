@@ -18,7 +18,7 @@ import Combine
 class AppDIContainer: ObservableObject {
         
         //MARK: Service injecté
-        let networkService: NetworkServiceProtocol
+        let networkService: NetworkServiceProtocol ///Singleton
         
         //MARK: Init
         init() {

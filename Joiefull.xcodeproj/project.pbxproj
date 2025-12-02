@@ -71,6 +71,7 @@
 		2288BACB2EB8E677006B9107 /* Exceptions for "DetailPerfViews" folder in "Joiefull" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				DetailImageSectionView.swift,
 				FavoriteBottonView.swift,
 				ProductInfoView.swift,
 				RemoteImageView.swift,

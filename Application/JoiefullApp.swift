@@ -10,13 +10,13 @@ import SwiftUI
 @main
 struct JoiefullApp: App {
         
-        @StateObject private var diContainer = AppDIContainer() ///l'usine central (Singleton)
+        @StateObject private var diContainer = AppDIContainer() 
         
         var body: some Scene {
                 WindowGroup {
                         let viewModel = diContainer.makeProductListViewModel()
                         ProductListView(viewModel: viewModel) /// injecter le VM dans la vue.
-                                .environmentObject(diContainer) ///conteneur pour les futures vues (ex: l'écran de détail)
+                                .environmentObject(diContainer) ///conteneur accèsible à d'autres vues (ex: l'écran de détail)
                                 .preferredColorScheme(.light)
                 }
         }

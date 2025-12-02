@@ -20,125 +20,65 @@ struct ProductDetailView: View {
         
         
         // MARK: - Body
+        
         var body: some View {
                 ZStack {
                         
+                        Color(uiColor: .systemGroupedBackground)
+                                .ignoresSafeArea()
+                        
                         ScrollView {
-                                VStack(alignment: .leading, spacing: 20) {
-                                        
-                                        // Image + Favoris
-                                        ZStack(alignment: .bottomTrailing) {
+                                // Contenu de la carte
+                                VStack(alignment: .leading, spacing: 0) {
+                                        ViewThatFits(in: .horizontal) {
                                                 
-                                                RemoteImageView(
-                                                        url: viewModel.product.picture.url,
-                                                        service: viewModel.service,
-                                                        contentMode: .fill              
-                                                )
-                                                .frame(height: 390)
-                                                .clipped()
-                                                .accessibilityElement(children: .ignore)
-                                                .accessibilityLabel(Text(viewModel.product.picture.description))
-                                                .accessibilityAddTraits(.isImage)
-                                                
-                                                FavoriteButtonView(
-                                                        isFavorite: viewModel.favoriteStatus.isFavorite,
-                                                        likesCount: viewModel.favoriteStatus.likesCount,
-                                                        onToggle: { viewModel.favoriteStatus.toggle() }
-                                                )
-                                                .equatable()
-                                                .padding(12)
-                                        }
-                                        .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
-                                        .padding(.horizontal)
-                                        
-                                        
-                                        // Infos du Produit
-                                        ProductInfoView(
-                                                product: viewModel.product,
-                                                accessibilityPriceDescription: a11yPriceDescription
-                                        )
-                                        .equatable()
-                                        
-                                        Divider().padding(.horizontal)
-                                        
-                                        
-                                        // Section Avis
-                                        VStack(alignment: .leading, spacing: 12) {
-                                                
-                                                Text(NSLocalizedString("SECTION_REVIEWS_TITLE", comment: "")) // ⬅️ LOCALISÉ : "Avis"
-                                                        .font(.headline)
-                                                        .accessibilityAddTraits(.isHeader)
-                                                
-                                                // Note
-                                                HStack {
-                                                        StarRatingView(rating: $viewModel.userRating)
-                                                        Spacer()
-                                                        Text("\(viewModel.userRating)/5")
-                                                                .foregroundColor(.secondary)
-                                                }
-                                                
-                                                // Avis
-                                                TextEditor(text: $viewModel.userComment)
-                                                        .frame(height: 100)
-                                                        .padding(4)
-                                                        .background(Color.joiefullCardBackground)
-                                                        .cornerRadius(8)
-                                                        .overlay(
-                                                                RoundedRectangle(cornerRadius: 8)
-                                                                        .stroke(Color.secondary.opacity(0.4), lineWidth: 1)
+                                                // VERSION IPAD
+                                                HStack(alignment: .top, spacing: 30) {
+                                                        
+                                                        DetailImageSectionView(
+                                                                imageUrl: viewModel.product.picture.url,
+                                                                isFavorite: viewModel.favoriteStatus.isFavorite,
+                                                                likesCount: viewModel.favoriteStatus.likesCount,
+                                                                onToggleFavorite: { viewModel.favoriteStatus.toggle() }
                                                         )
-                                                        .foregroundColor(.primary)
-                                                        .accessibilityLabel(NSLocalizedString("COMMENT_FIELD_LABEL", comment: ""))
-                                                        .accessibilityHint(NSLocalizedString("COMMENT_FIELD_HINT", comment: "")) //
-                                                
-                                                // Bouton Avis
-                                                Button {
-                                                        withAnimation {
-                                                                viewModel.userRating = 0
-                                                                viewModel.userComment = ""
+                                                        .frame(height: 500) 
+                                                        .layoutPriority(1)
+                                                        
+                                                        VStack(alignment: .leading, spacing: 20) {
+                                                                detailsSection
                                                         }
-                                                } label: {
-                                                        Text(NSLocalizedString("SUBMIT_REVIEW_BUTTON", comment: ""))
-                                                                .fontWeight(.semibold)
-                                                                .frame(maxWidth: .infinity)
-                                                                .padding()
-                                                                .background(Color.joiefullPrimary)
-                                                                .foregroundColor(.white)
-                                                                .cornerRadius(12)
                                                 }
-                                                .disabled(viewModel.userRating == 0)
-                                                .opacity(viewModel.userRating == 0 ? 0.6 : 1)
-                                                .accessibilityLabel(NSLocalizedString("SUBMIT_REVIEW_BUTTON", comment: ""))
-                                                .accessibilityHint(NSLocalizedString("SUBMIT_REVIEW_HINT", comment: ""))
+                                                
+                                                // VERSION IPHONE
+                                                VStack(spacing: 0) {
+                                                        DetailImageSectionView(
+                                                                imageUrl: viewModel.product.picture.url,
+                                                                isFavorite: viewModel.favoriteStatus.isFavorite,
+                                                                likesCount: viewModel.favoriteStatus.likesCount,
+                                                                onToggleFavorite: { viewModel.favoriteStatus.toggle() }
+                                                        )
+                                                        .aspectRatio(0.9, contentMode: .fit)
+                                                        .frame(maxWidth: .infinity)
+                                                        
+                                                        VStack(alignment: .leading, spacing: 20) {
+                                                                detailsSection
+                                                        }
+                                                        .padding(.top, 20)
+                                                }
                                         }
-                                        .padding(.horizontal)
-                                        .padding(.bottom, 40)
-                                        
                                 }
-                                .padding(.top)
+                                .padding(24)
+                                .background(
+                                        RoundedRectangle(cornerRadius: 24, style: .continuous)
+                                                .fill(Color(uiColor: .systemBackground))
+                                                .shadow(color: .black.opacity(0.08), radius: 12, x: 0, y: 6)
+                                )
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 12)
                         }
-                        .accessibilityHidden(viewModel.isLoadingImage)
-                        
-                        
-                        // MARK: LOADING OVERLAY
-                        if viewModel.isLoadingImage {
-                                Color.joiefullSpinnerOverlay
-                                        .edgesIgnoringSafeArea(.all)
-                                
-                                ProgressView(NSLocalizedString("SHARE_LOADING_MESSAGE", comment: ""))
-                                        .padding()
-                                        .background(Color(UIColor.systemBackground))
-                                        .cornerRadius(10)
-                                        .accessibilityElement(children: .combine)
-                                
-                        }
-                        
                 }
-                // MARK:  Navigation
                 .navigationTitle(viewModel.product.name)
                 .navigationBarTitleDisplayMode(.inline)
-                
-                // MARK: Toolbar (Partage)
                 .toolbar {
                         ToolbarItem(placement: .navigationBarTrailing) {
                                 Button {
@@ -146,37 +86,65 @@ struct ProductDetailView: View {
                                 } label: {
                                         Image(systemName: "square.and.arrow.up")
                                 }
-                                .accessibilityLabel(NSLocalizedString("SHARE_BUTTON_LABEL", comment: ""))
-                                .accessibilityHint(NSLocalizedString("SHARE_BUTTON_HINT", comment: ""))
                         }
-                }
-                
-                
-                // MARK: Share Sheet
-                .sheet(isPresented: $viewModel.isShowingShareSheet, onDismiss: {
-                        viewModel.resetShareableImage()
-                }) {
-                        if let image = viewModel.imageReadyToShare {
-                                let format = NSLocalizedString("SHARE_MESSAGE_FORMAT", comment: "")
-                                let message = String(format: format, viewModel.product.name)
-                                let provider = ImageShareProvider(image: image, message: message)
-                                ShareSheet(items: [provider, message])
-                        }
-                }
-                .alert(
-                        NSLocalizedString("SHARE_ERROR_TITLE", comment: "Titre de l'alerte d'erreur de partage"),
-                        isPresented: .constant(viewModel.shareError != nil),
-                        presenting: viewModel.shareError
-                ) { error in
-                        Button("OK") {
-                                viewModel.shareError = nil
-                        }
-                } message: { error in
-                        Text(NSLocalizedString("SHARE_ERROR_MESSAGE", comment: "Message de l'alerte d'erreur de partage"))
                 }
         }
         
-        //MARK: Prix Accésibilité
+        
+        // MARK: - Subview pour alléger le code
+        
+        
+        // Info, Description, Avis
+        private var detailsSection: some View {
+                VStack(alignment: .leading, spacing: 20) {
+                        
+                        ProductInfoView(
+                                product: viewModel.product,
+                                accessibilityPriceDescription: a11yPriceDescription
+                        )
+                        
+                        Divider()
+                        
+                        // Section Avis
+                        VStack(alignment: .leading, spacing: 12) {
+                                Text(NSLocalizedString("SECTION_REVIEWS_TITLE", comment: ""))
+                                        .font(.headline)
+                                
+                                HStack {
+                                        StarRatingView(rating: $viewModel.userRating)
+                                        Spacer()
+                                        Text("\(viewModel.userRating)/5").foregroundColor(.secondary)
+                                }
+                                
+                                TextEditor(text: $viewModel.userComment)
+                                        .frame(height: 100)
+                                        .padding(4)
+                                        .background(Color.white)
+                                        .cornerRadius(8)
+                                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.3)))
+                                
+                                Button {
+                                        withAnimation {
+                                                viewModel.userRating = 0
+                                                viewModel.userComment = ""
+                                        }
+                                } label: {
+                                        Text(NSLocalizedString("SUBMIT_REVIEW_BUTTON", comment: ""))
+                                                .fontWeight(.semibold)
+                                                .frame(maxWidth: .infinity)
+                                                .padding()
+                                                .background(Color.joiefullPrimary)
+                                                .foregroundColor(.white)
+                                                .cornerRadius(12)
+                                }
+                                .disabled(viewModel.userRating == 0)
+                                .opacity(viewModel.userRating == 0 ? 0.6 : 1)
+                        }
+                }
+                .padding(.bottom, 40)
+        }
+        
+        // Prix Accésibilité
         var a11yPriceDescription: String {
                 AccessibilityPriceHelper.generateA11yPriceDescription(
                         currentPrice: viewModel.product.price,

@@ -30,8 +30,7 @@ struct ProductListView: View {
                 
                 NavigationSplitView(columnVisibility: $columnVisibility) {
                         
-                        // COLONNE GAUCHE
-                        
+                        // Colonne de gauche
                         Group {
                                 switch viewModel.state {
                                         
@@ -55,6 +54,7 @@ struct ProductListView: View {
                                         .padding()
                                         
                                 case .loaded(let sections):
+                                        
                                         List(selection: $selectedProduct) {
                                                 ForEach(sections) { section in
                                                         ProductSectionView(
@@ -70,16 +70,15 @@ struct ProductListView: View {
                                 }
                         }
                         .navigationTitle("PRODUCT_LIST_TITLE")
-                        .navigationSplitViewColumnWidth(min: 320, ideal: 450, max: 500)
+                        .navigationSplitViewColumnWidth(min: 375, ideal: 500, max: 600)
                         
                 } detail: {
                         
-                        // COLONNE DROITE
-                        
+                        // Colonne de droite
                         if let product = selectedProduct {
                                 ProductDetailView(viewModel: diContainer.makeProductDetailViewModel(product: product))
                                         .environmentObject(diContainer)
-                                        .id(product.id)
+                                        .id(product.id) /// nouveau produt nkouveau detail
                         } else {
                                 VStack(spacing: 20) {
                                         Image(systemName: "tshirt")
