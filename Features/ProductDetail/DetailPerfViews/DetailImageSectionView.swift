@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct DetailImageSectionView : View {
+struct DetailImageSectionView : View, Equatable {
         
         // MARK: - Properties
         let imageUrl: String
@@ -15,8 +15,19 @@ struct DetailImageSectionView : View {
         let likesCount: Int
         let onToggleFavorite: () -> Void
         
+        //MARK: Equatable
+        static func == (lhs: DetailImageSectionView, rhs: DetailImageSectionView) -> Bool {
+                
+                return lhs.imageUrl == rhs.imageUrl &&
+                       lhs.isFavorite == rhs.isFavorite &&
+                       lhs.likesCount == rhs.likesCount
+            }
+        
         // MARK: - Body
         var body: some View {
+                
+                let _ = print ("3. DetailImageSectionView se redessine")
+                
                 ZStack(alignment: .bottomTrailing) {
                         
                         // Image
@@ -33,9 +44,6 @@ struct DetailImageSectionView : View {
                         )
                         .padding(12)
                 }
-                // CONTRAINTES DU CONTENEUR IMAGE
-                //.frame(height: 500)
-               // .frame(maxWidth: .infinity)
                 .clipped()
                 .contentShape(Rectangle())
                 .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))

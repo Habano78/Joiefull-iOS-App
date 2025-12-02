@@ -22,6 +22,9 @@ struct ProductDetailView: View {
         // MARK: - Body
         
         var body: some View {
+                
+                ///let _ = print("1. Vue Parent ProductDetailView se recalcule)
+                
                 ZStack {
                         
                         Color(uiColor: .systemGroupedBackground)
@@ -41,11 +44,24 @@ struct ProductDetailView: View {
                                                                 likesCount: viewModel.favoriteStatus.likesCount,
                                                                 onToggleFavorite: { viewModel.favoriteStatus.toggle() }
                                                         )
-                                                        .frame(height: 500) 
+                                                        .equatable()
+                                                        .frame(height: 500)
                                                         .layoutPriority(1)
                                                         
                                                         VStack(alignment: .leading, spacing: 20) {
-                                                                detailsSection
+                                                                DetailContentView(
+                                                                        product: viewModel.product,
+                                                                        accessibilityPriceDescription: a11yPriceDescription,
+                                                                        userRating: $viewModel.userRating,
+                                                                        userComment: $viewModel.userComment,
+                                                                        onSubmitReview: {
+                                                                                withAnimation {
+                                                                                        viewModel.userRating = 0
+                                                                                        viewModel.userComment = "" /// Réinitialisation après envoi
+                                                                                }
+                                                                        }
+                                                                )
+                                                                .equatable()
                                                         }
                                                 }
                                                 
@@ -57,11 +73,25 @@ struct ProductDetailView: View {
                                                                 likesCount: viewModel.favoriteStatus.likesCount,
                                                                 onToggleFavorite: { viewModel.favoriteStatus.toggle() }
                                                         )
+                                                        .equatable()
                                                         .aspectRatio(0.9, contentMode: .fit)
                                                         .frame(maxWidth: .infinity)
                                                         
                                                         VStack(alignment: .leading, spacing: 20) {
-                                                                detailsSection
+                                                                
+                                                                DetailContentView(
+                                                                        product: viewModel.product,
+                                                                        accessibilityPriceDescription: a11yPriceDescription,
+                                                                        userRating: $viewModel.userRating,
+                                                                        userComment: $viewModel.userComment,
+                                                                        onSubmitReview: {
+                                                                                withAnimation {
+                                                                                        viewModel.userRating = 0
+                                                                                        viewModel.userComment = ""
+                                                                                }
+                                                                        }
+                                                                )
+                                                                .equatable()
                                                         }
                                                         .padding(.top, 20)
                                                 }
@@ -88,60 +118,6 @@ struct ProductDetailView: View {
                                 }
                         }
                 }
-        }
-        
-        
-        // MARK: - Subview pour alléger le code
-        
-        
-        // Info, Description, Avis
-        private var detailsSection: some View {
-                VStack(alignment: .leading, spacing: 20) {
-                        
-                        ProductInfoView(
-                                product: viewModel.product,
-                                accessibilityPriceDescription: a11yPriceDescription
-                        )
-                        
-                        Divider()
-                        
-                        // Section Avis
-                        VStack(alignment: .leading, spacing: 12) {
-                                Text(NSLocalizedString("SECTION_REVIEWS_TITLE", comment: ""))
-                                        .font(.headline)
-                                
-                                HStack {
-                                        StarRatingView(rating: $viewModel.userRating)
-                                        Spacer()
-                                        Text("\(viewModel.userRating)/5").foregroundColor(.secondary)
-                                }
-                                
-                                TextEditor(text: $viewModel.userComment)
-                                        .frame(height: 100)
-                                        .padding(4)
-                                        .background(Color.white)
-                                        .cornerRadius(8)
-                                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.3)))
-                                
-                                Button {
-                                        withAnimation {
-                                                viewModel.userRating = 0
-                                                viewModel.userComment = ""
-                                        }
-                                } label: {
-                                        Text(NSLocalizedString("SUBMIT_REVIEW_BUTTON", comment: ""))
-                                                .fontWeight(.semibold)
-                                                .frame(maxWidth: .infinity)
-                                                .padding()
-                                                .background(Color.joiefullPrimary)
-                                                .foregroundColor(.white)
-                                                .cornerRadius(12)
-                                }
-                                .disabled(viewModel.userRating == 0)
-                                .opacity(viewModel.userRating == 0 ? 0.6 : 1)
-                        }
-                }
-                .padding(.bottom, 40)
         }
         
         // Prix Accésibilité

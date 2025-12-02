@@ -9,15 +9,18 @@ import SwiftUI
 
 struct ProductSectionView: View, Equatable {
         
+        //MARK: Properties
         let section: ProductSection
         let service: NetworkServiceProtocol
         let onProductSelected: (Product) -> Void
         
+        //MARK: Equatable
         /// Optimisation : si la section n’a pas changé, elle ne se reconstruit pas
         static func == (lhs: ProductSectionView, rhs: ProductSectionView) -> Bool {
                 lhs.section == rhs.section
         }
         
+        //MARK: Body
         var body: some View {
                 
                 Section(header: sectionHeader) {
