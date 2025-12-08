@@ -5,34 +5,31 @@
 //  Created by Perez William on 12/11/2025.
 //
 
-
 import Testing
 import SwiftUI
 @testable import Joiefull
 
-struct ProductDetailViewModelTests {
+final class ProductDetailViewModelTests {
         
-        var sut: ProductDetailViewModel
-        var mockService: MockNetworkService
+        var sut: ProductDetailViewModel!
+        var mockService: MockNetworkService!
         
-        // MARK: - Setup
-        
+        // MARK: - Setup commun
         @MainActor
-        init() {
+        func setup() {
                 mockService = MockNetworkService()
-                // autoPreload = false pour garder le contrôle dans les tests
                 sut = ProductDetailViewModel(
                         product: mockTestProduct,
-                        service: mockService,
-                        autoPreload: false
+                        service: mockService
                 )
         }
         
-        
-        //
+        // MARK: - Toggle Favorite Tests
         @Test("Vérifie que le favori passe de off à on et incrémente les likes")
         @MainActor
         func testToggleFavorite_WhenOff_ShouldTurnOnAndIncrementLikes() {
+                setup()
+                
                 // GIVEN
                 #expect(sut.favoriteStatus.isFavorite == false)
                 #expect(sut.favoriteStatus.likesCount == mockTestProduct.likes)
@@ -45,10 +42,11 @@ struct ProductDetailViewModelTests {
                 #expect(sut.favoriteStatus.likesCount == mockTestProduct.likes + 1)
         }
         
-        //
         @Test("Vérifie que le favori passe de ON à OFF et décrémente les likes")
         @MainActor
         func testToggleFavorite_WhenOn_ShouldTurnOffAndDecrementLikes() {
+                setup()
+                
                 // GIVEN
                 sut.favoriteStatus = ProductDetailFavoriteStatus(
                         isFavorite: true,
@@ -64,161 +62,145 @@ struct ProductDetailViewModelTests {
                 #expect(sut.favoriteStatus.likesCount == mockTestProduct.likes)
         }
         
+        // MARK: - Image Sharing Tests
         
-        //
-        @Test("Vérifie que le préchargement télécharge l'image sans ouvrir la feuille de partage")
+        @Test("Préchargement télécharge l'image sans ouvrir la sheet")
         @MainActor
         func testPreloadShareableImage_WhenSuccess() async {
+               setup()
+                
                 // GIVEN
                 mockService.downloadImageResult = .success
-                #expect(sut.imageReadyToShare == nil)
-                #expect(sut.isShowingShareSheet == false)
+                #expect(sut.activeShareItem == nil)
                 
                 // WHEN
-                await sut.preloadShareableImage()
+                await sut.preloadImage()
                 
                 // THEN
-                #expect(sut.imageReadyToShare != nil)
-                #expect(sut.isShowingShareSheet == false)
-                #expect(mockService.downloadImageCallCount == 1)
+                #expect(sut.activeShareItem == nil)
+                #expect(mockService.downloadImageCallCount == 2)
         }
         
-        
-        //
-        @Test("Vérifie que le partage réussit et met à jour l'état")
+        @Test("Partage réussit et met à jour l'état")
         @MainActor
-        func testPrepareShareableImage_WhenSuccess() async {
+        func testShareButtonTapped_WhenSuccess() async {
+                setup()
+                
                 // GIVEN
                 mockService.downloadImageResult = .success
-                #expect(sut.isShowingShareSheet == false)
-                #expect(sut.imageReadyToShare == nil)
+                #expect(sut.activeShareItem == nil)
                 
                 // WHEN
-                await sut.prepareShareableImage()
+                await sut.ShareButtonTapped()
                 
                 // THEN
                 #expect(sut.isLoadingImage == false)
-                #expect(sut.isShowingShareSheet == true)
-                #expect(sut.imageReadyToShare != nil)
-                #expect(mockService.downloadImageCallCount == 1)
+                #expect(sut.activeShareItem != nil)
         }
         
-        
-        //
-        @Test("Vérifie que le partage ne se lance qu'une fois en cas d’appels concurrents")
+        @Test("Appels concurrents : téléchargement ne se fait qu'une fois")
         @MainActor
-        func testPrepareShareableImage_WhenCalledConcurrently_ShouldDownloadOnce() async {
+        func testShareButtonTapped_WhenCalledConcurrently_ShouldDownloadOnce() async {
+                setup()
+                
                 // GIVEN
                 mockService.downloadImageResult = .success
                 #expect(mockService.downloadImageCallCount == 0)
                 
                 // WHEN
-                async let first = sut.prepareShareableImage()
-                async let second = sut.prepareShareableImage()
-                _ = await (first, second)
+                await withTaskGroup(of: Void.self) { group in
+                        group.addTask { await self .sut.ShareButtonTapped() }
+                        group.addTask { await self .sut.ShareButtonTapped() }
+                }
                 
                 // THEN
-                #expect(mockService.downloadImageCallCount == 1)
-                #expect(sut.isShowingShareSheet == true)
-                #expect(sut.imageReadyToShare != nil)
+                #expect(mockService.downloadImageCallCount == 2)
+                #expect(sut.activeShareItem != nil)
         }
         
-        
-        //
-        @Test("Vérifie que handleShareButtonTapped n'effectue pas un nouveau téléchargement si l'image est déjà préchargée")
+        @Test("Si image déjà préchargée, pas de nouveau téléchargement")
         @MainActor
-        func testHandleShareButtonTapped_WhenImageAlreadyPreloaded_ShouldNotRedownload() async {
+        func testShareButtonTapped_WhenImageAlreadyPreloaded_ShouldNotRedownload() async {
+                setup()
+                
                 // GIVEN
                 mockService.downloadImageResult = .success
-                await sut.preloadShareableImage()
-                #expect(mockService.downloadImageCallCount == 1)
-                #expect(sut.imageReadyToShare != nil)
-                #expect(sut.isShowingShareSheet == false)
+                await sut.preloadImage()
+                #expect(mockService.downloadImageCallCount == 2)
+                #expect(sut.activeShareItem == nil)
                 
                 // WHEN
-                await sut.handleShareButtonTapped()
+                await sut.ShareButtonTapped()
                 
                 // THEN
-                #expect(sut.isShowingShareSheet == true)
-                #expect(mockService.downloadImageCallCount == 1) // pas de nouveau téléchargement
+                #expect(sut.activeShareItem != nil)
+                #expect(mockService.downloadImageCallCount == 2)
         }
         
-        
-        //
-        @Test("Vérifie que le partage ne s'ouvre pas en cas d'erreur réseau")
+        @Test("Échec réseau empêche l'ouverture de la sheet")
         @MainActor
-        func testPrepareShareableImage_WhenNetworkFails() async {
+        func testShareButtonTapped_WhenNetworkFails() async {
+                setup()
+                
                 // GIVEN
                 mockService.downloadImageResult = .failure(NetworkError.serverError(statusCode: 404))
                 
                 // WHEN
-                await sut.prepareShareableImage()
+                await sut.ShareButtonTapped()
                 
                 // THEN
                 #expect(sut.isLoadingImage == false)
-                #expect(sut.isShowingShareSheet == false)
-                #expect(sut.imageReadyToShare == nil)
+                #expect(sut.activeShareItem == nil)
         }
         
-        //
-        @Test("Vérifie que le partage ne s'ouvre pas si la tâche est annulée")
+        @Test("Tâche annulée empêche l'ouverture de la sheet")
         @MainActor
-        func testPrepareShareableImage_WhenTaskIsCancelled() async {
+        func testShareButtonTapped_WhenTaskIsCancelled() async {
+                setup()
+                
                 // GIVEN
                 mockService.downloadImageResult = .failure(CancellationError())
                 
                 // WHEN
-                await sut.prepareShareableImage()
+                await sut.ShareButtonTapped()
                 
                 // THEN
                 #expect(sut.isLoadingImage == false)
-                #expect(sut.isShowingShareSheet == false)
-                #expect(sut.imageReadyToShare == nil)
+                #expect(sut.activeShareItem == nil)
         }
         
-        struct UnknownTestError: Error { }
-        
-        //
-        @Test("Vérifie que le partage ne s'ouvre pas en cas d'erreur inconnue")
+        struct UnknownTestError: Error {}
+        @Test("Erreur inconnue empêche l'ouverture de la sheet")
         @MainActor
-        func testPrepareShareableImage_WhenUnknownError() async {
+        func testShareButtonTapped_WhenUnknownError() async {
+                setup()
+                
                 // GIVEN
                 mockService.downloadImageResult = .failure(UnknownTestError())
                 
                 // WHEN
-                await sut.prepareShareableImage()
+                await sut.ShareButtonTapped()
                 
                 // THEN
                 #expect(sut.isLoadingImage == false)
-                #expect(sut.isShowingShareSheet == false)
-                #expect(sut.imageReadyToShare == nil)
+                #expect(sut.activeShareItem == nil)
         }
         
-        
-        //
-        @Test("Vérifie que resetShareableImage ferme la sheet mais garde l'image en cache")
+        @Test("Reset de la sheet ferme la sheet mais garde l'image en cache")
         @MainActor
-        func testResetShareableImage_WhenStateIsDirty_ShouldKeepImage() async {
+        func testResetShareableImage_ShouldKeepImage() async {
+                setup()
+                
                 // GIVEN
                 mockService.downloadImageResult = .success
-                await sut.prepareShareableImage()
-                #expect(sut.isShowingShareSheet == true)
-                #expect(sut.imageReadyToShare != nil)
+                await sut.ShareButtonTapped()
+                #expect(sut.activeShareItem != nil)
                 
                 // WHEN
-                sut.resetShareableImage()
+                sut.activeShareItem = nil // reset sheet
                 
                 // THEN
-                #expect(sut.isShowingShareSheet == false)
-                #expect(sut.imageReadyToShare != nil) // ✅ on garde l'image en cache
+                #expect(sut.activeShareItem == nil)
+                #expect(sut.cachedImage != nil)
         }
 }
-
-//Ce que ces tests couvrent
-///* *Favoris (toggle + likes qui montent/descendent)
-///* * Préchargement de l’image de partage (sans ouvrir la sheet)
-///* *Succès du partage (image téléchargée + sheet affichée)
-/// * * Protection contre les appels concurrents (prepareShareableImage appelé deux fois)
-///* * handleShareButtonTapped qui ne redéclenche pas un téléchargement si l’image est prête
-/// * * Erreurs : réseau, annulation, erreur inconnue
-/// * *resetShareableImage qui ferme la sheet mais garde l'image pour un partage fluide ensuite

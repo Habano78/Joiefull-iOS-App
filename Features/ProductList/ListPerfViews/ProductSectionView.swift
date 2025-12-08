@@ -37,21 +37,26 @@ struct ProductSectionView: View, Equatable {
                                                         )
                                                         .equatable()
                                                         .frame(width: 170, height: 260, alignment: .top)
-                                                       
+                                                        
                                                 }
                                                 .buttonStyle(.plain)
-                                                .id(product.id) /// Stabilisateur 
+                                                .id(product.id) /// Stabilisateur
                                         }
                                 }
                                 .padding(.horizontal, 16)
                         }
                         .listRowInsets(EdgeInsets())
+                        .listRowSeparator(.hidden)
                 }
         }
         
         private var sectionHeader: some View {
                 Text(section.category.capitalized)
-                        .font(.title2.bold())
-                        .foregroundColor(.primary)
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundColor(.black)
+                        .padding(.leading, 16) /// du padding pour que le titre ne colle pas trop
+                        .padding(.bottom, 4)
+                        .padding(.top, 4)
+                        .listRowInsets(EdgeInsets()) /// Important pour maîtriser l'alignement du header
         }
 }

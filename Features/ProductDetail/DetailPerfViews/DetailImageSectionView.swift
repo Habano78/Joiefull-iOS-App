@@ -44,7 +44,6 @@ struct DetailImageSectionView : View, Equatable {
                         )
                         .padding(12)
                 }
-                .clipped()
                 .contentShape(Rectangle())
                 .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
                 .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 5)

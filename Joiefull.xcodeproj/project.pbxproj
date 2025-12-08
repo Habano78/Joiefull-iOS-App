@@ -154,7 +154,7 @@
 		2288BA802EB8B6F5006B9107 = {
 			isa = PBXGroup;
 			children = (
-				2288BAB32EB8E401006B9107 /* Application */,
+				2288BAB32EB8E401006B9107 /* App */,
 				2288BAB42EB8E464006B9107 /* Core */,
 				2288BABC2EB8E560006B9107 /* Features */,
 				22CEC4232EBB66FD00BAB0AA /* Helpers */,
@@ -174,13 +174,13 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		2288BAB32EB8E401006B9107 /* Application */ = {
+		2288BAB32EB8E401006B9107 /* App */ = {
 			isa = PBXGroup;
 			children = (
 				2288BA902EB8B6F7006B9107 /* Assets.xcassets */,
 				2288BA8C2EB8B6F5006B9107 /* JoiefullApp.swift */,
 			);
-			path = Application;
+			path = App;
 			sourceTree = "<group>";
 		};
 		2288BAB42EB8E464006B9107 /* Core */ = {
@@ -287,6 +287,7 @@
 				2288BA852EB8B6F5006B9107 /* Sources */,
 				2288BA862EB8B6F5006B9107 /* Frameworks */,
 				2288BA872EB8B6F5006B9107 /* Resources */,
+				22859F5F2EE18C1E000D512A /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -419,6 +420,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		22859F5F2EE18C1E000D512A /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		2288BA852EB8B6F5006B9107 /* Sources */ = {

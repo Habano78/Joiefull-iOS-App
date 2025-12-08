@@ -107,24 +107,34 @@ struct ProductDetailView: View {
                                 .padding(.vertical, 12)
                         }
                 }
-                .navigationTitle(viewModel.product.name)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                         ToolbarItem(placement: .navigationBarTrailing) {
                                 Button {
-                                        Task { await viewModel.handleShareButtonTapped() }
+                                        Task { await viewModel.ShareButtonTapped();
+                                                print("Bouton appuyé") }
                                 } label: {
                                         Image(systemName: "square.and.arrow.up")
                                 }
                         }
                 }
-        }
-        
-        // Prix Accésibilité
-        var a11yPriceDescription: String {
-                AccessibilityPriceHelper.generateA11yPriceDescription(
-                        currentPrice: viewModel.product.price,
-                        originalPrice: viewModel.product.originalPrice
-                )
+                ///Feuille de partage branchée sur le ViewModel
+                .sheet(item: $viewModel.activeShareItem) { item in
+                        let provider = ImageShareProvider(image: item.image, message: item.message)
+                        ShareSheet(items: [provider, item.message])
+                }
+                .alert("Erreur", isPresented: $viewModel.isShowingErrorAlert) {
+                        Button("OK", role: .cancel) { }
+                } message: {
+                        Text(viewModel.shareError?.localizedDescription ?? "Impossible de télécharger l'image.")
+                }
+                
+                // Prix Accésibilité
+                var a11yPriceDescription: String {
+                        AccessibilityPriceHelper.generateA11yPriceDescription(
+                                currentPrice: viewModel.product.price,
+                                originalPrice: viewModel.product.originalPrice
+                        )
+                }
         }
 }

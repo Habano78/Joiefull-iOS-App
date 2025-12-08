@@ -56,6 +56,7 @@ struct ProductListView: View {
                                 case .loaded(let sections):
                                         
                                         List(selection: $selectedProduct) {
+                                                
                                                 ForEach(sections) { section in
                                                         ProductSectionView(
                                                                 section: section,
@@ -66,10 +67,11 @@ struct ProductListView: View {
                                                         )
                                                 }
                                         }
-                                        .listStyle(.plain)
+                                        .listStyle(.plain) /// pour éviter le style bulles
+                                        .listSectionSeparator(.hidden)
+                                        .listSectionSpacing(0)///pour  écraser l'espace entre les sections
                                 }
                         }
-                        .navigationTitle("PRODUCT_LIST_TITLE")
                         .navigationSplitViewColumnWidth(min: 375, ideal: 500, max: 600)
                         
                 } detail: {

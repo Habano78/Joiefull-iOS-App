@@ -19,14 +19,25 @@ struct ProductInfoView: View, Equatable {
         }
         
         var body: some View {
-                VStack(alignment: .leading, spacing: 12) {
+                
+                VStack(alignment: .leading, spacing: 8) {
+                        // Nom Produit + Note
+                        HStack {
+                                Text(product.name)
+                                        .font(.title2.bold())
+                                        .accessibilityAddTraits(.isHeader)
+                               
+                                Spacer()
+                                
+                                HStack(spacing: 4) {
+                                        Image(systemName: "star.fill")
+                                                .foregroundColor(.joiefullStar)
+                                        Text("4.6")
+                                                .foregroundColor(.secondary)
+                                }
+                        }
                         
-                        // Titre du Produit
-                        Text(product.name)
-                                .font(.title2.bold())
-                                .accessibilityAddTraits(.isHeader)
-                        
-                        // Prix + Note
+                        // Prix
                         HStack {
                                 Text(String(format: "%.2f €", product.price))
                                         .font(.title3.weight(.semibold))
@@ -40,12 +51,6 @@ struct ProductInfoView: View, Equatable {
                                                 .foregroundColor(.secondary)
                                 }
                                 
-                                HStack(spacing: 4) {
-                                        Image(systemName: "star.fill")
-                                                .foregroundColor(.joiefullStar)
-                                        Text("4.6")
-                                                .foregroundColor(.secondary)
-                                }
                         }
                         .accessibilityElement(children: .ignore)
                         .accessibilityLabel(Text(accessibilityPriceDescription))

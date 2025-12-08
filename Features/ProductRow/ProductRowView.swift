@@ -57,7 +57,7 @@ struct ProductRowView: View, Equatable {
                         // Nom + Note
                         HStack(alignment: .top) {
                                 Text(product.name)
-                                        .font(.system(size: 15, weight: .semibold))
+                                        .font(.system(size: 14, weight: .semibold))
                                         .foregroundColor(.black)
                                         .lineLimit(1)
                                 
@@ -71,7 +71,7 @@ struct ProductRowView: View, Equatable {
                                         
                                         /// Pas de note dans l'API. On force l'affichage à 4.5
                                         Text(String(format: "%.1f", product.note ?? 4.5))
-                                                .font(.system(size: 14, weight: .medium))
+                                                .font(.system(size: 12.5, weight: .semibold))
                                                 .foregroundColor(.black)
                                 }
                         }
@@ -79,14 +79,14 @@ struct ProductRowView: View, Equatable {
                         // Prix + Prx Barré
                         HStack(alignment: .bottom) {
                                 Text(String(format: "%.0f€", product.price))
-                                        .font(.system(size: 15, weight: .semibold))
+                                        .font(.system(size: 12.5, weight: .semibold))
                                         .foregroundColor(.black)
                                 
                                 Spacer()
                                 
                                 if product.originalPrice > product.price {
                                         Text(String(format: "%.0f€", product.originalPrice))
-                                                .font(.system(size: 14))
+                                                .font(.system(size: 12))
                                                 .strikethrough()
                                                 .foregroundColor(.gray)
                                 }

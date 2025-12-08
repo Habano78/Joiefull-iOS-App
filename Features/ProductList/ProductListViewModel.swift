@@ -13,12 +13,11 @@ import Combine
 class ProductListViewModel: ObservableObject {
         
         //MARK: Properties
-        
         @Published var state: ProductListViewState = .idle
         private let service: NetworkServiceProtocol
         
         //MARK: VM State
-        enum ProductListViewState {
+        enum ProductListViewState: Equatable {
                 case idle
                 case loading
                 case loaded([ProductSection])
