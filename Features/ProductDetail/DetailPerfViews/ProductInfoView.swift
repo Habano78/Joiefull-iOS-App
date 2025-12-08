@@ -64,6 +64,6 @@ struct ProductInfoView: View, Equatable {
 }
 
 // BUT de cette vue:
-/// la vue prend un Product en valeur (pas via ViewModel) → parfait pour Equatable
+/// la vue prend un Product en valeur (pas via ViewModel)
 /// on lui passe aussi la phrase d’accessibilité déjà calculée
 /// Equatable compare product + accessibilityPriceDescription

@@ -55,7 +55,7 @@ struct RemoteImageView: View {
                 }
                 .clipped()
                 .task {
-                        await loadImage()
+                        await loadImage() /// déclenchement
                 }
         }
 }
